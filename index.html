@@ -4,28 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PETMUNDO: uma comunidade de amor, cuidado e proteção para animais de todas as espécies.">
   <title>PETMUNDO - Rede Social Pet</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f3f7f5;
       color: #263b32;
-    }
-
-    .banner {
-      display: block;
-      width: 100%;
-      max-width: 900px;
-      height: auto;
-      margin: 0 auto;
-      border-radius: 0 0 14px 14px;
     }
 
     header {
@@ -55,10 +41,6 @@
       font-weight: bold;
     }
 
-    nav a:hover {
-      color: #0b6548;
-    }
-
     main {
       max-width: 700px;
       margin: 25px auto;
@@ -80,11 +62,6 @@
       border-radius: 8px;
       padding: 12px 18px;
       font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0b6548;
     }
 
     footer {
@@ -98,12 +75,14 @@
 
 <body>
 
+  <!-- IMAGEM DE ABERTURA -->
   <img
-    class="banner"
     src="./petmundo-banner.png"
     alt="PETMUNDO - Um mundo de amor por todos os pets"
+    style="display:block;width:100%;max-width:900px;height:auto;margin:0 auto;"
   >
 
+  <!-- TOPO VERDE -->
   <header>
     <h1>🐾 PETMUNDO</h1>
     <p>Um mundo de amor por todos os animais!</p>
@@ -133,7 +112,6 @@
     <section class="card" id="adocao">
       <h2>❤️ Adoção responsável</h2>
       <p>Um espaço para conectar animais que precisam de um lar a pessoas que desejam acolher.</p>
-      <button onclick="alert('Em breve!')">Conhecer animais</button>
     </section>
 
     <section class="card" id="donativos">
@@ -143,7 +121,7 @@
       <button onclick="alert('Em breve!')">Conhecer campanhas</button>
     </section>
 
-    <section class="card" id="tucolino">
+    <section class="card">
       <h2>🐦 Nosso mascote: Tucolino</h2>
       <p>Conheça nosso querido representante do PETMUNDO!</p>
     </section>
