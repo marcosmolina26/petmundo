@@ -262,5 +262,72 @@ document.getElementById("enviarFoto").addEventListener("click", async function()
 });
 </script>
 
+<section class="card" id="mural-petmundo">
+  <h2>🌎 Mural da Comunidade</h2>
+  <p>Veja os pets que estão sendo compartilhados no PETMUNDO!</p>
+  <div id="muralFotos">Carregando publicações...</div>
+</section>
+
+<script>
+async function carregarMural() {
+  const mural = document.getElementById("muralFotos");
+  mural.innerHTML = "Carregando fotos...";
+
+  const { data: usuarioData } = await supabaseClient.auth.getUser();
+
+  if (!usuarioData.user) {
+    mural.innerHTML = "Entre na sua conta para ver as fotos da comunidade.";
+    return;
+  }
+
+  const { data: pastas, error } = await supabaseClient.storage
+    .from("petmundo-fotos")
+    .list();
+
+  if (error) {
+    mural.textContent = "Erro ao carregar fotos: " + error.message;
+    return;
+  }
+
+  mural.innerHTML = "";
+  let total = 0;
+
+  for (const pasta of pastas) {
+    if (!pasta.id) {
+      const { data: arquivos } = await supabaseClient.storage
+        .from("petmundo-fotos")
+        .list(pasta.name);
+
+      for (const arquivo of arquivos || []) {
+        if (!arquivo.name) continue;
+
+        const caminho = pasta.name + "/" + arquivo.name;
+        const { data } = supabaseClient.storage
+          .from("petmundo-fotos")
+          .getPublicUrl(caminho);
+
+        const img = document.createElement("img");
+        img.src = data.publicUrl;
+        img.alt = "Foto de um pet";
+        img.style.cssText = "width:100%;border-radius:12px;margin:10px 0;";
+
+        mural.appendChild(img);
+        total++;
+      }
+    }
+  }
+
+  if (total === 0) {
+    mural.textContent = "Ainda não há fotos publicadas.";
+  }
+}
+
+carregarMural();
+
+supabaseClient.auth.onAuthStateChange(() => {
+  carregarMural();
+});
+</script>
+
 </body>
 </html>
