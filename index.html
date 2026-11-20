@@ -50,9 +50,10 @@
     .card {
       background: white;
       padding: 22px;
-      margin-bottom: 18px;
+      margin: 18px auto;
       border-radius: 14px;
       box-shadow: 0 2px 8px #0001;
+      max-width: 700px;
     }
 
     button {
@@ -70,19 +71,29 @@
       background: #15966b;
       color: white;
     }
+
+    .foto-publicada {
+      width: 100%;
+      border-radius: 12px;
+      margin: 5px 0 20px;
+    }
+
+    .nome-tutor {
+      font-weight: bold;
+      color: #247a38;
+      margin: 15px 0 5px;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- IMAGEM DE ABERTURA -->
   <img
     src="./petmundo-banner.png"
     alt="PETMUNDO - Um mundo de amor por todos os pets"
     style="display:block;width:100%;max-width:900px;height:auto;margin:0 auto;"
   >
 
-  <!-- TOPO VERDE -->
   <header>
     <h1>🐾 PETMUNDO</h1>
     <p>Um mundo de amor por todos os animais!</p>
@@ -131,203 +142,237 @@
   <footer>
     PETMUNDO © 2026 - Todos os animais têm seu lugar!
   </footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = "https://gvltggsagpiikmecyfyq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rejBmiKDT6eXZ53ilpVEBw_niDpV8-P";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<section id="petmundo-conta" style="max-width:420px;margin:30px auto;padding:20px;background:#f0f8ef;border-radius:15px;font-family:Arial,sans-serif;">
-  <h2 style="color:#247a38;text-align:center;">🐾 Entre no PETMUNDO</h2>
+  <script>
+    const SUPABASE_URL = "https://gvltggsagpiikmecyfyq.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_rejBmiKDT6eXZ53ilpVEBw_niDpV8-P";
 
-  <h3>Criar minha conta</h3>
-  <form id="cadastroPet">
-    <input id="nomePet" type="text" placeholder="Seu nome" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-    <input id="emailCadastro" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-    <input id="senhaCadastro" type="password" placeholder="Crie uma senha (mínimo 6 caracteres)" minlength="6" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-    <button type="submit" style="width:100%;padding:13px;background:#25833c;color:white;border:0;border-radius:8px;margin-top:8px;">Criar conta</button>
-  </form>
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+  </script>
 
-  <hr style="margin:22px 0;">
+  <section id="petmundo-conta" style="max-width:420px;margin:30px auto;padding:20px;background:#f0f8ef;border-radius:15px;font-family:Arial,sans-serif;">
 
-  <h3>Já tenho uma conta</h3>
-  <form id="loginPet">
-    <input id="emailLogin" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-    <input id="senhaLogin" type="password" placeholder="Sua senha" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-    <button type="submit" style="width:100%;padding:13px;background:#247a38;color:white;border:0;border-radius:8px;margin-top:8px;">Entrar</button>
-  </form>
+    <h2 style="color:#247a38;text-align:center;">🐾 Entre no PETMUNDO</h2>
 
-  <p id="mensagemPet" style="text-align:center;margin-top:15px;"></p>
-</section>
+    <h3>Criar minha conta</h3>
 
-<script>
-const cadastroPet = document.getElementById("cadastroPet");
-const loginPet = document.getElementById("loginPet");
-const mensagemPet = document.getElementById("mensagemPet");
+    <form id="cadastroPet">
+      <input id="nomePet" type="text" placeholder="Seu nome" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+      <input id="emailCadastro" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+      <input id="senhaCadastro" type="password" placeholder="Crie uma senha (mínimo 6 caracteres)" minlength="6" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+      <button type="submit" style="width:100%;padding:13px;background:#25833c;color:white;border:0;border-radius:8px;margin-top:8px;">Criar conta</button>
+    </form>
 
-cadastroPet.addEventListener("submit", async function(e) {
-  e.preventDefault();
-  mensagemPet.textContent = "Criando sua conta...";
+    <hr style="margin:22px 0;">
 
-  const nome = document.getElementById("nomePet").value;
-  const email = document.getElementById("emailCadastro").value;
-  const senha = document.getElementById("senhaCadastro").value;
+    <h3>Já tenho uma conta</h3>
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password: senha,
-    options: { data: { full_name: nome } }
-  });
+    <form id="loginPet">
+      <input id="emailLogin" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+      <input id="senhaLogin" type="password" placeholder="Sua senha" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+      <button type="submit" style="width:100%;padding:13px;background:#247a38;color:white;border:0;border-radius:8px;margin-top:8px;">Entrar</button>
+    </form>
 
-  mensagemPet.textContent = error
-    ? error.message
-    : "Cadastro realizado! Confira seu e-mail se for solicitada confirmação.";
-});
+    <p id="mensagemPet" style="text-align:center;margin-top:15px;"></p>
+  </section>
 
-loginPet.addEventListener("submit", async function(e) {
-  e.preventDefault();
-  mensagemPet.textContent = "Entrando...";
+  <script>
+    const cadastroPet = document.getElementById("cadastroPet");
+    const loginPet = document.getElementById("loginPet");
+    const mensagemPet = document.getElementById("mensagemPet");
 
-  const email = document.getElementById("emailLogin").value;
-  const senha = document.getElementById("senhaLogin").value;
+    cadastroPet.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      mensagemPet.textContent = "Criando sua conta...";
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password: senha
-  });
+      const nome = document.getElementById("nomePet").value;
+      const email = document.getElementById("emailCadastro").value;
+      const senha = document.getElementById("senhaCadastro").value;
 
-  mensagemPet.textContent = error
-    ? error.message
-    : "Login realizado! Bem-vindo ao PETMUNDO!";
-});
-</script>
+      const { error } = await supabaseClient.auth.signUp({
+        email,
+        password: senha,
+        options: { data: { full_name: nome } }
+      });
 
-<section class="card" id="publicar-foto" style="max-width:500px;margin:25px auto;">
-  <h2>📸 Compartilhe seu pet</h2>
-  <p>Escolha uma foto para publicar na comunidade PETMUNDO.</p>
-  <input type="file" id="fotoPet" accept="image/*" required>
-  <br><br>
-  <button type="button" id="enviarFoto">Enviar foto</button>
-  <p id="mensagemFoto"></p>
-  <img id="fotoEnviada" style="display:none;width:100%;border-radius:12px;">
-</section>
+      mensagemPet.textContent = error
+        ? error.message
+        : "Cadastro realizado! Confira seu e-mail se for solicitada confirmação.";
+    });
 
-<script>
-document.getElementById("enviarFoto").addEventListener("click", async function() {
-  const arquivo = document.getElementById("fotoPet").files[0];
-  const mensagem = document.getElementById("mensagemFoto");
-  const imagem = document.getElementById("fotoEnviada");
+    loginPet.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      mensagemPet.textContent = "Entrando...";
 
-  if (!arquivo) {
-    mensagem.textContent = "Escolha uma foto primeiro.";
-    return;
-  }
+      const email = document.getElementById("emailLogin").value;
+      const senha = document.getElementById("senhaLogin").value;
 
-  mensagem.textContent = "Verificando sua conta...";
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password: senha
+      });
 
-  const { data: usuarioData } = await supabaseClient.auth.getUser();
-  const usuario = usuarioData.user;
+      mensagemPet.textContent = error
+        ? error.message
+        : "Login realizado! Bem-vindo ao PETMUNDO!";
 
-  if (!usuario) {
-    mensagem.textContent = "Entre na sua conta para enviar fotos.";
-    return;
-  }
+      if (!error) {
+        carregarMural();
+      }
+    });
+  </script>
 
-  mensagem.textContent = "Enviando foto...";
+  <section class="card" id="publicar-foto" style="max-width:500px;margin:25px auto;">
+    <h2>📸 Compartilhe seu pet</h2>
+    <p>Escolha uma foto para publicar na comunidade PETMUNDO.</p>
+    <input type="file" id="fotoPet" accept="image/*" required>
+    <br><br>
+    <button type="button" id="enviarFoto">Enviar foto</button>
+    <p id="mensagemFoto"></p>
+    <img id="fotoEnviada" style="display:none;width:100%;border-radius:12px;">
+  </section>
 
-  const nomeArquivo = arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const caminho = usuario.id + "/" + Date.now() + "-" + nomeArquivo;
+  <script>
+    document.getElementById("enviarFoto").addEventListener("click", async function() {
+      const arquivo = document.getElementById("fotoPet").files[0];
+      const mensagem = document.getElementById("mensagemFoto");
+      const imagem = document.getElementById("fotoEnviada");
 
-  const { error } = await supabaseClient.storage
-    .from("petmundo-fotos")
-    .upload(caminho, arquivo);
+      if (!arquivo) {
+        mensagem.textContent = "Escolha uma foto primeiro.";
+        return;
+      }
 
-  if (error) {
-    mensagem.textContent = "Erro: " + error.message;
-    return;
-  }
+      mensagem.textContent = "Verificando sua conta...";
 
-  const { data } = supabaseClient.storage
-    .from("petmundo-fotos")
-    .getPublicUrl(caminho);
+      const { data: usuarioData } = await supabaseClient.auth.getUser();
+      const usuario = usuarioData.user;
 
-  imagem.src = data.publicUrl;
-  imagem.style.display = "block";
-  mensagem.textContent = "Foto enviada com sucesso! 🐾";
-});
-</script>
+      if (!usuario) {
+        mensagem.textContent = "Entre na sua conta para enviar fotos.";
+        return;
+      }
 
-<section class="card" id="mural-petmundo">
-  <h2>🌎 Mural da Comunidade</h2>
-  <p>Veja os pets que estão sendo compartilhados no PETMUNDO!</p>
-  <div id="muralFotos">Carregando publicações...</div>
-</section>
+      mensagem.textContent = "Enviando foto...";
 
-<script>
-async function carregarMural() {
-  const mural = document.getElementById("muralFotos");
-  mural.innerHTML = "Carregando fotos...";
+      const nomeArquivo = arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const caminho = usuario.id + "/" + Date.now() + "-" + nomeArquivo;
 
-  const { data: usuarioData } = await supabaseClient.auth.getUser();
-
-  if (!usuarioData.user) {
-    mural.innerHTML = "Entre na sua conta para ver as fotos da comunidade.";
-    return;
-  }
-
-  const { data: pastas, error } = await supabaseClient.storage
-    .from("petmundo-fotos")
-    .list();
-
-  if (error) {
-    mural.textContent = "Erro ao carregar fotos: " + error.message;
-    return;
-  }
-
-  mural.innerHTML = "";
-  let total = 0;
-
-  for (const pasta of pastas) {
-    if (!pasta.id) {
-      const { data: arquivos } = await supabaseClient.storage
+      const { error } = await supabaseClient.storage
         .from("petmundo-fotos")
-        .list(pasta.name);
+        .upload(caminho, arquivo);
 
-      for (const arquivo of arquivos || []) {
-        if (!arquivo.name) continue;
+      if (error) {
+        mensagem.textContent = "Erro: " + error.message;
+        return;
+      }
 
-        const caminho = pasta.name + "/" + arquivo.name;
-        const { data } = supabaseClient.storage
-          .from("petmundo-fotos")
-          .getPublicUrl(caminho);
+      const { data } = supabaseClient.storage
+        .from("petmundo-fotos")
+        .getPublicUrl(caminho);
 
-        const img = document.createElement("img");
-        img.src = data.publicUrl;
-        img.alt = "Foto de um pet";
-        img.style.cssText = "width:100%;border-radius:12px;margin:10px 0;";
+      imagem.src = data.publicUrl;
+      imagem.style.display = "block";
+      mensagem.textContent = "Foto enviada com sucesso! 🐾";
 
-        mural.appendChild(img);
-        total++;
+      carregarMural();
+    });
+  </script>
+
+  <section class="card" id="mural-petmundo">
+    <h2>🌎 Mural da Comunidade</h2>
+    <p>Veja os pets que estão sendo compartilhados no PETMUNDO!</p>
+    <div id="muralFotos">Carregando publicações...</div>
+  </section>
+
+  <script>
+    async function carregarMural() {
+      const mural = document.getElementById("muralFotos");
+      mural.innerHTML = "Carregando fotos...";
+
+      const { data: usuarioData } = await supabaseClient.auth.getUser();
+
+      if (!usuarioData.user) {
+        mural.innerHTML = "Entre na sua conta para ver as fotos da comunidade.";
+        return;
+      }
+
+      const { data: pastas, error } = await supabaseClient.storage
+        .from("petmundo-fotos")
+        .list();
+
+      if (error) {
+        mural.textContent = "Erro ao carregar fotos: " + error.message;
+        return;
+      }
+
+      mural.innerHTML = "";
+      let total = 0;
+
+      for (const pasta of pastas || []) {
+        if (!pasta.id) {
+          const { data: arquivos, error: erroArquivos } = await supabaseClient.storage
+            .from("petmundo-fotos")
+            .list(pasta.name);
+
+          if (erroArquivos) {
+            console.error("Erro ao listar arquivos:", erroArquivos.message);
+            continue;
+          }
+
+          const { data: perfil, error: erroPerfil } = await supabaseClient
+            .from("profiles")
+            .select("display_name")
+            .eq("id", pasta.name)
+            .maybeSingle();
+
+          if (erroPerfil) {
+            console.error("Erro ao buscar tutor:", erroPerfil.message);
+          }
+
+          const nomeTutor = perfil?.display_name || "Tutor PETMUNDO";
+
+          for (const arquivo of arquivos || []) {
+            if (!arquivo.name) continue;
+
+            const caminho = pasta.name + "/" + arquivo.name;
+
+            const { data } = supabaseClient.storage
+              .from("petmundo-fotos")
+              .getPublicUrl(caminho);
+
+            const nome = document.createElement("p");
+            nome.className = "nome-tutor";
+            nome.textContent = "🐾 " + nomeTutor;
+            mural.appendChild(nome);
+
+            const img = document.createElement("img");
+            img.src = data.publicUrl;
+            img.alt = "Foto de um pet";
+            img.className = "foto-publicada";
+            mural.appendChild(img);
+
+            total++;
+          }
+        }
+      }
+
+      if (total === 0) {
+        mural.textContent = "Ainda não há fotos publicadas.";
       }
     }
-  }
 
-  if (total === 0) {
-    mural.textContent = "Ainda não há fotos publicadas.";
-  }
-}
+    carregarMural();
 
-carregarMural();
-
-supabaseClient.auth.onAuthStateChange(() => {
-  carregarMural();
-});
-</script>
+    supabaseClient.auth.onAuthStateChange(() => {
+      carregarMural();
+    });
+  </script>
 
 </body>
 </html>
