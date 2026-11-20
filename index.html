@@ -2,427 +2,503 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PETMUNDO - Rede Social Pet</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PETMUNDO - Rede Social Pet</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f7f5;
-      color: #263b32;
-    }
-
-    header {
-      background: #15966b;
-      color: white;
-      padding: 25px 15px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 30px;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 18px;
-      padding: 15px;
-      background: white;
-    }
-
-    nav a {
-      color: #15966b;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    main {
-      max-width: 700px;
-      margin: 25px auto;
-      padding: 15px;
-    }
-
-    .card {
-      background: white;
-      padding: 22px;
-      margin: 18px auto;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px #0001;
-      max-width: 700px;
-    }
-
-    button {
-      background: #15966b;
-      color: white;
-      border: 0;
-      border-radius: 8px;
-      padding: 12px 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      background: #15966b;
-      color: white;
-    }
-
-    .foto-publicada {
-      width: 100%;
-      border-radius: 12px;
-      margin: 5px 0 20px;
-    }
-
-    .nome-tutor {
-      font-weight: bold;
-      color: #247a38;
-      margin: 15px 0 5px;
-    }
-  </style>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f7f5;
+  color: #263b32;
+}
+header {
+  background: #15966b;
+  color: white;
+  padding: 25px 15px;
+  text-align: center;
+}
+header h1 { margin: 0; font-size: 30px; }
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 15px;
+  background: white;
+}
+nav a {
+  color: #15966b;
+  text-decoration: none;
+  font-weight: bold;
+}
+main {
+  max-width: 700px;
+  margin: 25px auto;
+  padding: 15px;
+}
+.card {
+  background: white;
+  padding: 22px;
+  margin: 18px auto;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #0001;
+  max-width: 700px;
+}
+button {
+  background: #15966b;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+footer {
+  text-align: center;
+  padding: 25px;
+  background: #15966b;
+  color: white;
+}
+.foto-publicada {
+  width: 100%;
+  border-radius: 12px;
+  margin: 5px 0 10px;
+}
+.nome-tutor {
+  font-weight: bold;
+  color: #247a38;
+  margin: 15px 0 5px;
+}
+.area-curtida {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+.botao-curtir {
+  background: #e9f5ed;
+  color: #247a38;
+  border: 1px solid #b9ddc4;
+}
+.botao-curtir.curtiu {
+  background: #15966b;
+  color: white;
+}
+.contador-curtidas {
+  font-weight: bold;
+  color: #52675b;
+}
+input {
+  border: 1px solid #ccc;
+  border-radius: 7px;
+}
+</style>
 </head>
 
 <body>
 
-  <img
-    src="./petmundo-banner.png"
-    alt="PETMUNDO - Um mundo de amor por todos os pets"
-    style="display:block;width:100%;max-width:900px;height:auto;margin:0 auto;"
-  >
+<img src="./petmundo-banner.png"
+alt="PETMUNDO"
+style="display:block;width:100%;max-width:900px;height:auto;margin:0 auto;">
 
-  <header>
-    <h1>🐾 PETMUNDO</h1>
-    <p>Um mundo de amor por todos os animais!</p>
-  </header>
+<header>
+<h1>🐾 PETMUNDO</h1>
+<p>Um mundo de amor por todos os animais!</p>
+</header>
 
-  <nav>
-    <a href="#inicio">Início</a>
-    <a href="#comunidade">Comunidade</a>
-    <a href="#adocao">Adoção</a>
-    <a href="#donativos">DONATIVOS</a>
-  </nav>
+<nav>
+<a href="#inicio">Início</a>
+<a href="#comunidade">Comunidade</a>
+<a href="#adocao">Adoção</a>
+<a href="#donativos">DONATIVOS</a>
+</nav>
 
-  <main>
+<main>
 
-    <section class="card" id="inicio">
-      <h2>Bem-vindo ao PETMUNDO!</h2>
-      <p>Uma comunidade para tutores e amantes de todas as espécies.</p>
-      <p>🐶 Cães | 🐱 Gatos | 🐦 Aves | 🐍 Répteis | 🐠 Peixes</p>
-    </section>
+<section class="card" id="inicio">
+<h2>Bem-vindo ao PETMUNDO!</h2>
+<p>Uma comunidade para tutores e amantes de todas as espécies.</p>
+<p>🐶 Cães | 🐱 Gatos | 🐦 Aves | 🐍 Répteis | 🐠 Peixes</p>
+</section>
 
-    <section class="card" id="comunidade">
-      <h2>🌎 Nossa comunidade</h2>
-      <p>Compartilhe momentos, conheça outros tutores e celebre a vida animal.</p>
-      <button onclick="alert('Em breve!')">Participar</button>
-    </section>
+<section class="card" id="comunidade">
+<h2>🌎 Nossa comunidade</h2>
+<p>Compartilhe momentos, conheça outros tutores e celebre a vida animal.</p>
+<button onclick="alert('Em breve!')">Participar</button>
+</section>
 
-    <section class="card" id="adocao">
-      <h2>❤️ Adoção responsável</h2>
-      <p>Um espaço para conectar animais que precisam de um lar a pessoas que desejam acolher.</p>
-    </section>
+<section class="card" id="adocao">
+<h2>❤️ Adoção responsável</h2>
+<p>Um espaço para conectar animais que precisam de um lar a pessoas que desejam acolher.</p>
+</section>
 
-    <section class="card" id="donativos">
-      <h2>💚 DONATIVOS</h2>
-      <p>Ajude abrigos, protetores independentes e organizações de proteção animal.</p>
-      <p>Transparência e prestação de contas em cada campanha.</p>
-      <button onclick="alert('Em breve!')">Conhecer campanhas</button>
-    </section>
+<section class="card" id="donativos">
+<h2>💚 DONATIVOS</h2>
+<p>Ajude abrigos, protetores independentes e organizações de proteção animal.</p>
+<p>Transparência e prestação de contas em cada campanha.</p>
+<button onclick="alert('Em breve!')">Conhecer campanhas</button>
+</section>
 
-    <section class="card">
-      <h2>🐦 Nosso mascote: Tucolino</h2>
-      <p>Conheça nosso querido representante do PETMUNDO!</p>
-    </section>
+<section class="card">
+<h2>🐦 Nosso mascote: Tucolino</h2>
+<p>Conheça nosso querido representante do PETMUNDO!</p>
+</section>
 
-  </main>
+</main>
 
-  <footer>
-    PETMUNDO © 2026 - Todos os animais têm seu lugar!
-  </footer>
+<footer>
+PETMUNDO © 2026 - Todos os animais têm seu lugar!
+</footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
-    const SUPABASE_URL = "https://gvltggsagpiikmecyfyq.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_rejBmiKDT6eXZ53ilpVEBw_niDpV8-P";
+<script>
+const SUPABASE_URL = "https://gvltggsagpiikmecyfyq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_rejBmiKDT6eXZ53ilpVEBw_niDpV8-P";
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-    // Obtém o nome do usuário
-    function obterNome(usuario) {
-      return usuario.user_metadata?.full_name ||
-             usuario.email?.split("@")[0] ||
-             "Tutor PETMUNDO";
+function obterNome(usuario) {
+  return usuario.user_metadata?.full_name ||
+         usuario.email?.split("@")[0] ||
+         "Tutor PETMUNDO";
+}
+
+async function salvarNomePerfil(usuario) {
+  if (!usuario) return;
+
+  const nome = obterNome(usuario);
+
+  const { error } = await supabaseClient
+    .from("profiles")
+    .update({ display_name: nome })
+    .eq("id", usuario.id);
+
+  if (error) console.error("Erro ao atualizar perfil:", error.message);
+}
+</script>
+
+<section id="petmundo-conta" style="max-width:420px;margin:30px auto;padding:20px;background:#f0f8ef;border-radius:15px;font-family:Arial,sans-serif;">
+
+<h2 style="color:#247a38;text-align:center;">🐾 Entre no PETMUNDO</h2>
+
+<h3>Criar minha conta</h3>
+
+<form id="cadastroPet">
+<input id="nomePet" type="text" placeholder="Seu nome" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+<input id="emailCadastro" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+<input id="senhaCadastro" type="password" placeholder="Crie uma senha (mínimo 6 caracteres)" minlength="6" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+<button type="submit" style="width:100%;padding:13px;margin-top:8px;">Criar conta</button>
+</form>
+
+<hr style="margin:22px 0;">
+
+<h3>Já tenho uma conta</h3>
+
+<form id="loginPet">
+<input id="emailLogin" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+<input id="senhaLogin" type="password" placeholder="Sua senha" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+<button type="submit" style="width:100%;padding:13px;margin-top:8px;">Entrar</button>
+</form>
+
+<p id="mensagemPet" style="text-align:center;margin-top:15px;"></p>
+</section>
+
+<script>
+const cadastroPet = document.getElementById("cadastroPet");
+const loginPet = document.getElementById("loginPet");
+const mensagemPet = document.getElementById("mensagemPet");
+
+cadastroPet.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  mensagemPet.textContent = "Criando sua conta...";
+
+  const nome = document.getElementById("nomePet").value.trim();
+  const email = document.getElementById("emailCadastro").value;
+  const senha = document.getElementById("senhaCadastro").value;
+
+  const { error } = await supabaseClient.auth.signUp({
+    email,
+    password: senha,
+    options: { data: { full_name: nome } }
+  });
+
+  mensagemPet.textContent = error
+    ? error.message
+    : "Cadastro realizado! Confira seu e-mail se for solicitada confirmação.";
+});
+
+loginPet.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  mensagemPet.textContent = "Entrando...";
+
+  const email = document.getElementById("emailLogin").value;
+  const senha = document.getElementById("senhaLogin").value;
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password: senha
+  });
+
+  if (error) {
+    mensagemPet.textContent = error.message;
+    return;
+  }
+
+  await salvarNomePerfil(data.user);
+  mensagemPet.textContent = "Login realizado! Bem-vindo, " + obterNome(data.user) + "!";
+  await carregarMural();
+});
+</script>
+
+<section class="card" id="publicar-foto" style="max-width:500px;margin:25px auto;">
+<h2>📸 Compartilhe seu pet</h2>
+<p>Escolha uma foto para publicar na comunidade PETMUNDO.</p>
+<input type="file" id="fotoPet" accept="image/*">
+<br><br>
+<button type="button" id="enviarFoto">Enviar foto</button>
+<p id="mensagemFoto"></p>
+<img id="fotoEnviada" style="display:none;width:100%;border-radius:12px;">
+</section>
+
+<script>
+document.getElementById("enviarFoto").addEventListener("click", async function() {
+  const arquivo = document.getElementById("fotoPet").files[0];
+  const mensagem = document.getElementById("mensagemFoto");
+  const imagem = document.getElementById("fotoEnviada");
+
+  if (!arquivo) {
+    mensagem.textContent = "Escolha uma foto primeiro.";
+    return;
+  }
+
+  mensagem.textContent = "Verificando sua conta...";
+
+  const { data: usuarioData, error: erroUsuario } =
+    await supabaseClient.auth.getUser();
+
+  const usuario = usuarioData?.user;
+
+  if (erroUsuario || !usuario) {
+    mensagem.textContent = "Entre na sua conta para enviar fotos.";
+    return;
+  }
+
+  await salvarNomePerfil(usuario);
+
+  mensagem.textContent = "Enviando foto...";
+
+  const nomeArquivo = arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const caminho = usuario.id + "/" + Date.now() + "-" + nomeArquivo;
+
+  const { error } = await supabaseClient.storage
+    .from("petmundo-fotos")
+    .upload(caminho, arquivo);
+
+  if (error) {
+    mensagem.textContent = "Erro: " + error.message;
+    return;
+  }
+
+  const { data } = supabaseClient.storage
+    .from("petmundo-fotos")
+    .getPublicUrl(caminho);
+
+  imagem.src = data.publicUrl;
+  imagem.style.display = "block";
+  mensagem.textContent = "Foto enviada com sucesso! 🐾";
+
+  await carregarMural();
+});
+</script>
+
+<section class="card" id="mural-petmundo">
+<h2>🌎 Mural da Comunidade</h2>
+<p>Veja os pets que estão sendo compartilhados no PETMUNDO!</p>
+<div id="muralFotos">Carregando publicações...</div>
+</section>
+
+<script>
+async function alternarCurtida(caminho, botao, contador) {
+  const { data: usuarioData, error: erroUsuario } =
+    await supabaseClient.auth.getUser();
+
+  const usuario = usuarioData?.user;
+
+  if (erroUsuario || !usuario) {
+    alert("Entre na sua conta para curtir fotos.");
+    return;
+  }
+
+  botao.disabled = true;
+
+  const { data: curtidas, error } = await supabaseClient
+    .from("photo_likes")
+    .select("id")
+    .eq("photo_path", caminho)
+    .eq("user_id", usuario.id);
+
+  if (error) {
+    alert("Não foi possível consultar as curtidas: " + error.message);
+    botao.disabled = false;
+    return;
+  }
+
+  if (curtidas && curtidas.length > 0) {
+    const ids = curtidas.map(c => c.id);
+
+    const { error: erroDelete } = await supabaseClient
+      .from("photo_likes")
+      .delete()
+      .in("id", ids);
+
+    if (erroDelete) {
+      alert("Erro ao retirar curtida: " + erroDelete.message);
     }
-
-    // Atualiza o nome do perfil no banco
-    async function salvarNomePerfil(usuario) {
-      if (!usuario) return;
-
-      const nome = obterNome(usuario);
-
-      const { error } = await supabaseClient
-        .from("profiles")
-        .update({ display_name: nome })
-        .eq("id", usuario.id);
-
-      if (error) {
-        console.error("Erro ao atualizar perfil:", error.message);
-      }
-    }
-  </script>
-
-  <section id="petmundo-conta" style="max-width:420px;margin:30px auto;padding:20px;background:#f0f8ef;border-radius:15px;font-family:Arial,sans-serif;">
-
-    <h2 style="color:#247a38;text-align:center;">🐾 Entre no PETMUNDO</h2>
-
-    <h3>Criar minha conta</h3>
-
-    <form id="cadastroPet">
-      <input id="nomePet" type="text" placeholder="Seu nome" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-      <input id="emailCadastro" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-      <input id="senhaCadastro" type="password" placeholder="Crie uma senha (mínimo 6 caracteres)" minlength="6" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-      <button type="submit" style="width:100%;padding:13px;background:#25833c;color:white;border:0;border-radius:8px;margin-top:8px;">Criar conta</button>
-    </form>
-
-    <hr style="margin:22px 0;">
-
-    <h3>Já tenho uma conta</h3>
-
-    <form id="loginPet">
-      <input id="emailLogin" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-      <input id="senhaLogin" type="password" placeholder="Sua senha" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
-      <button type="submit" style="width:100%;padding:13px;background:#247a38;color:white;border:0;border-radius:8px;margin-top:8px;">Entrar</button>
-    </form>
-
-    <p id="mensagemPet" style="text-align:center;margin-top:15px;"></p>
-  </section>
-
-  <script>
-    const cadastroPet = document.getElementById("cadastroPet");
-    const loginPet = document.getElementById("loginPet");
-    const mensagemPet = document.getElementById("mensagemPet");
-
-    cadastroPet.addEventListener("submit", async function(e) {
-      e.preventDefault();
-      mensagemPet.textContent = "Criando sua conta...";
-
-      const nome = document.getElementById("nomePet").value.trim();
-      const email = document.getElementById("emailCadastro").value;
-      const senha = document.getElementById("senhaCadastro").value;
-
-      const { error } = await supabaseClient.auth.signUp({
-        email,
-        password: senha,
-        options: {
-          data: { full_name: nome }
-        }
+  } else {
+    const { error: erroInsert } = await supabaseClient
+      .from("photo_likes")
+      .insert({
+        photo_path: caminho,
+        user_id: usuario.id
       });
 
-      mensagemPet.textContent = error
-        ? error.message
-        : "Cadastro realizado! Confira seu e-mail se for solicitada confirmação.";
-    });
+    if (erroInsert) {
+      alert("Erro ao curtir: " + erroInsert.message);
+    }
+  }
 
-    loginPet.addEventListener("submit", async function(e) {
-      e.preventDefault();
-      mensagemPet.textContent = "Entrando...";
+  botao.disabled = false;
+  await carregarMural();
+}
 
-      const email = document.getElementById("emailLogin").value;
-      const senha = document.getElementById("senhaLogin").value;
+async function carregarMural() {
+  const mural = document.getElementById("muralFotos");
+  mural.innerHTML = "Carregando fotos...";
 
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password: senha
-      });
+  const { data: usuarioData, error: erroUsuario } =
+    await supabaseClient.auth.getUser();
 
-      if (error) {
-        mensagemPet.textContent = error.message;
-        return;
-      }
+  if (erroUsuario || !usuarioData.user) {
+    mural.innerHTML = "Entre na sua conta para ver as fotos da comunidade.";
+    return;
+  }
 
-      await salvarNomePerfil(data.user);
+  const usuarioAtual = usuarioData.user;
 
-      mensagemPet.textContent =
-        "Login realizado! Bem-vindo, " + obterNome(data.user) + "!";
+  const { data: pastas, error } = await supabaseClient.storage
+    .from("petmundo-fotos")
+    .list();
 
-      await carregarMural();
-    });
-  </script>
+  if (error) {
+    mural.textContent = "Erro ao carregar fotos: " + error.message;
+    return;
+  }
 
-  <section class="card" id="publicar-foto" style="max-width:500px;margin:25px auto;">
-    <h2>📸 Compartilhe seu pet</h2>
-    <p>Escolha uma foto para publicar na comunidade PETMUNDO.</p>
-    <input type="file" id="fotoPet" accept="image/*" required>
-    <br><br>
-    <button type="button" id="enviarFoto">Enviar foto</button>
-    <p id="mensagemFoto"></p>
-    <img id="fotoEnviada" style="display:none;width:100%;border-radius:12px;">
-  </section>
+  mural.innerHTML = "";
+  let total = 0;
 
-  <script>
-    document.getElementById("enviarFoto").addEventListener("click", async function() {
-      const arquivo = document.getElementById("fotoPet").files[0];
-      const mensagem = document.getElementById("mensagemFoto");
-      const imagem = document.getElementById("fotoEnviada");
+  for (const pasta of pastas || []) {
+    if (pasta.id) continue;
 
-      if (!arquivo) {
-        mensagem.textContent = "Escolha uma foto primeiro.";
-        return;
-      }
-
-      mensagem.textContent = "Verificando sua conta...";
-
-      const { data: usuarioData, error: erroUsuario } =
-        await supabaseClient.auth.getUser();
-
-      const usuario = usuarioData?.user;
-
-      if (erroUsuario || !usuario) {
-        mensagem.textContent = "Entre na sua conta para enviar fotos.";
-        return;
-      }
-
-      await salvarNomePerfil(usuario);
-
-      mensagem.textContent = "Enviando foto...";
-
-      const nomeArquivo = arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const caminho = usuario.id + "/" + Date.now() + "-" + nomeArquivo;
-
-      const { error } = await supabaseClient.storage
+    const { data: arquivos, error: erroArquivos } =
+      await supabaseClient.storage
         .from("petmundo-fotos")
-        .upload(caminho, arquivo);
+        .list(pasta.name);
 
-      if (error) {
-        mensagem.textContent = "Erro: " + error.message;
-        return;
-      }
+    if (erroArquivos) continue;
 
-      const { data } = supabaseClient.storage
+    const { data: perfil } = await supabaseClient
+      .from("profiles")
+      .select("display_name")
+      .eq("id", pasta.name)
+      .maybeSingle();
+
+    let nomeTutor = perfil?.display_name;
+
+    if (!nomeTutor && pasta.name === usuarioAtual.id) {
+      nomeTutor = obterNome(usuarioAtual);
+    }
+
+    if (!nomeTutor) nomeTutor = "Tutor PETMUNDO";
+
+    for (const arquivo of arquivos || []) {
+      if (!arquivo.name) continue;
+
+      const caminho = pasta.name + "/" + arquivo.name;
+
+      const { data: urlData } = supabaseClient.storage
         .from("petmundo-fotos")
         .getPublicUrl(caminho);
 
-      imagem.src = data.publicUrl;
-      imagem.style.display = "block";
-      mensagem.textContent = "Foto enviada com sucesso! 🐾";
+      const nome = document.createElement("p");
+      nome.className = "nome-tutor";
+      nome.textContent = "🐾 " + nomeTutor;
+      mural.appendChild(nome);
 
-      await carregarMural();
-    });
-  </script>
+      const img = document.createElement("img");
+      img.src = urlData.publicUrl;
+      img.alt = "Foto de um pet";
+      img.className = "foto-publicada";
+      mural.appendChild(img);
 
-  <section class="card" id="mural-petmundo">
-    <h2>🌎 Mural da Comunidade</h2>
-    <p>Veja os pets que estão sendo compartilhados no PETMUNDO!</p>
-    <div id="muralFotos">Carregando publicações...</div>
-  </section>
+      const { data: curtidas, error: erroCurtidas } =
+        await supabaseClient
+          .from("photo_likes")
+          .select("id,user_id")
+          .eq("photo_path", caminho);
 
-  <script>
-    async function carregarMural() {
-      const mural = document.getElementById("muralFotos");
-      mural.innerHTML = "Carregando fotos...";
-
-      const { data: usuarioData, error: erroUsuario } =
-        await supabaseClient.auth.getUser();
-
-      if (erroUsuario || !usuarioData.user) {
-        mural.innerHTML = "Entre na sua conta para ver as fotos da comunidade.";
-        return;
+      if (erroCurtidas) {
+        const aviso = document.createElement("p");
+        aviso.textContent = "Não foi possível carregar as curtidas.";
+        mural.appendChild(aviso);
+        continue;
       }
 
-      const usuarioAtual = usuarioData.user;
+      const listaCurtidas = curtidas || [];
+      const jaCurtiu = listaCurtidas.some(
+        curtida => curtida.user_id === usuarioAtual.id
+      );
 
-      const { data: pastas, error } = await supabaseClient.storage
-        .from("petmundo-fotos")
-        .list();
+      const area = document.createElement("div");
+      area.className = "area-curtida";
 
-      if (error) {
-        mural.textContent = "Erro ao carregar fotos: " + error.message;
-        return;
-      }
+      const botao = document.createElement("button");
+      botao.className = "botao-curtir" + (jaCurtiu ? " curtiu" : "");
+      botao.textContent = jaCurtiu ? "❤️ Curtido" : "🤍 Curtir";
 
-      mural.innerHTML = "";
-      let total = 0;
+      const contador = document.createElement("span");
+      contador.className = "contador-curtidas";
+      contador.textContent = listaCurtidas.length + " curtida(s)";
 
-      for (const pasta of pastas || []) {
-        // Ignora arquivos que não sejam pastas
-        if (pasta.id) continue;
+      botao.addEventListener("click", () => {
+        alternarCurtida(caminho, botao, contador);
+      });
 
-        const { data: arquivos, error: erroArquivos } =
-          await supabaseClient.storage
-            .from("petmundo-fotos")
-            .list(pasta.name);
+      area.appendChild(botao);
+      area.appendChild(contador);
+      mural.appendChild(area);
 
-        if (erroArquivos) {
-          console.error("Erro ao listar arquivos:", erroArquivos.message);
-          continue;
-        }
-
-        // Busca o nome correspondente ao dono da pasta
-        const { data: perfil, error: erroPerfil } =
-          await supabaseClient
-            .from("profiles")
-            .select("display_name")
-            .eq("id", pasta.name)
-            .maybeSingle();
-
-        if (erroPerfil) {
-          console.error("Erro ao buscar perfil:", erroPerfil.message);
-        }
-
-        let nomeTutor = perfil?.display_name;
-
-        // Se for a pasta do usuário conectado, usa o nome do cadastro
-        if (!nomeTutor && pasta.name === usuarioAtual.id) {
-          nomeTutor = obterNome(usuarioAtual);
-        }
-
-        if (!nomeTutor) {
-          nomeTutor = "Tutor PETMUNDO";
-        }
-
-        for (const arquivo of arquivos || []) {
-          if (!arquivo.name) continue;
-
-          const caminho = pasta.name + "/" + arquivo.name;
-
-          const { data } = supabaseClient.storage
-            .from("petmundo-fotos")
-            .getPublicUrl(caminho);
-
-          const nome = document.createElement("p");
-          nome.className = "nome-tutor";
-          nome.textContent = "🐾 " + nomeTutor;
-          mural.appendChild(nome);
-
-          const img = document.createElement("img");
-          img.src = data.publicUrl;
-          img.alt = "Foto de um pet";
-          img.className = "foto-publicada";
-          mural.appendChild(img);
-
-          total++;
-        }
-      }
-
-      if (total === 0) {
-        mural.textContent = "Ainda não há fotos publicadas.";
-      }
+      total++;
     }
+  }
 
-    carregarMural();
+  if (total === 0) {
+    mural.textContent = "Ainda não há fotos publicadas.";
+  }
+}
 
-    supabaseClient.auth.onAuthStateChange(() => {
-      setTimeout(carregarMural, 0);
-    });
-  </script>
+carregarMural();
+
+supabaseClient.auth.onAuthStateChange(() => {
+  setTimeout(carregarMural, 0);
+});
+</script>
 
 </body>
 </html>
