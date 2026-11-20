@@ -141,5 +141,71 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_KEY
 );
 </script>
+
+<section id="petmundo-conta" style="max-width:420px;margin:30px auto;padding:20px;background:#f0f8ef;border-radius:15px;font-family:Arial,sans-serif;">
+  <h2 style="color:#247a38;text-align:center;">🐾 Entre no PETMUNDO</h2>
+
+  <h3>Criar minha conta</h3>
+  <form id="cadastroPet">
+    <input id="nomePet" type="text" placeholder="Seu nome" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+    <input id="emailCadastro" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+    <input id="senhaCadastro" type="password" placeholder="Crie uma senha (mínimo 6 caracteres)" minlength="6" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+    <button type="submit" style="width:100%;padding:13px;background:#25833c;color:white;border:0;border-radius:8px;margin-top:8px;">Criar conta</button>
+  </form>
+
+  <hr style="margin:22px 0;">
+
+  <h3>Já tenho uma conta</h3>
+  <form id="loginPet">
+    <input id="emailLogin" type="email" placeholder="Seu e-mail" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+    <input id="senhaLogin" type="password" placeholder="Sua senha" required style="width:100%;padding:12px;margin:6px 0;box-sizing:border-box;">
+    <button type="submit" style="width:100%;padding:13px;background:#247a38;color:white;border:0;border-radius:8px;margin-top:8px;">Entrar</button>
+  </form>
+
+  <p id="mensagemPet" style="text-align:center;margin-top:15px;"></p>
+</section>
+
+<script>
+const cadastroPet = document.getElementById("cadastroPet");
+const loginPet = document.getElementById("loginPet");
+const mensagemPet = document.getElementById("mensagemPet");
+
+cadastroPet.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  mensagemPet.textContent = "Criando sua conta...";
+
+  const nome = document.getElementById("nomePet").value;
+  const email = document.getElementById("emailCadastro").value;
+  const senha = document.getElementById("senhaCadastro").value;
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password: senha,
+    options: { data: { full_name: nome } }
+  });
+
+  mensagemPet.textContent = error
+    ? error.message
+    : "Cadastro realizado! Confira seu e-mail se for solicitada confirmação.";
+});
+
+loginPet.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  mensagemPet.textContent = "Entrando...";
+
+  const email = document.getElementById("emailLogin").value;
+  const senha = document.getElementById("senhaLogin").value;
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password: senha
+  });
+
+  mensagemPet.textContent = error
+    ? error.message
+    : "Login realizado! Bem-vindo ao PETMUNDO!";
+});
+</script>
+
 </body>
 </html>
