@@ -207,5 +207,60 @@ loginPet.addEventListener("submit", async function(e) {
 });
 </script>
 
+<section class="card" id="publicar-foto" style="max-width:500px;margin:25px auto;">
+  <h2>📸 Compartilhe seu pet</h2>
+  <p>Escolha uma foto para publicar na comunidade PETMUNDO.</p>
+  <input type="file" id="fotoPet" accept="image/*" required>
+  <br><br>
+  <button type="button" id="enviarFoto">Enviar foto</button>
+  <p id="mensagemFoto"></p>
+  <img id="fotoEnviada" style="display:none;width:100%;border-radius:12px;">
+</section>
+
+<script>
+document.getElementById("enviarFoto").addEventListener("click", async function() {
+  const arquivo = document.getElementById("fotoPet").files[0];
+  const mensagem = document.getElementById("mensagemFoto");
+  const imagem = document.getElementById("fotoEnviada");
+
+  if (!arquivo) {
+    mensagem.textContent = "Escolha uma foto primeiro.";
+    return;
+  }
+
+  mensagem.textContent = "Verificando sua conta...";
+
+  const { data: usuarioData } = await supabaseClient.auth.getUser();
+  const usuario = usuarioData.user;
+
+  if (!usuario) {
+    mensagem.textContent = "Entre na sua conta para enviar fotos.";
+    return;
+  }
+
+  mensagem.textContent = "Enviando foto...";
+
+  const nomeArquivo = arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const caminho = usuario.id + "/" + Date.now() + "-" + nomeArquivo;
+
+  const { error } = await supabaseClient.storage
+    .from("petmundo-fotos")
+    .upload(caminho, arquivo);
+
+  if (error) {
+    mensagem.textContent = "Erro: " + error.message;
+    return;
+  }
+
+  const { data } = supabaseClient.storage
+    .from("petmundo-fotos")
+    .getPublicUrl(caminho);
+
+  imagem.src = data.publicUrl;
+  imagem.style.display = "block";
+  mensagem.textContent = "Foto enviada com sucesso! 🐾";
+});
+</script>
+
 </body>
 </html>
