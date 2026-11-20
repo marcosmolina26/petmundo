@@ -63,6 +63,7 @@
       border-radius: 8px;
       padding: 12px 18px;
       font-weight: bold;
+      cursor: pointer;
     }
 
     footer {
@@ -153,6 +154,29 @@
       SUPABASE_URL,
       SUPABASE_KEY
     );
+
+    // Obtém o nome do usuário
+    function obterNome(usuario) {
+      return usuario.user_metadata?.full_name ||
+             usuario.email?.split("@")[0] ||
+             "Tutor PETMUNDO";
+    }
+
+    // Atualiza o nome do perfil no banco
+    async function salvarNomePerfil(usuario) {
+      if (!usuario) return;
+
+      const nome = obterNome(usuario);
+
+      const { error } = await supabaseClient
+        .from("profiles")
+        .update({ display_name: nome })
+        .eq("id", usuario.id);
+
+      if (error) {
+        console.error("Erro ao atualizar perfil:", error.message);
+      }
+    }
   </script>
 
   <section id="petmundo-conta" style="max-width:420px;margin:30px auto;padding:20px;background:#f0f8ef;border-radius:15px;font-family:Arial,sans-serif;">
@@ -190,14 +214,16 @@
       e.preventDefault();
       mensagemPet.textContent = "Criando sua conta...";
 
-      const nome = document.getElementById("nomePet").value;
+      const nome = document.getElementById("nomePet").value.trim();
       const email = document.getElementById("emailCadastro").value;
       const senha = document.getElementById("senhaCadastro").value;
 
       const { error } = await supabaseClient.auth.signUp({
         email,
         password: senha,
-        options: { data: { full_name: nome } }
+        options: {
+          data: { full_name: nome }
+        }
       });
 
       mensagemPet.textContent = error
@@ -212,18 +238,22 @@
       const email = document.getElementById("emailLogin").value;
       const senha = document.getElementById("senhaLogin").value;
 
-      const { error } = await supabaseClient.auth.signInWithPassword({
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
         email,
         password: senha
       });
 
-      mensagemPet.textContent = error
-        ? error.message
-        : "Login realizado! Bem-vindo ao PETMUNDO!";
-
-      if (!error) {
-        carregarMural();
+      if (error) {
+        mensagemPet.textContent = error.message;
+        return;
       }
+
+      await salvarNomePerfil(data.user);
+
+      mensagemPet.textContent =
+        "Login realizado! Bem-vindo, " + obterNome(data.user) + "!";
+
+      await carregarMural();
     });
   </script>
 
@@ -250,13 +280,17 @@
 
       mensagem.textContent = "Verificando sua conta...";
 
-      const { data: usuarioData } = await supabaseClient.auth.getUser();
-      const usuario = usuarioData.user;
+      const { data: usuarioData, error: erroUsuario } =
+        await supabaseClient.auth.getUser();
 
-      if (!usuario) {
+      const usuario = usuarioData?.user;
+
+      if (erroUsuario || !usuario) {
         mensagem.textContent = "Entre na sua conta para enviar fotos.";
         return;
       }
+
+      await salvarNomePerfil(usuario);
 
       mensagem.textContent = "Enviando foto...";
 
@@ -280,7 +314,7 @@
       imagem.style.display = "block";
       mensagem.textContent = "Foto enviada com sucesso! 🐾";
 
-      carregarMural();
+      await carregarMural();
     });
   </script>
 
@@ -295,12 +329,15 @@
       const mural = document.getElementById("muralFotos");
       mural.innerHTML = "Carregando fotos...";
 
-      const { data: usuarioData } = await supabaseClient.auth.getUser();
+      const { data: usuarioData, error: erroUsuario } =
+        await supabaseClient.auth.getUser();
 
-      if (!usuarioData.user) {
+      if (erroUsuario || !usuarioData.user) {
         mural.innerHTML = "Entre na sua conta para ver as fotos da comunidade.";
         return;
       }
+
+      const usuarioAtual = usuarioData.user;
 
       const { data: pastas, error } = await supabaseClient.storage
         .from("petmundo-fotos")
@@ -315,50 +352,63 @@
       let total = 0;
 
       for (const pasta of pastas || []) {
-        if (!pasta.id) {
-          const { data: arquivos, error: erroArquivos } = await supabaseClient.storage
+        // Ignora arquivos que não sejam pastas
+        if (pasta.id) continue;
+
+        const { data: arquivos, error: erroArquivos } =
+          await supabaseClient.storage
             .from("petmundo-fotos")
             .list(pasta.name);
 
-          if (erroArquivos) {
-            console.error("Erro ao listar arquivos:", erroArquivos.message);
-            continue;
-          }
+        if (erroArquivos) {
+          console.error("Erro ao listar arquivos:", erroArquivos.message);
+          continue;
+        }
 
-          const { data: perfil, error: erroPerfil } = await supabaseClient
+        // Busca o nome correspondente ao dono da pasta
+        const { data: perfil, error: erroPerfil } =
+          await supabaseClient
             .from("profiles")
             .select("display_name")
             .eq("id", pasta.name)
             .maybeSingle();
 
-          if (erroPerfil) {
-            console.error("Erro ao buscar tutor:", erroPerfil.message);
-          }
+        if (erroPerfil) {
+          console.error("Erro ao buscar perfil:", erroPerfil.message);
+        }
 
-          const nomeTutor = perfil?.display_name || "Tutor PETMUNDO";
+        let nomeTutor = perfil?.display_name;
 
-          for (const arquivo of arquivos || []) {
-            if (!arquivo.name) continue;
+        // Se for a pasta do usuário conectado, usa o nome do cadastro
+        if (!nomeTutor && pasta.name === usuarioAtual.id) {
+          nomeTutor = obterNome(usuarioAtual);
+        }
 
-            const caminho = pasta.name + "/" + arquivo.name;
+        if (!nomeTutor) {
+          nomeTutor = "Tutor PETMUNDO";
+        }
 
-            const { data } = supabaseClient.storage
-              .from("petmundo-fotos")
-              .getPublicUrl(caminho);
+        for (const arquivo of arquivos || []) {
+          if (!arquivo.name) continue;
 
-            const nome = document.createElement("p");
-            nome.className = "nome-tutor";
-            nome.textContent = "🐾 " + nomeTutor;
-            mural.appendChild(nome);
+          const caminho = pasta.name + "/" + arquivo.name;
 
-            const img = document.createElement("img");
-            img.src = data.publicUrl;
-            img.alt = "Foto de um pet";
-            img.className = "foto-publicada";
-            mural.appendChild(img);
+          const { data } = supabaseClient.storage
+            .from("petmundo-fotos")
+            .getPublicUrl(caminho);
 
-            total++;
-          }
+          const nome = document.createElement("p");
+          nome.className = "nome-tutor";
+          nome.textContent = "🐾 " + nomeTutor;
+          mural.appendChild(nome);
+
+          const img = document.createElement("img");
+          img.src = data.publicUrl;
+          img.alt = "Foto de um pet";
+          img.className = "foto-publicada";
+          mural.appendChild(img);
+
+          total++;
         }
       }
 
@@ -370,7 +420,7 @@
     carregarMural();
 
     supabaseClient.auth.onAuthStateChange(() => {
-      carregarMural();
+      setTimeout(carregarMural, 0);
     });
   </script>
 
