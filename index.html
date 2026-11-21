@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -63,9 +64,20 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .area-video-pet{margin-top:12px;padding:10px;background:#f3f7f5;border-radius:8px}
 .editor-pet{background:#f0f8f3;border:1px solid #b9dfca;border-radius:10px;padding:14px;margin-top:14px}
 .editor-pet h3{margin-top:4px}
-.acoes-editor{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* ADOÇÃO E RESGATE */
+.resgate-intro{background:#eaf7f0;padding:16px;border-radius:10px;margin:12px 0}
+.resgate-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.resgate-card{border:1px solid #dce9e0;border-radius:12px;padding:16px;background:#fbfdfb}
+.resgate-card h3{margin-top:0}
+.resgate-icone{font-size:32px;margin-bottom:8px}
+.resgate-aviso{background:#fff8e7;border-left:4px solid #e3b64b;border-radius:8px;padding:14px;margin-top:16px}
+.resgate-passos{padding-left:20px;line-height:1.7}
+.resgate-destaque{background:#087c56;color:white;padding:16px;border-radius:10px;margin-top:16px}
+.resgate-destaque h3{color:white}
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
+.resgate-grid{grid-template-columns:1fr}
 nav a{padding:11px 8px;font-size:13px}
 header h1{font-size:25px}
 .logo-petmundo{height:230px}
@@ -84,7 +96,7 @@ header h1{font-size:25px}
 <h2>Bem-vindo ao PETMUNDO!</h2>
 <p>Um mundo de amor pelos animais.</p>
 <div class="botoes-capa">
-<a href="#adocao">🐶 Adote</a>
+<a href="#adocao">🐾 Adoção e resgate</a>
 <a href="#comunidade">📸 Comunidade</a>
 <a href="#donativos">❤️ Doações</a>
 </div>
@@ -104,7 +116,7 @@ header h1{font-size:25px}
 <nav>
 <a href="#inicio">Início</a>
 <a href="#comunidade">Comunidade</a>
-<a href="#adocao">Adoção</a>
+<a href="#adocao">Adoção e Resgate</a>
 <a href="#donativos">DONATIVOS</a>
 <a href="#meu-petmundo">Meu PETMUNDO</a>
 </nav>
@@ -227,10 +239,69 @@ header h1{font-size:25px}
 <div id="mural"><p>Carregando fotos...</p></div>
 </section>
 
+<!-- NOVA ÁREA: ADOÇÃO E RESGATE -->
 <section id="adocao" class="card">
-<h2>🐶 Adoção responsável</h2>
-<p>Um espaço para aproximar animais que precisam de um lar de pessoas dispostas a oferecer carinho e cuidado.</p>
-<p>Em breve, teremos uma área para divulgação de animais disponíveis para adoção.</p>
+<h2>🐶 ADOÇÃO E RESGATE</h2>
+
+<div class="resgate-intro">
+<h3>❤️ Juntos podemos salvar vidas!</h3>
+<p>O PETMUNDO quer ser um espaço de união entre pessoas que amam os animais e desejam fazer a diferença.</p>
+<p>Aqui queremos aproximar quem procura um novo companheiro, quem resgata animais e quem pode oferecer ajuda.</p>
+</div>
+
+<h3>Como queremos ajudar?</h3>
+
+<div class="resgate-grid">
+<div class="resgate-card">
+<div class="resgate-icone">🏡</div>
+<h3>Adoção responsável</h3>
+<p>Divulgação de cães, gatos e outros animais que precisam encontrar uma família.</p>
+<p>Nosso objetivo é aproximar animais disponíveis para adoção de pessoas preparadas para oferecer um lar seguro, carinho e cuidados.</p>
+</div>
+
+<div class="resgate-card">
+<div class="resgate-icone">🐕</div>
+<h3>Animais abandonados</h3>
+<p>Um espaço para dar visibilidade a animais encontrados nas ruas ou abandonados.</p>
+<p>A comunidade poderá ajudar compartilhando informações e aproximando protetores de possíveis adotantes.</p>
+</div>
+
+<div class="resgate-card">
+<div class="resgate-icone">🔎</div>
+<h3>Animais perdidos</h3>
+<p>Queremos facilitar a divulgação de animais desaparecidos e ajudar tutores a reencontrarem seus companheiros.</p>
+<p>Fotos, características e região onde o animal foi visto poderão ajudar nessa busca.</p>
+</div>
+
+<div class="resgate-card">
+<div class="resgate-icone">🆘</div>
+<h3>Animais feridos ou em risco</h3>
+<p>Animais machucados, doentes ou em situação de perigo também precisam de atenção.</p>
+<p>A proposta é aproximar pessoas dispostas a ajudar, protetores independentes e organizações de proteção animal.</p>
+</div>
+</div>
+
+<div class="resgate-aviso">
+<strong>⚠️ Atenção em situações urgentes</strong>
+<p>Se encontrar um animal ferido ou em perigo imediato, procure atendimento veterinário ou os serviços de proteção animal da sua região. Não tente realizar procedimentos ou transportar um animal agressivo ou gravemente ferido sem orientação adequada.</p>
+</div>
+
+<h3>Como agir ao encontrar um animal precisando de ajuda?</h3>
+<ol class="resgate-passos">
+<li>Observe a situação do animal mantendo uma distância segura.</li>
+<li>Registre uma foto, se for seguro fazer isso.</li>
+<li>Anote o bairro ou local onde o animal foi encontrado.</li>
+<li>Procure um protetor independente, abrigo ou serviço de proteção animal da região.</li>
+<li>Compartilhe informações para ajudar a encontrar apoio ou um possível lar.</li>
+</ol>
+
+<div class="resgate-destaque">
+<h3>🐾 Uma comunidade que protege vidas</h3>
+<p>Queremos que o PETMUNDO seja mais do que uma rede social. Queremos construir uma rede de solidariedade para que nenhum animal fique invisível.</p>
+<p><strong>Adotar, acolher, resgatar ou compartilhar: toda ajuda pode fazer diferença!</strong></p>
+</div>
+
+<p class="pequeno">A área de cadastro e divulgação de casos de adoção e resgate será implementada na próxima etapa, com publicação de informações e fotos e cuidados para proteger os dados dos responsáveis.</p>
 </section>
 
 <section id="donativos" class="card">
