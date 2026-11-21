@@ -12,69 +12,118 @@
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#26332d}
 
+/* CAPA NO TOPO */
 .capa{
-position:relative;width:100%;height:300px;overflow:hidden;
-background:linear-gradient(135deg,#15966b,#b5e8c9);
-display:flex;align-items:flex-end;justify-content:center
+position:relative;
+width:100%;
+height:320px;
+overflow:hidden;
+background:#15966b;
+display:flex;
+align-items:flex-end;
+justify-content:center;
 }
 .imagem-capa{
-position:absolute;inset:0;width:100%;height:100%;
-object-fit:cover
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center;
 }
 .capa-texto{
-position:relative;z-index:1;width:100%;padding:22px 12px;
-text-align:center;color:white;
-background:linear-gradient(transparent,rgba(0,0,0,.75))
+position:relative;
+z-index:1;
+width:100%;
+padding:22px 12px;
+text-align:center;
+color:white;
+background:linear-gradient(transparent,rgba(0,0,0,.75));
 }
 .capa-texto h2{color:white;font-size:29px;margin:0 0 8px}
 .capa-texto p{margin:0 0 12px}
 .botoes-capa{
-display:flex;justify-content:center;gap:8px;flex-wrap:wrap
+display:flex;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
 }
 .botoes-capa a{
-display:inline-block;text-decoration:none;color:#087c56;
-background:white;padding:11px 16px;border-radius:8px;
-font-weight:bold;font-size:14px
+display:inline-block;
+text-decoration:none;
+color:#087c56;
+background:white;
+padding:11px 16px;
+border-radius:8px;
+font-weight:bold;
+font-size:14px;
 }
 .botoes-capa a:hover{background:#e4f7ec}
 
+/* LOGO GRANDE ABAIXO DA CAPA */
 header{
-background:#15966b;color:white;padding:15px;text-align:center
+background:#15966b;
+color:white;
+padding:0;
+text-align:center;
 }
 .logo-petmundo{
-width:140px;height:140px;object-fit:contain;
-display:block;margin:0 auto 8px
+width:100%;
+height:260px;
+object-fit:cover;
+object-position:center;
+display:block;
+margin:0;
 }
+.header-texto{padding:15px}
 header h1{margin:0;font-size:30px}
 header p{margin:7px 0 0}
 
+/* MENU */
 nav{
-background:#087c56;display:flex;
-justify-content:center;flex-wrap:wrap
+background:#087c56;
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
 }
 nav a{
-color:white;text-decoration:none;padding:13px 12px;
-font-weight:bold
+color:white;
+text-decoration:none;
+padding:13px 12px;
+font-weight:bold;
 }
 nav a:hover{background:#056344}
 
 .container{max-width:950px;margin:20px auto;padding:0 12px}
 .card{
-background:white;border-radius:12px;padding:18px;
-margin-bottom:18px;box-shadow:0 2px 8px #00000012
+background:white;
+border-radius:12px;
+padding:18px;
+margin-bottom:18px;
+box-shadow:0 2px 8px #00000012;
 }
 h2{color:#087c56;margin-top:0}
 h3{color:#087c56}
 
 input,textarea{
-width:100%;padding:12px;margin:7px 0;
-border:1px solid #ccd8d1;border-radius:8px;font-size:15px
+width:100%;
+padding:12px;
+margin:7px 0;
+border:1px solid #ccd8d1;
+border-radius:8px;
+font-size:15px;
 }
 textarea{resize:vertical;min-height:75px}
 button{
-background:#15966b;color:white;border:0;border-radius:8px;
-padding:11px 16px;font-size:15px;font-weight:bold;
-cursor:pointer;margin:5px 3px 5px 0
+background:#15966b;
+color:white;
+border:0;
+border-radius:8px;
+padding:11px 16px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+margin:5px 3px 5px 0;
 }
 button:hover{background:#087c56}
 button.secundario{background:#687b71}
@@ -86,12 +135,18 @@ button.curtir.ativo{background:#15966b;color:white}
 .duas-colunas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 .foto-card{
-background:white;border:1px solid #e0e9e3;
-border-radius:12px;padding:12px;margin:15px 0
+background:white;
+border:1px solid #e0e9e3;
+border-radius:12px;
+padding:12px;
+margin:15px 0;
 }
 .foto-card img{
-width:100%;max-height:520px;object-fit:contain;
-border-radius:8px;background:#f3f7f5
+width:100%;
+max-height:520px;
+object-fit:contain;
+border-radius:8px;
+background:#f3f7f5;
 }
 .foto-autor{font-weight:bold;color:#087c56;margin-bottom:8px}
 .acoes-foto{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
@@ -106,8 +161,8 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .duas-colunas{grid-template-columns:1fr}
 nav a{padding:11px 8px;font-size:13px}
 header h1{font-size:25px}
-.logo-petmundo{width:120px;height:120px}
-.capa{height:240px}
+.logo-petmundo{height:230px}
+.capa{height:260px}
 .capa-texto h2{font-size:24px}
 .botoes-capa a{padding:10px 12px;font-size:13px}
 }
@@ -116,7 +171,7 @@ header h1{font-size:25px}
 
 <body>
 
-<!-- CAPA PRINCIPAL NO TOPO -->
+<!-- CAPA PRINCIPAL -->
 <section id="inicio">
 <div class="capa">
 <img class="imagem-capa"
@@ -127,7 +182,6 @@ onerror="this.style.display='none'">
 <div class="capa-texto">
 <h2>Bem-vindo ao PETMUNDO!</h2>
 <p>Um mundo de amor pelos animais.</p>
-
 <div class="botoes-capa">
 <a href="#adocao">🐶 Adote</a>
 <a href="#comunidade">📸 Comunidade</a>
@@ -142,12 +196,14 @@ onerror="this.style.display='none'">
 <img class="logo-petmundo"
 src="%20petmundo-logo.png"
 alt="Logo PETMUNDO">
+
+<div class="header-texto">
 <h1>🐾 PETMUNDO</h1>
 <p>Uma rede social para quem ama os animais</p>
 <p id="identificacaoTopo">Entre ou crie sua conta</p>
+</div>
 </header>
 
-<!-- MENU -->
 <nav>
 <a href="#inicio">Início</a>
 <a href="#comunidade">Comunidade</a>
@@ -177,7 +233,6 @@ alt="Logo PETMUNDO">
 <input type="password" id="senhaLogin" placeholder="Sua senha">
 <button onclick="entrar()">Entrar</button>
 </div>
-
 <div>
 <h3>Criar uma conta</h3>
 <input type="text" id="nomeCadastro" placeholder="Seu nome">
@@ -191,16 +246,13 @@ alt="Logo PETMUNDO">
 
 <section id="meu-petmundo" class="card">
 <h2>👤 Meu PETMUNDO</h2>
-
 <div id="perfilDesconectado">
 <p>Entre na sua conta para visualizar seu perfil.</p>
 </div>
-
 <div id="perfilConectado" class="oculto">
 <p><strong>Nome:</strong> <span id="perfilNome"></span></p>
 <p><strong>E-mail:</strong> <span id="perfilEmail"></span></p>
 <p><strong>Situação:</strong> <span id="perfilStatus">Conectado</span></p>
-
 <h3>Alterar meu nome</h3>
 <input type="text" id="novoNome" placeholder="Digite seu nome">
 <button onclick="atualizarNome()">Salvar nome</button>
@@ -212,11 +264,9 @@ alt="Logo PETMUNDO">
 <section id="comunidade" class="card">
 <h2>📸 Comunidade PETMUNDO</h2>
 <p>Compartilhe as fotos do seu animal com a comunidade.</p>
-
 <div id="areaPublicacao">
 <p>Entre na sua conta para publicar fotos.</p>
 </div>
-
 <div id="publicarFoto" class="oculto">
 <h3>Publicar uma foto</h3>
 <input type="file" id="arquivoFoto" accept="image/*">
@@ -224,7 +274,6 @@ alt="Logo PETMUNDO">
 <button onclick="enviarFoto()">Publicar foto</button>
 <p id="mensagemFoto" class="mensagem oculto"></p>
 </div>
-
 <h3>Fotos da comunidade</h3>
 <div id="mural"><p>Carregando fotos...</p></div>
 </section>
