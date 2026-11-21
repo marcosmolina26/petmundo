@@ -37,6 +37,8 @@ button:disabled{opacity:.6;cursor:wait}
 button.secundario{background:#687b71}
 button.curtir{background:#eaf7f0;color:#087c56;border:1px solid #b9dfca}
 button.curtir.ativo{background:#15966b;color:white}
+button.editar{background:#2675b8}
+button.cancelar{background:#687b71}
 .pequeno{font-size:13px;color:#68756e}
 .mensagem{padding:10px;margin:8px 0;border-radius:7px;background:#edf8f1}
 .oculto{display:none!important}
@@ -59,6 +61,9 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .campo-check{display:flex;align-items:flex-start;gap:8px;margin:12px 0}
 .campo-check input{width:auto;margin-top:3px}
 .area-video-pet{margin-top:12px;padding:10px;background:#f3f7f5;border-radius:8px}
+.editor-pet{background:#f0f8f3;border:1px solid #b9dfca;border-radius:10px;padding:14px;margin-top:14px}
+.editor-pet h3{margin-top:4px}
+.acoes-editor{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
 nav a{padding:11px 8px;font-size:13px}
@@ -182,7 +187,7 @@ header h1{font-size:25px}
 <label for="petFoto">Foto do pet</label>
 <input class="campo-arquivo" type="file" id="petFoto" accept="image/jpeg,image/png,image/webp,image/gif">
 <label for="petVideo">Vídeo do pet (máximo 20 MB)</label>
-<input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime">
+<input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm">
 <h3>Contato do tutor</h3>
 <input type="tel" id="petTelefone" placeholder="Telefone do responsável">
 <input type="text" id="petEndereco" placeholder="Endereço do responsável">
@@ -353,10 +358,7 @@ return (arquivo.name.split(".").pop()||"").replace(/[^a-zA-Z0-9]/g,"").toLowerCa
 
 async function enviarArquivoPet(arquivo,tipo){
 if(!arquivo)return null;
-
-if(arquivo.size>20*1024*1024){
-throw new Error("O arquivo ultrapassa o limite de 20 MB.");
-}
+if(arquivo.size>20*1024*1024)throw new Error("O arquivo ultrapassa o limite de 20 MB.");
 
 const extensao=extensaoArquivo(arquivo);
 const tiposFoto=["image/jpeg","image/png","image/webp","image/gif"];
@@ -366,39 +368,37 @@ const extensoesVideo=["mp4","webm","mov"];
 if(tipo==="foto"&&!tiposFoto.includes(arquivo.type)){
 throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
 }
-
 if(tipo==="vídeo"&&!tiposVideo.includes(arquivo.type)&&!extensoesVideo.includes(extensao)){
 throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
 }
 
 const nomeArquivo=Date.now()+"-"+Math.random().toString(36).slice(2)+"."+extensao;
 const caminho=usuarioAtual.id+"/"+nomeArquivo;
-const contentType=arquivo.type||(extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm");
+let contentType=arquivo.type;
+
+if(tipo==="vídeo"&&!contentType.startsWith("video/")){
+contentType=extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm";
+}
 
 let resultado;
 try{
 resultado=await supabaseClient.storage.from("petmundo-pets").upload(caminho,arquivo,{
 upsert:false,
-contentType:contentType,
+contentType:contentType||"application/octet-stream",
 cacheControl:"3600"
 });
 }catch(erro){
 throw new Error("Falha de conexão ao enviar o "+tipo+". Verifique sua internet e tente novamente. Detalhe: "+(erro.message||"Falha de comunicação."));
 }
 
-if(resultado.error){
-throw new Error("Erro no armazenamento do "+tipo+": "+resultado.error.message);
-}
+if(resultado.error)throw new Error("Erro no armazenamento do "+tipo+": "+resultado.error.message);
 return caminho;
 }
 
 /* CADASTRAR NOVO PET */
 
 async function cadastrarPet(){
-if(!usuarioAtual){
-mostrarMensagem("mensagemPet","Entre na sua conta primeiro.");
-return;
-}
+if(!usuarioAtual){mostrarMensagem("mensagemPet","Entre na sua conta primeiro.");return;}
 
 const botao=document.getElementById("botaoCadastrarPet");
 const nome=document.getElementById("petNome").value.trim();
@@ -413,10 +413,7 @@ const mostrarContato=document.getElementById("petMostrarContato").checked;
 const foto=document.getElementById("petFoto").files[0];
 const video=document.getElementById("petVideo").files[0];
 
-if(!nome||!especie){
-mostrarMensagem("mensagemPet","Informe o nome e a espécie do animal.");
-return;
-}
+if(!nome||!especie){mostrarMensagem("mensagemPet","Informe o nome e a espécie do animal.");return;}
 
 botao.disabled=true;
 botao.textContent="Salvando cadastro...";
@@ -469,34 +466,20 @@ if(anos===0)return meses+" mês(es)";
 return anos+" ano(s) e "+meses+" mês(es)";
 }
 
-/* NOVA FUNÇÃO: ADICIONAR VÍDEO A PET JÁ CADASTRADO */
+/* ADICIONAR VÍDEO A PET JÁ CADASTRADO */
 
 async function adicionarVideoPet(petId,input,botao,mensagem){
-if(!usuarioAtual){
-mensagem.textContent="Entre na sua conta primeiro.";
-return;
-}
-
+if(!usuarioAtual){mensagem.textContent="Entre na sua conta primeiro.";return;}
 const arquivo=input.files[0];
-if(!arquivo){
-mensagem.textContent="Escolha um vídeo primeiro.";
-return;
-}
-
-if(arquivo.size>20*1024*1024){
-mensagem.textContent="O vídeo ultrapassa o limite de 20 MB.";
-return;
-}
+if(!arquivo){mensagem.textContent="Escolha um vídeo primeiro.";return;}
+if(arquivo.size>20*1024*1024){mensagem.textContent="O vídeo ultrapassa o limite de 20 MB.";return;}
 
 botao.disabled=true;
 botao.textContent="Enviando vídeo...";
 mensagem.textContent="Enviando vídeo. Aguarde...";
 
-let caminho=null;
-
 try{
-caminho=await enviarArquivoPet(arquivo,"vídeo");
-
+const caminho=await enviarArquivoPet(arquivo,"vídeo");
 const {data,error}=await supabaseClient.from("pets")
 .update({video_path:caminho})
 .eq("id",petId)
@@ -510,12 +493,187 @@ if(!data)throw new Error("O vídeo foi enviado, mas o cadastro não foi atualiza
 mensagem.textContent="Vídeo adicionado ao pet com sucesso! 🐾";
 input.value="";
 await carregarMeusPets();
-
 }catch(erro){
 mensagem.textContent=erro.message||"Não foi possível adicionar o vídeo.";
 }finally{
 botao.disabled=false;
 botao.textContent="🎬 Adicionar vídeo";
+}
+}
+
+/* EDIÇÃO DO CADASTRO DO PET */
+
+function criarCampoEditor(form,rotulo,tipo,nome,valor){
+const grupo=document.createElement("div");
+const label=document.createElement("label");
+label.textContent=rotulo;
+const campo=document.createElement(tipo==="textarea"?"textarea":tipo==="select"?"select":"input");
+campo.name=nome;
+
+if(tipo==="select"){
+const opcoes=nome==="species"
+?["Cachorro","Gato","Ave","Coelho","Roedor","Réptil","Outro"]
+:["Macho","Fêmea"];
+const vazio=document.createElement("option");
+vazio.value="";
+vazio.textContent=nome==="species"?"Selecione":"Não informado";
+campo.appendChild(vazio);
+opcoes.forEach(op=>{
+const option=document.createElement("option");
+option.value=op;
+option.textContent=op;
+campo.appendChild(option);
+});
+campo.value=valor||"";
+}else{
+if(tipo!=="textarea")campo.type=tipo;
+campo.value=valor||"";
+if(tipo==="date")campo.placeholder="";
+}
+grupo.appendChild(label);
+grupo.appendChild(campo);
+form.appendChild(grupo);
+return campo;
+}
+
+function abrirEdicaoPet(pet,card){
+const editorExistente=card.querySelector(".editor-pet");
+if(editorExistente){editorExistente.remove();return;}
+
+const editor=document.createElement("div");
+editor.className="editor-pet";
+const titulo=document.createElement("h3");
+titulo.textContent="✏️ Editar cadastro de "+pet.name;
+editor.appendChild(titulo);
+
+const form=document.createElement("form");
+form.addEventListener("submit",event=>event.preventDefault());
+
+criarCampoEditor(form,"Nome do animal *","text","name",pet.name);
+criarCampoEditor(form,"Espécie *","select","species",pet.species);
+criarCampoEditor(form,"Raça","text","breed",pet.breed);
+criarCampoEditor(form,"Data de nascimento","date","birth_date",pet.birth_date);
+criarCampoEditor(form,"Sexo","select","sex",pet.sex);
+criarCampoEditor(form,"Descrição do pet","textarea","description",pet.description);
+criarCampoEditor(form,"Telefone do tutor","tel","tutor_phone",pet.tutor_phone);
+criarCampoEditor(form,"Endereço do tutor","text","tutor_address",pet.tutor_address);
+
+const checkArea=document.createElement("label");
+checkArea.className="campo-check";
+const check=document.createElement("input");
+check.type="checkbox";
+check.name="show_contact";
+check.checked=!!pet.show_contact;
+const checkTexto=document.createElement("span");
+checkTexto.textContent="Autorizo exibir telefone e endereço no perfil público do pet.";
+checkArea.appendChild(check);
+checkArea.appendChild(checkTexto);
+form.appendChild(checkArea);
+
+const aviso=document.createElement("div");
+aviso.className="aviso-privacidade";
+aviso.textContent="Os dados de contato ficam privados quando esta opção não está marcada.";
+form.appendChild(aviso);
+
+const labelFoto=document.createElement("label");
+labelFoto.textContent="Substituir foto do pet (opcional)";
+form.appendChild(labelFoto);
+const foto=document.createElement("input");
+foto.type="file";
+foto.name="photo";
+foto.accept="image/jpeg,image/png,image/webp,image/gif";
+foto.className="campo-arquivo";
+form.appendChild(foto);
+
+const labelVideo=document.createElement("label");
+labelVideo.textContent="Substituir vídeo do pet (opcional, máximo 20 MB)";
+form.appendChild(labelVideo);
+const video=document.createElement("input");
+video.type="file";
+video.name="video";
+video.accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm";
+video.className="campo-arquivo";
+form.appendChild(video);
+
+const mensagem=document.createElement("p");
+mensagem.className="mensagem oculto";
+form.appendChild(mensagem);
+
+const acoes=document.createElement("div");
+acoes.className="acoes-editor";
+
+const salvar=document.createElement("button");
+salvar.type="button";
+salvar.textContent="💾 Salvar alterações";
+salvar.addEventListener("click",()=>salvarEdicaoPet(pet.id,form,salvar,mensagem));
+
+const cancelar=document.createElement("button");
+cancelar.type="button";
+cancelar.className="cancelar";
+cancelar.textContent="Cancelar";
+cancelar.addEventListener("click",()=>editor.remove());
+
+acoes.appendChild(salvar);
+acoes.appendChild(cancelar);
+form.appendChild(acoes);
+editor.appendChild(form);
+card.appendChild(editor);
+editor.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+async function salvarEdicaoPet(petId,form,botao,mensagem){
+if(!usuarioAtual){mensagem.textContent="Entre na sua conta primeiro.";mensagem.classList.remove("oculto");return;}
+
+const nome=form.elements.name.value.trim();
+const especie=form.elements.species.value;
+
+if(!nome||!especie){
+mensagem.textContent="Preencha o nome e a espécie do animal.";
+mensagem.classList.remove("oculto");
+return;
+}
+
+botao.disabled=true;
+botao.textContent="Salvando...";
+
+try{
+const dados={
+name:nome,
+species:especie,
+breed:form.elements.breed.value.trim()||null,
+birth_date:form.elements.birth_date.value||null,
+sex:form.elements.sex.value||null,
+description:form.elements.description.value.trim()||null,
+tutor_phone:form.elements.tutor_phone.value.trim()||null,
+tutor_address:form.elements.tutor_address.value.trim()||null,
+show_contact:form.elements.show_contact.checked
+};
+
+const novaFoto=form.elements.photo.files[0];
+const novoVideo=form.elements.video.files[0];
+
+if(novaFoto)dados.photo_path=await enviarArquivoPet(novaFoto,"foto");
+if(novoVideo)dados.video_path=await enviarArquivoPet(novoVideo,"vídeo");
+
+const {data,error}=await supabaseClient.from("pets")
+.update(dados)
+.eq("id",petId)
+.eq("owner_id",usuarioAtual.id)
+.select("id")
+.maybeSingle();
+
+if(error)throw new Error("Não foi possível salvar as alterações: "+error.message);
+if(!data)throw new Error("Nenhum cadastro foi atualizado. Confira se você está conectado à conta proprietária do pet.");
+
+mensagem.textContent="Cadastro atualizado com sucesso! 🐾";
+mensagem.classList.remove("oculto");
+await carregarMeusPets();
+
+}catch(erro){
+mensagem.textContent=erro.message||"Erro ao atualizar o cadastro.";
+mensagem.classList.remove("oculto");
+botao.disabled=false;
+botao.textContent="💾 Salvar alterações";
 }
 }
 
@@ -582,18 +740,18 @@ input.accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm";
 input.className="campo-arquivo";
 input.setAttribute("aria-label","Escolher vídeo de "+pet.name);
 
-const botao=document.createElement("button");
-botao.type="button";
-botao.textContent="🎬 Adicionar vídeo";
+const botaoVideo=document.createElement("button");
+botaoVideo.type="button";
+botaoVideo.textContent="🎬 Adicionar vídeo";
 
-const mensagem=document.createElement("p");
-mensagem.className="pequeno";
+const mensagemVideo=document.createElement("p");
+mensagemVideo.className="pequeno";
 
-botao.addEventListener("click",()=>adicionarVideoPet(pet.id,input,botao,mensagem));
+botaoVideo.addEventListener("click",()=>adicionarVideoPet(pet.id,input,botaoVideo,mensagemVideo));
 
 areaVideo.appendChild(input);
-areaVideo.appendChild(botao);
-areaVideo.appendChild(mensagem);
+areaVideo.appendChild(botaoVideo);
+areaVideo.appendChild(mensagemVideo);
 card.appendChild(areaVideo);
 }
 
@@ -628,6 +786,14 @@ dados.appendChild(privado);
 }
 
 card.appendChild(dados);
+
+const botaoEditar=document.createElement("button");
+botaoEditar.type="button";
+botaoEditar.className="editar";
+botaoEditar.textContent="✏️ Editar pet";
+botaoEditar.addEventListener("click",()=>abrirEdicaoPet(pet,card));
+card.appendChild(botaoEditar);
+
 area.appendChild(card);
 });
 }
