@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -40,6 +39,7 @@ button.curtir{background:#eaf7f0;color:#087c56;border:1px solid #b9dfca}
 button.curtir.ativo{background:#15966b;color:white}
 button.editar{background:#2675b8}
 button.cancelar{background:#687b71}
+button.excluir{background:#b93636}
 .pequeno{font-size:13px;color:#68756e}
 .mensagem{padding:10px;margin:8px 0;border-radius:7px;background:#edf8f1}
 .oculto{display:none!important}
@@ -75,6 +75,12 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .resgate-passos{padding-left:20px;line-height:1.7}
 .resgate-destaque{background:#087c56;color:white;padding:16px;border-radius:10px;margin-top:16px}
 .resgate-destaque h3{color:white}
+.resgate-formulario{background:#fbfdfb;border:1px solid #dce9e0;border-radius:10px;padding:15px;margin-top:20px}
+.resgate-publicacao{border:1px solid #dce9e0;border-radius:12px;padding:14px;margin:14px 0;background:#fff}
+.resgate-publicacao img{width:100%;max-height:380px;object-fit:contain;border-radius:9px;background:#f3f7f5;margin:8px 0}
+.resgate-publicacao h3{margin-bottom:8px}
+.resgate-etiqueta{display:inline-block;background:#eaf7f0;color:#087c56;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin:3px 0}
+.resgate-publicacao p{line-height:1.5}
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
 .resgate-grid{grid-template-columns:1fr}
@@ -239,7 +245,6 @@ header h1{font-size:25px}
 <div id="mural"><p>Carregando fotos...</p></div>
 </section>
 
-<!-- NOVA ÁREA: ADOÇÃO E RESGATE -->
 <section id="adocao" class="card">
 <h2>🐶 ADOÇÃO E RESGATE</h2>
 
@@ -250,7 +255,6 @@ header h1{font-size:25px}
 </div>
 
 <h3>Como queremos ajudar?</h3>
-
 <div class="resgate-grid">
 <div class="resgate-card">
 <div class="resgate-icone">🏡</div>
@@ -258,21 +262,18 @@ header h1{font-size:25px}
 <p>Divulgação de cães, gatos e outros animais que precisam encontrar uma família.</p>
 <p>Nosso objetivo é aproximar animais disponíveis para adoção de pessoas preparadas para oferecer um lar seguro, carinho e cuidados.</p>
 </div>
-
 <div class="resgate-card">
 <div class="resgate-icone">🐕</div>
 <h3>Animais abandonados</h3>
 <p>Um espaço para dar visibilidade a animais encontrados nas ruas ou abandonados.</p>
 <p>A comunidade poderá ajudar compartilhando informações e aproximando protetores de possíveis adotantes.</p>
 </div>
-
 <div class="resgate-card">
 <div class="resgate-icone">🔎</div>
 <h3>Animais perdidos</h3>
 <p>Queremos facilitar a divulgação de animais desaparecidos e ajudar tutores a reencontrarem seus companheiros.</p>
 <p>Fotos, características e região onde o animal foi visto poderão ajudar nessa busca.</p>
 </div>
-
 <div class="resgate-card">
 <div class="resgate-icone">🆘</div>
 <h3>Animais feridos ou em risco</h3>
@@ -301,7 +302,82 @@ header h1{font-size:25px}
 <p><strong>Adotar, acolher, resgatar ou compartilhar: toda ajuda pode fazer diferença!</strong></p>
 </div>
 
-<p class="pequeno">A área de cadastro e divulgação de casos de adoção e resgate será implementada na próxima etapa, com publicação de informações e fotos e cuidados para proteger os dados dos responsáveis.</p>
+<!-- FORMULÁRIO DE ADOÇÃO E RESGATE -->
+<div class="resgate-formulario">
+<h2>📝 Publicar um caso</h2>
+<p>Divulgue um animal para adoção, um animal abandonado, perdido ou que precise de ajuda.</p>
+
+<div id="avisoLoginResgate" class="aviso-privacidade">
+Para publicar um caso, entre na sua conta PETMUNDO.
+</div>
+
+<div id="formularioResgate" class="oculto">
+<label for="resgateTipo">O que você deseja divulgar? *</label>
+<select id="resgateTipo">
+<option value="">Selecione uma opção</option>
+<option value="Adoção">Animal para adoção</option>
+<option value="Abandonado">Animal abandonado</option>
+<option value="Perdido">Animal perdido</option>
+<option value="Ferido ou em risco">Animal ferido ou em risco</option>
+</select>
+
+<label for="resgateNome">Nome do animal</label>
+<input type="text" id="resgateNome" placeholder="Nome ou identificação do animal">
+
+<label for="resgateEspecie">Espécie *</label>
+<select id="resgateEspecie">
+<option value="">Selecione</option>
+<option>Cachorro</option>
+<option>Gato</option>
+<option>Ave</option>
+<option>Coelho</option>
+<option>Roedor</option>
+<option>Réptil</option>
+<option>Outro</option>
+</select>
+
+<label for="resgateDescricao">Descrição do caso *</label>
+<textarea id="resgateDescricao" placeholder="Conte o que aconteceu, características do animal e outras informações importantes..."></textarea>
+
+<div class="duas-colunas">
+<div>
+<label for="resgateCidade">Cidade *</label>
+<input type="text" id="resgateCidade" placeholder="Cidade">
+</div>
+<div>
+<label for="resgateBairro">Bairro</label>
+<input type="text" id="resgateBairro" placeholder="Bairro ou região">
+</div>
+</div>
+
+<label for="resgateAjuda">Que tipo de ajuda é necessária?</label>
+<textarea id="resgateAjuda" placeholder="Ex.: adoção, lar temporário, alimentação, atendimento veterinário..."></textarea>
+
+<label for="resgateFoto">Foto do animal</label>
+<input class="campo-arquivo" type="file" id="resgateFoto" accept="image/jpeg,image/png,image/webp,image/gif">
+
+<label for="resgateContato">Telefone ou contato do responsável</label>
+<input type="text" id="resgateContato" placeholder="Telefone, WhatsApp ou outro contato">
+
+<label class="campo-check">
+<input type="checkbox" id="resgateAutorizaContato">
+<span>Autorizo divulgar publicamente o contato informado nesta publicação.</span>
+</label>
+
+<div class="aviso-privacidade">
+<strong>Privacidade:</strong> o contato só será salvo na publicação se você marcar a autorização acima. Como as publicações são públicas, o contato autorizado poderá ser visto por qualquer visitante.
+</div>
+
+<button id="botaoPublicarResgate" onclick="publicarResgate()">🐾 Publicar caso</button>
+<p id="mensagemResgate" class="mensagem oculto"></p>
+</div>
+</div>
+
+<h2 style="margin-top:25px">🐾 Casos publicados pela comunidade</h2>
+<p>Veja os animais que precisam de adoção, localização ou ajuda.</p>
+<div id="muralResgates">
+<p>Carregando publicações...</p>
+</div>
 </section>
 
 <section id="donativos" class="card">
@@ -365,6 +441,7 @@ usuarioAtual=data.user;
 await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
 await atualizarAreaUsuario();
 await carregarMural();
+await carregarResgates();
 mostrarMensagem("mensagemAcesso","Login realizado com sucesso!");
 }
 
@@ -374,6 +451,8 @@ const desconectado=document.getElementById("perfilDesconectado");
 const conectado=document.getElementById("perfilConectado");
 const publicacao=document.getElementById("publicarFoto");
 const area=document.getElementById("areaPublicacao");
+const formularioResgate=document.getElementById("formularioResgate");
+const avisoLoginResgate=document.getElementById("avisoLoginResgate");
 
 if(!usuarioAtual){
 topo.textContent="Entre ou crie sua conta";
@@ -381,6 +460,8 @@ desconectado.classList.remove("oculto");
 conectado.classList.add("oculto");
 publicacao.classList.add("oculto");
 area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
+formularioResgate.classList.add("oculto");
+avisoLoginResgate.classList.remove("oculto");
 document.getElementById("listaMeusPets").innerHTML="";
 return;
 }
@@ -395,6 +476,8 @@ desconectado.classList.add("oculto");
 conectado.classList.remove("oculto");
 publicacao.classList.remove("oculto");
 area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";
+formularioResgate.classList.remove("oculto");
+avisoLoginResgate.classList.add("oculto");
 await carregarMeusPets();
 }
 
@@ -418,6 +501,7 @@ if(error){mostrarMensagem("mensagemPerfil",error.message);return;}
 usuarioAtual=null;
 await atualizarAreaUsuario();
 await carregarMural();
+await carregarResgates();
 mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
 }
 
@@ -1049,6 +1133,226 @@ mural.appendChild(card);
 }
 }
 
+/* NOVA FUNÇÃO: PUBLICAR CASO DE ADOÇÃO OU RESGATE */
+
+async function publicarResgate(){
+if(!usuarioAtual){
+mostrarMensagem("mensagemResgate","Entre na sua conta primeiro.");
+return;
+}
+
+const botao=document.getElementById("botaoPublicarResgate");
+const tipo=document.getElementById("resgateTipo").value;
+const nome=document.getElementById("resgateNome").value.trim();
+const especie=document.getElementById("resgateEspecie").value;
+const descricao=document.getElementById("resgateDescricao").value.trim();
+const cidade=document.getElementById("resgateCidade").value.trim();
+const bairro=document.getElementById("resgateBairro").value.trim();
+const ajuda=document.getElementById("resgateAjuda").value.trim();
+const contatoDigitado=document.getElementById("resgateContato").value.trim();
+const autorizaContato=document.getElementById("resgateAutorizaContato").checked;
+const foto=document.getElementById("resgateFoto").files[0];
+
+if(!tipo||!especie||!descricao||!cidade){
+mostrarMensagem("mensagemResgate","Preencha o tipo de publicação, a espécie, a descrição e a cidade.");
+return;
+}
+
+if(contatoDigitado&&!autorizaContato){
+mostrarMensagem("mensagemResgate","Para divulgar o contato, marque a autorização. Se não quiser divulgá-lo, apague o campo de contato.");
+return;
+}
+
+botao.disabled=true;
+botao.textContent="Publicando...";
+
+try{
+let caminhoFoto=null;
+
+if(foto){
+if(!foto.type.startsWith("image/")){
+throw new Error("Escolha um arquivo de imagem válido.");
+}
+caminhoFoto=await enviarArquivoPet(foto,"foto");
+}
+
+const dados={
+owner_id:usuarioAtual.id,
+tipo:tipo,
+nome_animal:nome||null,
+especie:especie,
+descricao:descricao,
+cidade:cidade,
+bairro:bairro||null,
+contato:autorizaContato?contatoDigitado:null,
+ajuda_necessaria:ajuda||null,
+foto_path:caminhoFoto,
+status:"ativo"
+};
+
+const {error}=await supabaseClient.from("pet_resgates").insert(dados);
+
+if(error)throw new Error("Não foi possível publicar o caso: "+error.message);
+
+[
+"resgateTipo",
+"resgateNome",
+"resgateEspecie",
+"resgateDescricao",
+"resgateCidade",
+"resgateBairro",
+"resgateAjuda",
+"resgateContato",
+"resgateFoto"
+].forEach(id=>document.getElementById(id).value="");
+
+document.getElementById("resgateAutorizaContato").checked=false;
+
+mostrarMensagem("mensagemResgate","Publicação realizada com sucesso! 🐾");
+await carregarResgates();
+
+}catch(erro){
+mostrarMensagem("mensagemResgate",erro.message||"Ocorreu um erro ao publicar.");
+}finally{
+botao.disabled=false;
+botao.textContent="🐾 Publicar caso";
+}
+}
+
+/* NOVA FUNÇÃO: CARREGAR MURAL DE ADOÇÃO E RESGATE */
+
+async function carregarResgates(){
+const mural=document.getElementById("muralResgates");
+mural.innerHTML="<p>Carregando publicações...</p>";
+
+const {data:casos,error}=await supabaseClient
+.from("pet_resgates")
+.select("id,owner_id,tipo,nome_animal,especie,descricao,cidade,bairro,contato,ajuda_necessaria,foto_path,status,created_at")
+.order("created_at",{ascending:false});
+
+if(error){
+console.error("Erro ao carregar resgates:",error);
+mural.innerHTML="<p>Não foi possível carregar as publicações: "+escapeHTML(error.message)+"</p>";
+return;
+}
+
+mural.innerHTML="";
+
+if(!casos||casos.length===0){
+mural.innerHTML="<p>Ainda não há casos publicados. Seja o primeiro a ajudar um animal!</p>";
+return;
+}
+
+casos.forEach(caso=>{
+const card=document.createElement("div");
+card.className="resgate-publicacao";
+
+const etiqueta=document.createElement("span");
+etiqueta.className="resgate-etiqueta";
+etiqueta.textContent=caso.tipo||"Adoção e resgate";
+card.appendChild(etiqueta);
+
+const titulo=document.createElement("h3");
+titulo.textContent="🐾 "+(caso.nome_animal||caso.especie||"Animal");
+card.appendChild(titulo);
+
+if(caso.foto_path){
+const {data:urlData}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(caso.foto_path);
+const img=document.createElement("img");
+img.src=urlData.publicUrl;
+img.alt="Foto do animal anunciado";
+img.loading="lazy";
+card.appendChild(img);
+}
+
+function adicionarTexto(rotulo,valor){
+if(!valor)return;
+const p=document.createElement("p");
+const strong=document.createElement("strong");
+strong.textContent=rotulo+": ";
+p.appendChild(strong);
+p.appendChild(document.createTextNode(valor));
+card.appendChild(p);
+}
+
+adicionarTexto("Espécie",caso.especie);
+adicionarTexto("Descrição",caso.descricao);
+adicionarTexto("Cidade",caso.cidade);
+adicionarTexto("Bairro",caso.bairro);
+adicionarTexto("Ajuda necessária",caso.ajuda_necessaria);
+
+if(caso.contato){
+adicionarTexto("Contato autorizado pelo responsável",caso.contato);
+}
+
+if(caso.created_at){
+const data=document.createElement("p");
+data.className="pequeno";
+data.textContent="Publicado em "+new Date(caso.created_at).toLocaleDateString("pt-BR");
+card.appendChild(data);
+}
+
+if(usuarioAtual&&caso.owner_id===usuarioAtual.id){
+const acoes=document.createElement("div");
+acoes.className="acoes-foto";
+
+const botaoExcluir=document.createElement("button");
+botaoExcluir.type="button";
+botaoExcluir.className="excluir";
+botaoExcluir.textContent="Excluir minha publicação";
+botaoExcluir.onclick=()=>excluirResgate(caso.id,botaoExcluir);
+
+acoes.appendChild(botaoExcluir);
+card.appendChild(acoes);
+}
+
+mural.appendChild(card);
+});
+}
+
+/* EXCLUIR A PRÓPRIA PUBLICAÇÃO */
+
+async function excluirResgate(id,botao){
+if(!usuarioAtual){
+alert("Entre na sua conta primeiro.");
+return;
+}
+
+if(!confirm("Deseja realmente excluir esta publicação?"))return;
+
+botao.disabled=true;
+botao.textContent="Excluindo...";
+
+const {error}=await supabaseClient
+.from("pet_resgates")
+.delete()
+.eq("id",id)
+.eq("owner_id",usuarioAtual.id);
+
+if(error){
+alert("Não foi possível excluir: "+error.message);
+botao.disabled=false;
+botao.textContent="Excluir minha publicação";
+return;
+}
+
+await carregarResgates();
+}
+
+function escapeHTML(texto){
+return String(texto).replace(/[&<>"']/g,function(letra){
+return {
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[letra];
+});
+}
+
+/* INICIALIZAÇÃO */
+
 async function iniciarPetmundo(){
 const {data,error}=await supabaseClient.auth.getSession();
 if(error)console.error(error);
@@ -1056,6 +1360,7 @@ usuarioAtual=data?.session?.user||null;
 if(usuarioAtual)await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
 await atualizarAreaUsuario();
 await carregarMural();
+await carregarResgates();
 }
 
 supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
@@ -1064,6 +1369,7 @@ setTimeout(async()=>{
 if(usuarioAtual)await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
 await atualizarAreaUsuario();
 await carregarMural();
+await carregarResgates();
 },0);
 });
 
