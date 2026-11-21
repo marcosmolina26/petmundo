@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -332,31 +333,61 @@ usuarioAtual=null;await atualizarAreaUsuario();await carregarMural();await carre
 }
 
 /* ENVIO DE FOTOS E VÍDEOS - COM NOVA TENTATIVA */
-function extensaoArquivo(arquivo){return (arquivo.name.split(".").pop()||"").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();}
+function extensaoArquivo(arquivo){
+return (arquivo.name.split(".").pop()||"").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+}
+
 async function enviarArquivoPet(arquivo,tipo){
 if(!arquivo)return null;
-if(arquivo.size>20*1024*1024)throw new Error("O arquivo ultrapassa o limite de 20 MB.");
+
+if(arquivo.size>20*1024*1024){
+throw new Error("O arquivo ultrapassa o limite de 20 MB.");
+}
+
 const extensao=extensaoArquivo(arquivo);
 const tiposFoto=["image/jpeg","image/png","image/webp","image/gif"];
 const tiposVideo=["video/mp4","video/webm","video/quicktime"];
 const extensoesVideo=["mp4","webm","mov"];
-if(tipo==="foto"&&!tiposFoto.includes(arquivo.type))throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
-if(tipo==="vídeo"&&!tiposVideo.includes(arquivo.type)&&!extensoesVideo.includes(extensao))throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
+
+if(tipo==="foto"&&!tiposFoto.includes(arquivo.type)){
+throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
+}
+
+if(tipo==="vídeo"&&!tiposVideo.includes(arquivo.type)&&!extensoesVideo.includes(extensao)){
+throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
+}
+
+let contentType=arquivo.type;
+
+if(tipo==="vídeo"&&!contentType.startsWith("video/")){
+contentType=extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm";
+}
+
+let ultimoErro=null;
+
+for(let tentativa=1;tentativa<=2;tentativa++){
 const nomeArquivo=Date.now()+"-"+Math.random().toString(36).slice(2)+"."+extensao;
 const caminho=usuarioAtual.id+"/"+nomeArquivo;
-let contentType=arquivo.type;
-if(tipo==="vídeo"&&!contentType.startsWith("video/"))contentType=extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm";
-let ultimoErro=null;
-for(let tentativa=1;tentativa<=2;tentativa++){
+
 try{
 const resultado=await supabaseClient.storage.from("petmundo-pets").upload(caminho,arquivo,{
-upsert:false,contentType:contentType||"application/octet-stream",cacheControl:"3600"
+upsert:false,
+contentType:contentType||"application/octet-stream",
+cacheControl:"3600"
 });
+
 if(!resultado.error)return caminho;
 ultimoErro=resultado.error;
-}catch(erro){ultimoErro=erro;}
-if(tentativa<2)await new Promise(resolve=>setTimeout(resolve,1200));
+
+}catch(erro){
+ultimoErro=erro;
 }
+
+if(tentativa<2){
+await new Promise(resolve=>setTimeout(resolve,1200));
+}
+}
+
 throw new Error("Não foi possível enviar o arquivo após duas tentativas. "+(ultimoErro?.message||"Verifique sua conexão e tente novamente."));
 }
 
@@ -609,7 +640,7 @@ botao.disabled=true;botao.textContent="Publicando...";
 try{
 let caminhoFoto=null;
 if(foto){if(!foto.type.startsWith("image/"))throw new Error("Escolha um arquivo de imagem válido.");caminhoFoto=await enviarArquivoPet(foto,"foto");}
-const dados={owner_id:usuarioAtual.id,tipo:tipo,nome_animal:nome||null,especie:especie,descricao:descricao,cidade:cidade,bairro:bairro||null,contato:autorizaContato?contatoDigitado:null,ajuda_necessaria:ajuda||null,foto_path:caminhoFoto,status:"ativo"};
+const dados={owner_id:usuarioAtual.id,tipo:tipo,nome_animal:nome||null,especie:especie,descricao:descricao,cidade:cidade,bairro:bairro||null,contato:autorizaContato?contatoDigitado:null,ajuda_necessaria:ajuda||null,foto_path:caminhoFoto,status:"aguardando"};
 const {error}=await supabaseClient.from("pet_resgates").insert(dados);
 if(error)throw new Error("Não foi possível publicar o caso: "+error.message);
 ["resgateTipo","resgateNome","resgateEspecie","resgateDescricao","resgateCidade","resgateBairro","resgateAjuda","resgateContato","resgateFoto"].forEach(id=>document.getElementById(id).value="");
@@ -625,7 +656,7 @@ if(!usuarioAtual)return;
 if(!confirm("Este pedido já foi atendido? Deseja marcar a publicação como ATENDIDA?"))return;
 botao.disabled=true;botao.textContent="Atualizando...";
 const {data,error}=await supabaseClient.from("pet_resgates")
-.update({status:"atendido"}).eq("id",id).eq("owner_id",usuarioAtual.id).select("id").maybeSingle();
+.update({status:"resolvido"}).eq("id",id).eq("owner_id",usuarioAtual.id).select("id").maybeSingle();
 if(error||!data){
 alert("Não foi possível atualizar: "+(error?.message||"Publicação não encontrada ou sem permissão."));
 botao.disabled=false;botao.textContent="✓ Marcar como atendido";return;
@@ -650,11 +681,16 @@ if(error||!data){
 alert("Não foi possível excluir: "+(error?.message||"Publicação não encontrada ou sem permissão."));
 botao.disabled=false;botao.textContent="🗑 Excluir publicação e foto";return;
 }
+let avisoFoto="";
 if(caso.foto_path){
 const {error:erroFoto}=await supabaseClient.storage.from("petmundo-pets").remove([caso.foto_path]);
-if(erroFoto)console.error("Publicação excluída, mas não foi possível apagar a foto:",erroFoto.message);
+if(erroFoto){
+console.error("Publicação excluída, mas não foi possível apagar a foto:",erroFoto.message);
+avisoFoto=" A publicação foi excluída, mas a foto permaneceu no armazenamento.";
+}
 }
 await carregarResgates();
+if(avisoFoto)alert(avisoFoto);
 }
 
 /* CARREGAR MURAL DE ADOÇÃO E RESGATE */
@@ -669,7 +705,7 @@ if(!casos||casos.length===0){mural.innerHTML="<p>Ainda não há casos publicados
 casos.forEach(caso=>{
 const card=document.createElement("div");card.className="resgate-publicacao";
 const etiqueta=document.createElement("span");etiqueta.className="resgate-etiqueta";etiqueta.textContent=caso.tipo||"Adoção e resgate";card.appendChild(etiqueta);
-if(caso.status==="atendido"){
+if(caso.status==="resolvido"){
 const selo=document.createElement("div");selo.className="resgate-atendido";selo.textContent="✓ PEDIDO ATENDIDO";card.appendChild(selo);
 }
 const titulo=document.createElement("h3");titulo.textContent="🐾 "+(caso.nome_animal||caso.especie||"Animal");card.appendChild(titulo);
@@ -685,7 +721,7 @@ if(caso.contato)adicionarTexto("Contato autorizado pelo responsável",caso.conta
 if(caso.created_at){const data=document.createElement("p");data.className="pequeno";data.textContent="Publicado em "+new Date(caso.created_at).toLocaleDateString("pt-BR");card.appendChild(data);}
 if(usuarioAtual&&caso.owner_id===usuarioAtual.id){
 const acoes=document.createElement("div");acoes.className="acoes-foto";
-if(caso.status!=="atendido"){
+if(caso.status!=="resolvido"){
 const botaoAtendido=document.createElement("button");botaoAtendido.type="button";botaoAtendido.textContent="✓ Marcar como atendido";
 botaoAtendido.onclick=()=>marcarResgateAtendido(caso.id,botaoAtendido);acoes.appendChild(botaoAtendido);
 }
