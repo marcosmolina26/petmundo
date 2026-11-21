@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PETMUNDO - Rede Social Pet</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -64,8 +63,6 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .area-video-pet{margin-top:12px;padding:10px;background:#f3f7f5;border-radius:8px}
 .editor-pet{background:#f0f8f3;border:1px solid #b9dfca;border-radius:10px;padding:14px;margin-top:14px}
 .editor-pet h3{margin-top:4px}
-
-/* ADOÇÃO E RESGATE */
 .resgate-intro{background:#eaf7f0;padding:16px;border-radius:10px;margin:12px 0}
 .resgate-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
 .resgate-card{border:1px solid #dce9e0;border-radius:12px;padding:16px;background:#fbfdfb}
@@ -80,6 +77,7 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .resgate-publicacao img{width:100%;max-height:380px;object-fit:contain;border-radius:9px;background:#f3f7f5;margin:8px 0}
 .resgate-publicacao h3{margin-bottom:8px}
 .resgate-etiqueta{display:inline-block;background:#eaf7f0;color:#087c56;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin:3px 0}
+.resgate-atendido{display:inline-block;background:#e5f1ff;color:#205b91;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold;margin:5px 0}
 .resgate-publicacao p{line-height:1.5}
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
@@ -93,7 +91,6 @@ header h1{font-size:25px}
 }
 </style>
 </head>
-
 <body>
 <section id="inicio">
 <div class="capa">
@@ -109,7 +106,6 @@ header h1{font-size:25px}
 </div>
 </div>
 </section>
-
 <header>
 <img class="logo-petmundo" src="%20petmundo-logo.png" alt="Logo PETMUNDO">
 <div class="header-texto">
@@ -118,7 +114,6 @@ header h1{font-size:25px}
 <p id="identificacaoTopo">Entre ou crie sua conta</p>
 </div>
 </header>
-
 <nav>
 <a href="#inicio">Início</a>
 <a href="#comunidade">Comunidade</a>
@@ -126,7 +121,6 @@ header h1{font-size:25px}
 <a href="#donativos">DONATIVOS</a>
 <a href="#meu-petmundo">Meu PETMUNDO</a>
 </nav>
-
 <main class="container">
 <section class="card banner">
 <div class="banner-conteudo">
@@ -135,7 +129,6 @@ header h1{font-size:25px}
 <a href="#comunidade"><button>Conhecer a comunidade</button></a>
 </div>
 </section>
-
 <section id="acesso" class="card">
 <h2>Entrar no PETMUNDO</h2>
 <p>Faça login para publicar fotos, curtir e comentar.</p>
@@ -156,23 +149,18 @@ header h1{font-size:25px}
 </div>
 <p id="mensagemAcesso" class="mensagem oculto"></p>
 </section>
-
 <section id="meu-petmundo" class="card">
 <h2>👤 Meu PETMUNDO</h2>
-<div id="perfilDesconectado">
-<p>Entre na sua conta para visualizar seu perfil.</p>
-</div>
+<div id="perfilDesconectado"><p>Entre na sua conta para visualizar seu perfil.</p></div>
 <div id="perfilConectado" class="oculto">
 <p><strong>Nome:</strong> <span id="perfilNome"></span></p>
 <p><strong>E-mail:</strong> <span id="perfilEmail"></span></p>
 <p><strong>Situação:</strong> Conectado</p>
-
 <h3>Alterar meu nome</h3>
 <input type="text" id="novoNome" placeholder="Digite seu nome">
 <button onclick="atualizarNome()">Salvar nome</button>
 <p id="mensagemPerfil" class="mensagem oculto"></p>
 <hr>
-
 <h2>🐾 Cadastro dos meus pets</h2>
 <p>Crie um perfil para cada animal da sua família.</p>
 <div class="pet-formulario">
@@ -180,60 +168,30 @@ header h1{font-size:25px}
 <label for="petNome">Nome do animal *</label>
 <input type="text" id="petNome" placeholder="Nome do pet">
 <label for="petEspecie">Espécie *</label>
-<select id="petEspecie">
-<option value="">Selecione</option>
-<option>Cachorro</option>
-<option>Gato</option>
-<option>Ave</option>
-<option>Coelho</option>
-<option>Roedor</option>
-<option>Réptil</option>
-<option>Outro</option>
-</select>
-<label for="petRaca">Raça</label>
-<input type="text" id="petRaca" placeholder="Raça do animal">
-<label for="petNascimento">Data de nascimento</label>
-<input type="date" id="petNascimento">
-<label for="petSexo">Sexo</label>
-<select id="petSexo">
-<option value="">Não informado</option>
-<option>Macho</option>
-<option>Fêmea</option>
-</select>
-<label for="petDescricao">Descrição do pet</label>
-<textarea id="petDescricao" placeholder="Conte um pouco sobre seu animal..."></textarea>
-<label for="petFoto">Foto do pet</label>
-<input class="campo-arquivo" type="file" id="petFoto" accept="image/jpeg,image/png,image/webp,image/gif">
-<label for="petVideo">Vídeo do pet (máximo 20 MB)</label>
-<input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm">
+<select id="petEspecie"><option value="">Selecione</option><option>Cachorro</option><option>Gato</option><option>Ave</option><option>Coelho</option><option>Roedor</option><option>Réptil</option><option>Outro</option></select>
+<label for="petRaca">Raça</label><input type="text" id="petRaca" placeholder="Raça do animal">
+<label for="petNascimento">Data de nascimento</label><input type="date" id="petNascimento">
+<label for="petSexo">Sexo</label><select id="petSexo"><option value="">Não informado</option><option>Macho</option><option>Fêmea</option></select>
+<label for="petDescricao">Descrição do pet</label><textarea id="petDescricao" placeholder="Conte um pouco sobre seu animal..."></textarea>
+<label for="petFoto">Foto do pet</label><input class="campo-arquivo" type="file" id="petFoto" accept="image/jpeg,image/png,image/webp,image/gif">
+<label for="petVideo">Vídeo do pet (máximo 20 MB)</label><input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm">
 <h3>Contato do tutor</h3>
 <input type="tel" id="petTelefone" placeholder="Telefone do responsável">
 <input type="text" id="petEndereco" placeholder="Endereço do responsável">
-<label class="campo-check">
-<input type="checkbox" id="petMostrarContato">
-<span>Autorizo exibir telefone e endereço no perfil público do pet.</span>
-</label>
-<div class="aviso-privacidade">
-<strong>Privacidade:</strong> os dados de contato ficam privados por padrão. Só serão exibidos publicamente quando o tutor marcar a opção acima. Nesta versão, os dados ainda aparecem somente na área privada do tutor.
-</div>
+<label class="campo-check"><input type="checkbox" id="petMostrarContato"><span>Autorizo exibir telefone e endereço no perfil público do pet.</span></label>
+<div class="aviso-privacidade"><strong>Privacidade:</strong> os dados de contato ficam privados por padrão. Só serão exibidos publicamente quando o tutor marcar a opção acima. Nesta versão, os dados ainda aparecem somente na área privada do tutor.</div>
 <button id="botaoCadastrarPet" onclick="cadastrarPet()">🐾 Salvar cadastro do pet</button>
 <p id="mensagemPet" class="mensagem oculto"></p>
 </div>
-
 <h3>Meus animais cadastrados</h3>
-<div id="listaMeusPets">
-<p class="pequeno">Seus animais cadastrados aparecerão aqui.</p>
-</div>
+<div id="listaMeusPets"><p class="pequeno">Seus animais cadastrados aparecerão aqui.</p></div>
 <button class="secundario" onclick="sair()">Sair da conta</button>
 </div>
 </section>
-
 <section id="comunidade" class="card">
 <h2>📸 Comunidade PETMUNDO</h2>
 <p>Compartilhe as fotos do seu animal com a comunidade.</p>
-<div id="areaPublicacao">
-<p>Entre na sua conta para publicar fotos.</p>
-</div>
+<div id="areaPublicacao"><p>Entre na sua conta para publicar fotos.</p></div>
 <div id="publicarFoto" class="oculto">
 <h3>Publicar uma foto</h3>
 <input type="file" id="arquivoFoto" accept="image/*">
@@ -241,163 +199,64 @@ header h1{font-size:25px}
 <button onclick="enviarFoto()">Publicar foto</button>
 <p id="mensagemFoto" class="mensagem oculto"></p>
 </div>
-<h3>Fotos da comunidade</h3>
-<div id="mural"><p>Carregando fotos...</p></div>
+<h3>Fotos da comunidade</h3><div id="mural"><p>Carregando fotos...</p></div>
 </section>
-
 <section id="adocao" class="card">
 <h2>🐶 ADOÇÃO E RESGATE</h2>
-
 <div class="resgate-intro">
 <h3>❤️ Juntos podemos salvar vidas!</h3>
 <p>O PETMUNDO quer ser um espaço de união entre pessoas que amam os animais e desejam fazer a diferença.</p>
 <p>Aqui queremos aproximar quem procura um novo companheiro, quem resgata animais e quem pode oferecer ajuda.</p>
 </div>
-
 <h3>Como queremos ajudar?</h3>
 <div class="resgate-grid">
-<div class="resgate-card">
-<div class="resgate-icone">🏡</div>
-<h3>Adoção responsável</h3>
-<p>Divulgação de cães, gatos e outros animais que precisam encontrar uma família.</p>
-<p>Nosso objetivo é aproximar animais disponíveis para adoção de pessoas preparadas para oferecer um lar seguro, carinho e cuidados.</p>
+<div class="resgate-card"><div class="resgate-icone">🏡</div><h3>Adoção responsável</h3><p>Divulgação de cães, gatos e outros animais que precisam encontrar uma família.</p><p>Nosso objetivo é aproximar animais disponíveis para adoção de pessoas preparadas para oferecer um lar seguro, carinho e cuidados.</p></div>
+<div class="resgate-card"><div class="resgate-icone">🐕</div><h3>Animais abandonados</h3><p>Um espaço para dar visibilidade a animais encontrados nas ruas ou abandonados.</p><p>A comunidade poderá ajudar compartilhando informações e aproximando protetores de possíveis adotantes.</p></div>
+<div class="resgate-card"><div class="resgate-icone">🔎</div><h3>Animais perdidos</h3><p>Queremos facilitar a divulgação de animais desaparecidos e ajudar tutores a reencontrarem seus companheiros.</p><p>Fotos, características e região onde o animal foi visto poderão ajudar nessa busca.</p></div>
+<div class="resgate-card"><div class="resgate-icone">🆘</div><h3>Animais feridos ou em risco</h3><p>Animais machucados, doentes ou em situação de perigo também precisam de atenção.</p><p>A proposta é aproximar pessoas dispostas a ajudar, protetores independentes e organizações de proteção animal.</p></div>
 </div>
-<div class="resgate-card">
-<div class="resgate-icone">🐕</div>
-<h3>Animais abandonados</h3>
-<p>Um espaço para dar visibilidade a animais encontrados nas ruas ou abandonados.</p>
-<p>A comunidade poderá ajudar compartilhando informações e aproximando protetores de possíveis adotantes.</p>
-</div>
-<div class="resgate-card">
-<div class="resgate-icone">🔎</div>
-<h3>Animais perdidos</h3>
-<p>Queremos facilitar a divulgação de animais desaparecidos e ajudar tutores a reencontrarem seus companheiros.</p>
-<p>Fotos, características e região onde o animal foi visto poderão ajudar nessa busca.</p>
-</div>
-<div class="resgate-card">
-<div class="resgate-icone">🆘</div>
-<h3>Animais feridos ou em risco</h3>
-<p>Animais machucados, doentes ou em situação de perigo também precisam de atenção.</p>
-<p>A proposta é aproximar pessoas dispostas a ajudar, protetores independentes e organizações de proteção animal.</p>
-</div>
-</div>
-
-<div class="resgate-aviso">
-<strong>⚠️ Atenção em situações urgentes</strong>
-<p>Se encontrar um animal ferido ou em perigo imediato, procure atendimento veterinário ou os serviços de proteção animal da sua região. Não tente realizar procedimentos ou transportar um animal agressivo ou gravemente ferido sem orientação adequada.</p>
-</div>
-
+<div class="resgate-aviso"><strong>⚠️ Atenção em situações urgentes</strong><p>Se encontrar um animal ferido ou em perigo imediato, procure atendimento veterinário ou os serviços de proteção animal da sua região. Não tente realizar procedimentos ou transportar um animal agressivo ou gravemente ferido sem orientação adequada.</p></div>
 <h3>Como agir ao encontrar um animal precisando de ajuda?</h3>
-<ol class="resgate-passos">
-<li>Observe a situação do animal mantendo uma distância segura.</li>
-<li>Registre uma foto, se for seguro fazer isso.</li>
-<li>Anote o bairro ou local onde o animal foi encontrado.</li>
-<li>Procure um protetor independente, abrigo ou serviço de proteção animal da região.</li>
-<li>Compartilhe informações para ajudar a encontrar apoio ou um possível lar.</li>
-</ol>
-
-<div class="resgate-destaque">
-<h3>🐾 Uma comunidade que protege vidas</h3>
-<p>Queremos que o PETMUNDO seja mais do que uma rede social. Queremos construir uma rede de solidariedade para que nenhum animal fique invisível.</p>
-<p><strong>Adotar, acolher, resgatar ou compartilhar: toda ajuda pode fazer diferença!</strong></p>
-</div>
-
-<!-- FORMULÁRIO DE ADOÇÃO E RESGATE -->
+<ol class="resgate-passos"><li>Observe a situação do animal mantendo uma distância segura.</li><li>Registre uma foto, se for seguro fazer isso.</li><li>Anote o bairro ou local onde o animal foi encontrado.</li><li>Procure um protetor independente, abrigo ou serviço de proteção animal da região.</li><li>Compartilhe informações para ajudar a encontrar apoio ou um possível lar.</li></ol>
+<div class="resgate-destaque"><h3>🐾 Uma comunidade que protege vidas</h3><p>Queremos que o PETMUNDO seja mais do que uma rede social. Queremos construir uma rede de solidariedade para que nenhum animal fique invisível.</p><p><strong>Adotar, acolher, resgatar ou compartilhar: toda ajuda pode fazer diferença!</strong></p></div>
 <div class="resgate-formulario">
 <h2>📝 Publicar um caso</h2>
 <p>Divulgue um animal para adoção, um animal abandonado, perdido ou que precise de ajuda.</p>
-
-<div id="avisoLoginResgate" class="aviso-privacidade">
-Para publicar um caso, entre na sua conta PETMUNDO.
-</div>
-
+<div id="avisoLoginResgate" class="aviso-privacidade">Para publicar um caso, entre na sua conta PETMUNDO.</div>
 <div id="formularioResgate" class="oculto">
 <label for="resgateTipo">O que você deseja divulgar? *</label>
-<select id="resgateTipo">
-<option value="">Selecione uma opção</option>
-<option value="Adoção">Animal para adoção</option>
-<option value="Abandonado">Animal abandonado</option>
-<option value="Perdido">Animal perdido</option>
-<option value="Ferido ou em risco">Animal ferido ou em risco</option>
-</select>
-
-<label for="resgateNome">Nome do animal</label>
-<input type="text" id="resgateNome" placeholder="Nome ou identificação do animal">
-
+<select id="resgateTipo"><option value="">Selecione uma opção</option><option value="Adoção">Animal para adoção</option><option value="Abandonado">Animal abandonado</option><option value="Perdido">Animal perdido</option><option value="Ferido ou em risco">Animal ferido ou em risco</option></select>
+<label for="resgateNome">Nome do animal</label><input type="text" id="resgateNome" placeholder="Nome ou identificação do animal">
 <label for="resgateEspecie">Espécie *</label>
-<select id="resgateEspecie">
-<option value="">Selecione</option>
-<option>Cachorro</option>
-<option>Gato</option>
-<option>Ave</option>
-<option>Coelho</option>
-<option>Roedor</option>
-<option>Réptil</option>
-<option>Outro</option>
-</select>
-
-<label for="resgateDescricao">Descrição do caso *</label>
-<textarea id="resgateDescricao" placeholder="Conte o que aconteceu, características do animal e outras informações importantes..."></textarea>
-
-<div class="duas-colunas">
-<div>
-<label for="resgateCidade">Cidade *</label>
-<input type="text" id="resgateCidade" placeholder="Cidade">
-</div>
-<div>
-<label for="resgateBairro">Bairro</label>
-<input type="text" id="resgateBairro" placeholder="Bairro ou região">
-</div>
-</div>
-
-<label for="resgateAjuda">Que tipo de ajuda é necessária?</label>
-<textarea id="resgateAjuda" placeholder="Ex.: adoção, lar temporário, alimentação, atendimento veterinário..."></textarea>
-
-<label for="resgateFoto">Foto do animal</label>
-<input class="campo-arquivo" type="file" id="resgateFoto" accept="image/jpeg,image/png,image/webp,image/gif">
-
-<label for="resgateContato">Telefone ou contato do responsável</label>
-<input type="text" id="resgateContato" placeholder="Telefone, WhatsApp ou outro contato">
-
-<label class="campo-check">
-<input type="checkbox" id="resgateAutorizaContato">
-<span>Autorizo divulgar publicamente o contato informado nesta publicação.</span>
-</label>
-
-<div class="aviso-privacidade">
-<strong>Privacidade:</strong> o contato só será salvo na publicação se você marcar a autorização acima. Como as publicações são públicas, o contato autorizado poderá ser visto por qualquer visitante.
-</div>
-
+<select id="resgateEspecie"><option value="">Selecione</option><option>Cachorro</option><option>Gato</option><option>Ave</option><option>Coelho</option><option>Roedor</option><option>Réptil</option><option>Outro</option></select>
+<label for="resgateDescricao">Descrição do caso *</label><textarea id="resgateDescricao" placeholder="Conte o que aconteceu, características do animal e outras informações importantes..."></textarea>
+<div class="duas-colunas"><div><label for="resgateCidade">Cidade *</label><input type="text" id="resgateCidade" placeholder="Cidade"></div><div><label for="resgateBairro">Bairro</label><input type="text" id="resgateBairro" placeholder="Bairro ou região"></div></div>
+<label for="resgateAjuda">Que tipo de ajuda é necessária?</label><textarea id="resgateAjuda" placeholder="Ex.: adoção, lar temporário, alimentação, atendimento veterinário..."></textarea>
+<label for="resgateFoto">Foto do animal</label><input class="campo-arquivo" type="file" id="resgateFoto" accept="image/jpeg,image/png,image/webp,image/gif">
+<label for="resgateContato">Telefone ou contato do responsável</label><input type="text" id="resgateContato" placeholder="Telefone, WhatsApp ou outro contato">
+<label class="campo-check"><input type="checkbox" id="resgateAutorizaContato"><span>Autorizo divulgar publicamente o contato informado nesta publicação.</span></label>
+<div class="aviso-privacidade"><strong>Privacidade:</strong> o contato só será salvo na publicação se você marcar a autorização acima. Como as publicações são públicas, o contato autorizado poderá ser visto por qualquer visitante.</div>
 <button id="botaoPublicarResgate" onclick="publicarResgate()">🐾 Publicar caso</button>
 <p id="mensagemResgate" class="mensagem oculto"></p>
 </div>
 </div>
-
 <h2 style="margin-top:25px">🐾 Casos publicados pela comunidade</h2>
 <p>Veja os animais que precisam de adoção, localização ou ajuda.</p>
-<div id="muralResgates">
-<p>Carregando publicações...</p>
-</div>
+<div id="muralResgates"><p>Carregando publicações...</p></div>
 </section>
-
 <section id="donativos" class="card">
 <h2>❤️ DONATIVOS</h2>
 <p>Ajude organizações de proteção animal, abrigos, protetores independentes e campanhas verificadas.</p>
 <p>Nosso objetivo é dar transparência às contribuições, aos destinatários e à utilização dos recursos.</p>
 <p><strong>Em breve, uma área própria para campanhas e contribuições.</strong></p>
 </section>
-
 <section class="card mascote">
 <h2>🦜 Conheça o Tucolino!</h2>
 <p>O mascote do PETMUNDO representa todos os animais que fazem parte da nossa comunidade.</p>
 <p><strong>Um mundo melhor para todos os pets!</strong></p>
 </section>
 </main>
-
-<footer>
-<p><strong>PETMUNDO</strong> - Rede Social Pet</p>
-<p>Conectando pessoas e animais.</p>
-</footer>
+<footer><p><strong>PETMUNDO</strong> - Rede Social Pet</p><p>Conectando pessoas e animais.</p></footer>
 
 <script>
 const SUPABASE_URL="https://gvltggsagpiikmecyfyq.supabase.co";
@@ -410,16 +269,11 @@ const elemento=document.getElementById(id);
 elemento.textContent=texto;
 elemento.classList.remove("oculto");
 }
-
-function obterNome(usuario){
-return usuario?.user_metadata?.full_name||usuario?.email?.split("@")[0]||"Tutor PETMUNDO";
-}
-
+function obterNome(usuario){return usuario?.user_metadata?.full_name||usuario?.email?.split("@")[0]||"Tutor PETMUNDO";}
 async function salvarNomePerfil(usuario,nome){
 const {error}=await supabaseClient.from("profiles").upsert({id:usuario.id,display_name:nome},{onConflict:"id"});
 if(error)console.error("Erro ao salvar perfil:",error.message);
 }
-
 async function cadastrar(){
 const nome=document.getElementById("nomeCadastro").value.trim();
 const email=document.getElementById("emailCadastro").value.trim();
@@ -430,7 +284,6 @@ if(error){mostrarMensagem("mensagemAcesso",error.message);return;}
 if(data.user)await salvarNomePerfil(data.user,nome);
 mostrarMensagem("mensagemAcesso","Cadastro realizado! Verifique seu e-mail para confirmar a conta, caso seja solicitado.");
 }
-
 async function entrar(){
 const email=document.getElementById("emailLogin").value.trim();
 const senha=document.getElementById("senhaLogin").value;
@@ -439,12 +292,9 @@ const {data,error}=await supabaseClient.auth.signInWithPassword({email,password:
 if(error){mostrarMensagem("mensagemAcesso","Não foi possível entrar: "+error.message);return;}
 usuarioAtual=data.user;
 await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
-await atualizarAreaUsuario();
-await carregarMural();
-await carregarResgates();
+await atualizarAreaUsuario();await carregarMural();await carregarResgates();
 mostrarMensagem("mensagemAcesso","Login realizado com sucesso!");
 }
-
 async function atualizarAreaUsuario(){
 const topo=document.getElementById("identificacaoTopo");
 const desconectado=document.getElementById("perfilDesconectado");
@@ -453,34 +303,18 @@ const publicacao=document.getElementById("publicarFoto");
 const area=document.getElementById("areaPublicacao");
 const formularioResgate=document.getElementById("formularioResgate");
 const avisoLoginResgate=document.getElementById("avisoLoginResgate");
-
 if(!usuarioAtual){
-topo.textContent="Entre ou crie sua conta";
-desconectado.classList.remove("oculto");
-conectado.classList.add("oculto");
-publicacao.classList.add("oculto");
-area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
-formularioResgate.classList.add("oculto");
-avisoLoginResgate.classList.remove("oculto");
-document.getElementById("listaMeusPets").innerHTML="";
-return;
+topo.textContent="Entre ou crie sua conta";desconectado.classList.remove("oculto");conectado.classList.add("oculto");publicacao.classList.add("oculto");
+area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";formularioResgate.classList.add("oculto");avisoLoginResgate.classList.remove("oculto");
+document.getElementById("listaMeusPets").innerHTML="";return;
 }
-
 const {data:perfil}=await supabaseClient.from("profiles").select("display_name").eq("id",usuarioAtual.id).maybeSingle();
 const nome=perfil?.display_name||obterNome(usuarioAtual);
-topo.textContent="Conectado: "+nome;
-document.getElementById("perfilNome").textContent=nome;
-document.getElementById("perfilEmail").textContent=usuarioAtual.email;
-document.getElementById("novoNome").value=nome;
-desconectado.classList.add("oculto");
-conectado.classList.remove("oculto");
-publicacao.classList.remove("oculto");
-area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";
-formularioResgate.classList.remove("oculto");
-avisoLoginResgate.classList.add("oculto");
+topo.textContent="Conectado: "+nome;document.getElementById("perfilNome").textContent=nome;document.getElementById("perfilEmail").textContent=usuarioAtual.email;document.getElementById("novoNome").value=nome;
+desconectado.classList.add("oculto");conectado.classList.remove("oculto");publicacao.classList.remove("oculto");
+area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";formularioResgate.classList.remove("oculto");avisoLoginResgate.classList.add("oculto");
 await carregarMeusPets();
 }
-
 async function atualizarNome(){
 if(!usuarioAtual)return;
 const nome=document.getElementById("novoNome").value.trim();
@@ -488,73 +322,47 @@ if(!nome){mostrarMensagem("mensagemPerfil","Digite um nome.");return;}
 const {error}=await supabaseClient.auth.updateUser({data:{full_name:nome}});
 if(error){mostrarMensagem("mensagemPerfil",error.message);return;}
 await salvarNomePerfil(usuarioAtual,nome);
-const {data}=await supabaseClient.auth.getUser();
-usuarioAtual=data.user;
-await atualizarAreaUsuario();
-mostrarMensagem("mensagemPerfil","Nome atualizado com sucesso!");
-await carregarMural();
+const {data}=await supabaseClient.auth.getUser();usuarioAtual=data.user;
+await atualizarAreaUsuario();mostrarMensagem("mensagemPerfil","Nome atualizado com sucesso!");await carregarMural();
 }
-
 async function sair(){
 const {error}=await supabaseClient.auth.signOut();
 if(error){mostrarMensagem("mensagemPerfil",error.message);return;}
-usuarioAtual=null;
-await atualizarAreaUsuario();
-await carregarMural();
-await carregarResgates();
-mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
+usuarioAtual=null;await atualizarAreaUsuario();await carregarMural();await carregarResgates();mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
 }
 
-/* ENVIO DE FOTOS E VÍDEOS */
-
-function extensaoArquivo(arquivo){
-return (arquivo.name.split(".").pop()||"").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
-}
-
+/* ENVIO DE FOTOS E VÍDEOS - COM NOVA TENTATIVA */
+function extensaoArquivo(arquivo){return (arquivo.name.split(".").pop()||"").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();}
 async function enviarArquivoPet(arquivo,tipo){
 if(!arquivo)return null;
 if(arquivo.size>20*1024*1024)throw new Error("O arquivo ultrapassa o limite de 20 MB.");
-
 const extensao=extensaoArquivo(arquivo);
 const tiposFoto=["image/jpeg","image/png","image/webp","image/gif"];
 const tiposVideo=["video/mp4","video/webm","video/quicktime"];
 const extensoesVideo=["mp4","webm","mov"];
-
-if(tipo==="foto"&&!tiposFoto.includes(arquivo.type)){
-throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
-}
-if(tipo==="vídeo"&&!tiposVideo.includes(arquivo.type)&&!extensoesVideo.includes(extensao)){
-throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
-}
-
+if(tipo==="foto"&&!tiposFoto.includes(arquivo.type))throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
+if(tipo==="vídeo"&&!tiposVideo.includes(arquivo.type)&&!extensoesVideo.includes(extensao))throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
 const nomeArquivo=Date.now()+"-"+Math.random().toString(36).slice(2)+"."+extensao;
 const caminho=usuarioAtual.id+"/"+nomeArquivo;
 let contentType=arquivo.type;
-
-if(tipo==="vídeo"&&!contentType.startsWith("video/")){
-contentType=extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm";
-}
-
-let resultado;
+if(tipo==="vídeo"&&!contentType.startsWith("video/"))contentType=extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm";
+let ultimoErro=null;
+for(let tentativa=1;tentativa<=2;tentativa++){
 try{
-resultado=await supabaseClient.storage.from("petmundo-pets").upload(caminho,arquivo,{
-upsert:false,
-contentType:contentType||"application/octet-stream",
-cacheControl:"3600"
+const resultado=await supabaseClient.storage.from("petmundo-pets").upload(caminho,arquivo,{
+upsert:false,contentType:contentType||"application/octet-stream",cacheControl:"3600"
 });
-}catch(erro){
-throw new Error("Falha de conexão ao enviar o "+tipo+". Verifique sua internet e tente novamente. Detalhe: "+(erro.message||"Falha de comunicação."));
+if(!resultado.error)return caminho;
+ultimoErro=resultado.error;
+}catch(erro){ultimoErro=erro;}
+if(tentativa<2)await new Promise(resolve=>setTimeout(resolve,1200));
 }
-
-if(resultado.error)throw new Error("Erro no armazenamento do "+tipo+": "+resultado.error.message);
-return caminho;
+throw new Error("Não foi possível enviar o arquivo após duas tentativas. "+(ultimoErro?.message||"Verifique sua conexão e tente novamente."));
 }
 
 /* CADASTRAR NOVO PET */
-
 async function cadastrarPet(){
 if(!usuarioAtual){mostrarMensagem("mensagemPet","Entre na sua conta primeiro.");return;}
-
 const botao=document.getElementById("botaoCadastrarPet");
 const nome=document.getElementById("petNome").value.trim();
 const especie=document.getElementById("petEspecie").value;
@@ -567,143 +375,57 @@ const endereco=document.getElementById("petEndereco").value.trim();
 const mostrarContato=document.getElementById("petMostrarContato").checked;
 const foto=document.getElementById("petFoto").files[0];
 const video=document.getElementById("petVideo").files[0];
-
 if(!nome||!especie){mostrarMensagem("mensagemPet","Informe o nome e a espécie do animal.");return;}
-
-botao.disabled=true;
-botao.textContent="Salvando cadastro...";
-
+botao.disabled=true;botao.textContent="Salvando cadastro...";
 try{
 const caminhoFoto=foto?await enviarArquivoPet(foto,"foto"):null;
 const caminhoVideo=video?await enviarArquivoPet(video,"vídeo"):null;
-
-const {error}=await supabaseClient.from("pets").insert({
-owner_id:usuarioAtual.id,
-name:nome,
-species:especie,
-breed:raca||null,
-birth_date:nascimento,
-sex:sexo||null,
-description:descricao||null,
-photo_path:caminhoFoto,
-video_path:caminhoVideo,
-tutor_phone:telefone||null,
-tutor_address:endereco||null,
-show_contact:mostrarContato
-});
-
+const {error}=await supabaseClient.from("pets").insert({owner_id:usuarioAtual.id,name:nome,species:especie,breed:raca||null,birth_date:nascimento,sex:sexo||null,description:descricao||null,photo_path:caminhoFoto,video_path:caminhoVideo,tutor_phone:telefone||null,tutor_address:endereco||null,show_contact:mostrarContato});
 if(error)throw new Error("Não foi possível salvar o cadastro: "+error.message);
-
 ["petNome","petEspecie","petRaca","petNascimento","petSexo","petDescricao","petTelefone","petEndereco","petFoto","petVideo"].forEach(id=>document.getElementById(id).value="");
 document.getElementById("petMostrarContato").checked=false;
-mostrarMensagem("mensagemPet","Cadastro do pet realizado com sucesso! 🐾");
-await carregarMeusPets();
-
-}catch(erro){
-mostrarMensagem("mensagemPet",erro.message||"Erro inesperado ao cadastrar.");
-}finally{
-botao.disabled=false;
-botao.textContent="🐾 Salvar cadastro do pet";
+mostrarMensagem("mensagemPet","Cadastro do pet realizado com sucesso! 🐾");await carregarMeusPets();
+}catch(erro){mostrarMensagem("mensagemPet",erro.message||"Erro inesperado ao cadastrar.");}
+finally{botao.disabled=false;botao.textContent="🐾 Salvar cadastro do pet";}
 }
-}
-
 function calcularIdade(data){
 if(!data)return "Não informada";
-const nascimento=new Date(data+"T12:00:00");
-if(Number.isNaN(nascimento.getTime()))return "Não informada";
-const hoje=new Date();
-let anos=hoje.getFullYear()-nascimento.getFullYear();
-let meses=hoje.getMonth()-nascimento.getMonth();
-if(hoje.getDate()<nascimento.getDate())meses--;
-if(meses<0){anos--;meses+=12;}
-if(anos<0)return "Não informada";
-if(anos===0)return meses+" mês(es)";
-return anos+" ano(s) e "+meses+" mês(es)";
+const nascimento=new Date(data+"T12:00:00");if(Number.isNaN(nascimento.getTime()))return "Não informada";
+const hoje=new Date();let anos=hoje.getFullYear()-nascimento.getFullYear();let meses=hoje.getMonth()-nascimento.getMonth();
+if(hoje.getDate()<nascimento.getDate())meses--;if(meses<0){anos--;meses+=12;}if(anos<0)return "Não informada";
+if(anos===0)return meses+" mês(es)";return anos+" ano(s) e "+meses+" mês(es)";
 }
-
-/* ADICIONAR VÍDEO A PET JÁ CADASTRADO */
-
 async function adicionarVideoPet(petId,input,botao,mensagem){
 if(!usuarioAtual){mensagem.textContent="Entre na sua conta primeiro.";return;}
-const arquivo=input.files[0];
-if(!arquivo){mensagem.textContent="Escolha um vídeo primeiro.";return;}
+const arquivo=input.files[0];if(!arquivo){mensagem.textContent="Escolha um vídeo primeiro.";return;}
 if(arquivo.size>20*1024*1024){mensagem.textContent="O vídeo ultrapassa o limite de 20 MB.";return;}
-
-botao.disabled=true;
-botao.textContent="Enviando vídeo...";
-mensagem.textContent="Enviando vídeo. Aguarde...";
-
+botao.disabled=true;botao.textContent="Enviando vídeo...";mensagem.textContent="Enviando vídeo. Aguarde...";
 try{
 const caminho=await enviarArquivoPet(arquivo,"vídeo");
-const {data,error}=await supabaseClient.from("pets")
-.update({video_path:caminho})
-.eq("id",petId)
-.eq("owner_id",usuarioAtual.id)
-.select("id")
-.maybeSingle();
-
+const {data,error}=await supabaseClient.from("pets").update({video_path:caminho}).eq("id",petId).eq("owner_id",usuarioAtual.id).select("id").maybeSingle();
 if(error)throw new Error("O vídeo foi enviado, mas não foi possível atualizar o cadastro: "+error.message);
 if(!data)throw new Error("O vídeo foi enviado, mas o cadastro não foi atualizado. Verifique a permissão UPDATE da tabela pets.");
-
-mensagem.textContent="Vídeo adicionado ao pet com sucesso! 🐾";
-input.value="";
-await carregarMeusPets();
-}catch(erro){
-mensagem.textContent=erro.message||"Não foi possível adicionar o vídeo.";
-}finally{
-botao.disabled=false;
-botao.textContent="🎬 Adicionar vídeo";
-}
+mensagem.textContent="Vídeo adicionado ao pet com sucesso! 🐾";input.value="";await carregarMeusPets();
+}catch(erro){mensagem.textContent=erro.message||"Não foi possível adicionar o vídeo.";}
+finally{botao.disabled=false;botao.textContent="🎬 Adicionar vídeo";}
 }
 
 /* EDIÇÃO DO CADASTRO DO PET */
-
 function criarCampoEditor(form,rotulo,tipo,nome,valor){
-const grupo=document.createElement("div");
-const label=document.createElement("label");
-label.textContent=rotulo;
-const campo=document.createElement(tipo==="textarea"?"textarea":tipo==="select"?"select":"input");
-campo.name=nome;
-
+const grupo=document.createElement("div");const label=document.createElement("label");label.textContent=rotulo;
+const campo=document.createElement(tipo==="textarea"?"textarea":tipo==="select"?"select":"input");campo.name=nome;
 if(tipo==="select"){
-const opcoes=nome==="species"
-?["Cachorro","Gato","Ave","Coelho","Roedor","Réptil","Outro"]
-:["Macho","Fêmea"];
-const vazio=document.createElement("option");
-vazio.value="";
-vazio.textContent=nome==="species"?"Selecione":"Não informado";
-campo.appendChild(vazio);
-opcoes.forEach(op=>{
-const option=document.createElement("option");
-option.value=op;
-option.textContent=op;
-campo.appendChild(option);
-});
-campo.value=valor||"";
-}else{
-if(tipo!=="textarea")campo.type=tipo;
-campo.value=valor||"";
-if(tipo==="date")campo.placeholder="";
+const opcoes=nome==="species"?["Cachorro","Gato","Ave","Coelho","Roedor","Réptil","Outro"]:["Macho","Fêmea"];
+const vazio=document.createElement("option");vazio.value="";vazio.textContent=nome==="species"?"Selecione":"Não informado";campo.appendChild(vazio);
+opcoes.forEach(op=>{const option=document.createElement("option");option.value=op;option.textContent=op;campo.appendChild(option);});campo.value=valor||"";
+}else{if(tipo!=="textarea")campo.type=tipo;campo.value=valor||"";}
+grupo.appendChild(label);grupo.appendChild(campo);form.appendChild(grupo);return campo;
 }
-grupo.appendChild(label);
-grupo.appendChild(campo);
-form.appendChild(grupo);
-return campo;
-}
-
 function abrirEdicaoPet(pet,card){
-const editorExistente=card.querySelector(".editor-pet");
-if(editorExistente){editorExistente.remove();return;}
-
-const editor=document.createElement("div");
-editor.className="editor-pet";
-const titulo=document.createElement("h3");
-titulo.textContent="✏️ Editar cadastro de "+pet.name;
-editor.appendChild(titulo);
-
-const form=document.createElement("form");
-form.addEventListener("submit",event=>event.preventDefault());
-
+const editorExistente=card.querySelector(".editor-pet");if(editorExistente){editorExistente.remove();return;}
+const editor=document.createElement("div");editor.className="editor-pet";
+const titulo=document.createElement("h3");titulo.textContent="✏️ Editar cadastro de "+pet.name;editor.appendChild(titulo);
+const form=document.createElement("form");form.addEventListener("submit",event=>event.preventDefault());
 criarCampoEditor(form,"Nome do animal *","text","name",pet.name);
 criarCampoEditor(form,"Espécie *","select","species",pet.species);
 criarCampoEditor(form,"Raça","text","breed",pet.breed);
@@ -712,435 +434,164 @@ criarCampoEditor(form,"Sexo","select","sex",pet.sex);
 criarCampoEditor(form,"Descrição do pet","textarea","description",pet.description);
 criarCampoEditor(form,"Telefone do tutor","tel","tutor_phone",pet.tutor_phone);
 criarCampoEditor(form,"Endereço do tutor","text","tutor_address",pet.tutor_address);
-
-const checkArea=document.createElement("label");
-checkArea.className="campo-check";
-const check=document.createElement("input");
-check.type="checkbox";
-check.name="show_contact";
-check.checked=!!pet.show_contact;
-const checkTexto=document.createElement("span");
-checkTexto.textContent="Autorizo exibir telefone e endereço no perfil público do pet.";
-checkArea.appendChild(check);
-checkArea.appendChild(checkTexto);
-form.appendChild(checkArea);
-
-const aviso=document.createElement("div");
-aviso.className="aviso-privacidade";
-aviso.textContent="Os dados de contato ficam privados quando esta opção não está marcada.";
-form.appendChild(aviso);
-
-const labelFoto=document.createElement("label");
-labelFoto.textContent="Substituir foto do pet (opcional)";
-form.appendChild(labelFoto);
-const foto=document.createElement("input");
-foto.type="file";
-foto.name="photo";
-foto.accept="image/jpeg,image/png,image/webp,image/gif";
-foto.className="campo-arquivo";
-form.appendChild(foto);
-
-const labelVideo=document.createElement("label");
-labelVideo.textContent="Substituir vídeo do pet (opcional, máximo 20 MB)";
-form.appendChild(labelVideo);
-const video=document.createElement("input");
-video.type="file";
-video.name="video";
-video.accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm";
-video.className="campo-arquivo";
-form.appendChild(video);
-
-const mensagem=document.createElement("p");
-mensagem.className="mensagem oculto";
-form.appendChild(mensagem);
-
-const acoes=document.createElement("div");
-acoes.className="acoes-editor";
-
-const salvar=document.createElement("button");
-salvar.type="button";
-salvar.textContent="💾 Salvar alterações";
-salvar.addEventListener("click",()=>salvarEdicaoPet(pet.id,form,salvar,mensagem));
-
-const cancelar=document.createElement("button");
-cancelar.type="button";
-cancelar.className="cancelar";
-cancelar.textContent="Cancelar";
-cancelar.addEventListener("click",()=>editor.remove());
-
-acoes.appendChild(salvar);
-acoes.appendChild(cancelar);
-form.appendChild(acoes);
-editor.appendChild(form);
-card.appendChild(editor);
-editor.scrollIntoView({behavior:"smooth",block:"center"});
+const checkArea=document.createElement("label");checkArea.className="campo-check";
+const check=document.createElement("input");check.type="checkbox";check.name="show_contact";check.checked=!!pet.show_contact;
+const checkTexto=document.createElement("span");checkTexto.textContent="Autorizo exibir telefone e endereço no perfil público do pet.";
+checkArea.appendChild(check);checkArea.appendChild(checkTexto);form.appendChild(checkArea);
+const aviso=document.createElement("div");aviso.className="aviso-privacidade";aviso.textContent="Os dados de contato ficam privados quando esta opção não está marcada.";form.appendChild(aviso);
+const labelFoto=document.createElement("label");labelFoto.textContent="Substituir foto do pet (opcional)";form.appendChild(labelFoto);
+const foto=document.createElement("input");foto.type="file";foto.name="photo";foto.accept="image/jpeg,image/png,image/webp,image/gif";foto.className="campo-arquivo";form.appendChild(foto);
+const labelVideo=document.createElement("label");labelVideo.textContent="Substituir vídeo do pet (opcional, máximo 20 MB)";form.appendChild(labelVideo);
+const video=document.createElement("input");video.type="file";video.name="video";video.accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm";video.className="campo-arquivo";form.appendChild(video);
+const mensagem=document.createElement("p");mensagem.className="mensagem oculto";form.appendChild(mensagem);
+const acoes=document.createElement("div");acoes.className="acoes-editor";
+const salvar=document.createElement("button");salvar.type="button";salvar.textContent="💾 Salvar alterações";salvar.addEventListener("click",()=>salvarEdicaoPet(pet.id,form,salvar,mensagem));
+const cancelar=document.createElement("button");cancelar.type="button";cancelar.className="cancelar";cancelar.textContent="Cancelar";cancelar.addEventListener("click",()=>editor.remove());
+acoes.appendChild(salvar);acoes.appendChild(cancelar);form.appendChild(acoes);editor.appendChild(form);card.appendChild(editor);editor.scrollIntoView({behavior:"smooth",block:"center"});
 }
-
 async function salvarEdicaoPet(petId,form,botao,mensagem){
 if(!usuarioAtual){mensagem.textContent="Entre na sua conta primeiro.";mensagem.classList.remove("oculto");return;}
-
-const nome=form.elements.name.value.trim();
-const especie=form.elements.species.value;
-
-if(!nome||!especie){
-mensagem.textContent="Preencha o nome e a espécie do animal.";
-mensagem.classList.remove("oculto");
-return;
-}
-
-botao.disabled=true;
-botao.textContent="Salvando...";
-
+const nome=form.elements.name.value.trim();const especie=form.elements.species.value;
+if(!nome||!especie){mensagem.textContent="Preencha o nome e a espécie do animal.";mensagem.classList.remove("oculto");return;}
+botao.disabled=true;botao.textContent="Salvando...";
 try{
-const dados={
-name:nome,
-species:especie,
-breed:form.elements.breed.value.trim()||null,
-birth_date:form.elements.birth_date.value||null,
-sex:form.elements.sex.value||null,
-description:form.elements.description.value.trim()||null,
-tutor_phone:form.elements.tutor_phone.value.trim()||null,
-tutor_address:form.elements.tutor_address.value.trim()||null,
-show_contact:form.elements.show_contact.checked
-};
-
-const novaFoto=form.elements.photo.files[0];
-const novoVideo=form.elements.video.files[0];
-
+const dados={name:nome,species:especie,breed:form.elements.breed.value.trim()||null,birth_date:form.elements.birth_date.value||null,sex:form.elements.sex.value||null,description:form.elements.description.value.trim()||null,tutor_phone:form.elements.tutor_phone.value.trim()||null,tutor_address:form.elements.tutor_address.value.trim()||null,show_contact:form.elements.show_contact.checked};
+const novaFoto=form.elements.photo.files[0];const novoVideo=form.elements.video.files[0];
 if(novaFoto)dados.photo_path=await enviarArquivoPet(novaFoto,"foto");
 if(novoVideo)dados.video_path=await enviarArquivoPet(novoVideo,"vídeo");
-
-const {data,error}=await supabaseClient.from("pets")
-.update(dados)
-.eq("id",petId)
-.eq("owner_id",usuarioAtual.id)
-.select("id")
-.maybeSingle();
-
+const {data,error}=await supabaseClient.from("pets").update(dados).eq("id",petId).eq("owner_id",usuarioAtual.id).select("id").maybeSingle();
 if(error)throw new Error("Não foi possível salvar as alterações: "+error.message);
 if(!data)throw new Error("Nenhum cadastro foi atualizado. Confira se você está conectado à conta proprietária do pet.");
-
-mensagem.textContent="Cadastro atualizado com sucesso! 🐾";
-mensagem.classList.remove("oculto");
-await carregarMeusPets();
-
-}catch(erro){
-mensagem.textContent=erro.message||"Erro ao atualizar o cadastro.";
-mensagem.classList.remove("oculto");
-botao.disabled=false;
-botao.textContent="💾 Salvar alterações";
-}
+mensagem.textContent="Cadastro atualizado com sucesso! 🐾";mensagem.classList.remove("oculto");await carregarMeusPets();
+}catch(erro){mensagem.textContent=erro.message||"Erro ao atualizar o cadastro.";mensagem.classList.remove("oculto");botao.disabled=false;botao.textContent="💾 Salvar alterações";}
 }
 
 /* CARREGAR PETS */
-
 async function carregarMeusPets(){
-const area=document.getElementById("listaMeusPets");
-if(!usuarioAtual){area.innerHTML="";return;}
-
+const area=document.getElementById("listaMeusPets");if(!usuarioAtual){area.innerHTML="";return;}
 area.innerHTML="<p class='pequeno'>Carregando seus animais...</p>";
-
-const {data:pets,error}=await supabaseClient.from("pets")
-.select("id,name,species,breed,birth_date,sex,description,photo_path,video_path,tutor_phone,tutor_address,show_contact,created_at")
-.eq("owner_id",usuarioAtual.id)
-.order("created_at",{ascending:false});
-
-if(error){
-console.error(error);
-area.textContent="Não foi possível carregar seus pets: "+error.message;
-return;
-}
-
-area.innerHTML="";
-if(!pets||pets.length===0){
-area.innerHTML="<p class='pequeno'>Você ainda não cadastrou nenhum pet.</p>";
-return;
-}
-
+const {data:pets,error}=await supabaseClient.from("pets").select("id,name,species,breed,birth_date,sex,description,photo_path,video_path,tutor_phone,tutor_address,show_contact,created_at").eq("owner_id",usuarioAtual.id).order("created_at",{ascending:false});
+if(error){console.error(error);area.textContent="Não foi possível carregar seus pets: "+error.message;return;}
+area.innerHTML="";if(!pets||pets.length===0){area.innerHTML="<p class='pequeno'>Você ainda não cadastrou nenhum pet.</p>";return;}
 pets.forEach(pet=>{
-const card=document.createElement("div");
-card.className="pet-card";
-
-const titulo=document.createElement("h3");
-titulo.textContent="🐾 "+pet.name;
-card.appendChild(titulo);
-
-if(pet.photo_path){
-const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.photo_path);
-const img=document.createElement("img");
-img.src=data.publicUrl;
-img.alt="Foto de "+pet.name;
-img.loading="lazy";
-card.appendChild(img);
-}
-
-if(pet.video_path){
-const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.video_path);
-const video=document.createElement("video");
-video.src=data.publicUrl;
-video.controls=true;
-video.preload="metadata";
-video.playsInline=true;
-card.appendChild(video);
-}else{
-const areaVideo=document.createElement("div");
-areaVideo.className="area-video-pet";
-const tituloVideo=document.createElement("strong");
-tituloVideo.textContent="🎬 Este pet ainda não tem vídeo.";
-areaVideo.appendChild(tituloVideo);
-
-const input=document.createElement("input");
-input.type="file";
-input.accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm";
-input.className="campo-arquivo";
-input.setAttribute("aria-label","Escolher vídeo de "+pet.name);
-
-const botaoVideo=document.createElement("button");
-botaoVideo.type="button";
-botaoVideo.textContent="🎬 Adicionar vídeo";
-
-const mensagemVideo=document.createElement("p");
-mensagemVideo.className="pequeno";
-
+const card=document.createElement("div");card.className="pet-card";
+const titulo=document.createElement("h3");titulo.textContent="🐾 "+pet.name;card.appendChild(titulo);
+if(pet.photo_path){const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.photo_path);const img=document.createElement("img");img.src=data.publicUrl;img.alt="Foto de "+pet.name;img.loading="lazy";card.appendChild(img);}
+if(pet.video_path){const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.video_path);const video=document.createElement("video");video.src=data.publicUrl;video.controls=true;video.preload="metadata";video.playsInline=true;card.appendChild(video);}
+else{
+const areaVideo=document.createElement("div");areaVideo.className="area-video-pet";const tituloVideo=document.createElement("strong");tituloVideo.textContent="🎬 Este pet ainda não tem vídeo.";areaVideo.appendChild(tituloVideo);
+const input=document.createElement("input");input.type="file";input.accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm";input.className="campo-arquivo";input.setAttribute("aria-label","Escolher vídeo de "+pet.name);
+const botaoVideo=document.createElement("button");botaoVideo.type="button";botaoVideo.textContent="🎬 Adicionar vídeo";
+const mensagemVideo=document.createElement("p");mensagemVideo.className="pequeno";
 botaoVideo.addEventListener("click",()=>adicionarVideoPet(pet.id,input,botaoVideo,mensagemVideo));
-
-areaVideo.appendChild(input);
-areaVideo.appendChild(botaoVideo);
-areaVideo.appendChild(mensagemVideo);
-card.appendChild(areaVideo);
+areaVideo.appendChild(input);areaVideo.appendChild(botaoVideo);areaVideo.appendChild(mensagemVideo);card.appendChild(areaVideo);
 }
-
-const dados=document.createElement("div");
-dados.className="pet-dados";
-
-function adicionarDado(rotulo,valor){
-if(!valor)return;
-const p=document.createElement("p");
-const strong=document.createElement("strong");
-strong.textContent=rotulo+": ";
-p.appendChild(strong);
-p.appendChild(document.createTextNode(valor));
-dados.appendChild(p);
-}
-
-adicionarDado("Espécie",pet.species);
-adicionarDado("Raça",pet.breed);
+const dados=document.createElement("div");dados.className="pet-dados";
+function adicionarDado(rotulo,valor){if(!valor)return;const p=document.createElement("p");const strong=document.createElement("strong");strong.textContent=rotulo+": ";p.appendChild(strong);p.appendChild(document.createTextNode(valor));dados.appendChild(p);}
+adicionarDado("Espécie",pet.species);adicionarDado("Raça",pet.breed);
 adicionarDado("Nascimento",pet.birth_date?new Date(pet.birth_date+"T12:00:00").toLocaleDateString("pt-BR"):"");
-adicionarDado("Idade aproximada",calcularIdade(pet.birth_date));
-adicionarDado("Sexo",pet.sex);
-adicionarDado("Descrição",pet.description);
-
-if(pet.show_contact){
-adicionarDado("Telefone do tutor",pet.tutor_phone);
-adicionarDado("Endereço do tutor",pet.tutor_address);
-}else{
-const privado=document.createElement("p");
-privado.className="pequeno";
-privado.textContent="Contato do tutor protegido.";
-dados.appendChild(privado);
-}
-
+adicionarDado("Idade aproximada",calcularIdade(pet.birth_date));adicionarDado("Sexo",pet.sex);adicionarDado("Descrição",pet.description);
+if(pet.show_contact){adicionarDado("Telefone do tutor",pet.tutor_phone);adicionarDado("Endereço do tutor",pet.tutor_address);}
+else{const privado=document.createElement("p");privado.className="pequeno";privado.textContent="Contato do tutor protegido.";dados.appendChild(privado);}
 card.appendChild(dados);
-
-const botaoEditar=document.createElement("button");
-botaoEditar.type="button";
-botaoEditar.className="editar";
-botaoEditar.textContent="✏️ Editar pet";
-botaoEditar.addEventListener("click",()=>abrirEdicaoPet(pet,card));
-card.appendChild(botaoEditar);
-
+const botaoEditar=document.createElement("button");botaoEditar.type="button";botaoEditar.className="editar";botaoEditar.textContent="✏️ Editar pet";botaoEditar.addEventListener("click",()=>abrirEdicaoPet(pet,card));card.appendChild(botaoEditar);
 area.appendChild(card);
 });
 }
 
 /* PUBLICAÇÕES DA COMUNIDADE */
-
 async function enviarFoto(){
 if(!usuarioAtual){mostrarMensagem("mensagemFoto","Entre na sua conta primeiro.");return;}
-const arquivo=document.getElementById("arquivoFoto").files[0];
-const legenda=document.getElementById("legendaFoto").value.trim();
+const arquivo=document.getElementById("arquivoFoto").files[0];const legenda=document.getElementById("legendaFoto").value.trim();
 if(!arquivo){mostrarMensagem("mensagemFoto","Escolha uma foto antes de publicar.");return;}
 if(!arquivo.type.startsWith("image/")){mostrarMensagem("mensagemFoto","Escolha um arquivo de imagem.");return;}
-
 const nomeArquivo=Date.now()+"-"+Math.random().toString(36).slice(2)+"-"+arquivo.name.replace(/[^a-zA-Z0-9._-]/g,"_");
 const caminho=usuarioAtual.id+"/"+nomeArquivo;
-
 try{
 const {error}=await supabaseClient.storage.from("petmundo-fotos").upload(caminho,arquivo);
 if(error){mostrarMensagem("mensagemFoto","Erro ao enviar: "+error.message);return;}
 if(legenda)localStorage.setItem("petmundo_legenda_"+caminho,legenda);
-document.getElementById("arquivoFoto").value="";
-document.getElementById("legendaFoto").value="";
-mostrarMensagem("mensagemFoto","Foto publicada com sucesso!");
-await carregarMural();
-}catch(erro){
-mostrarMensagem("mensagemFoto","Falha de conexão ao publicar foto: "+erro.message);
+document.getElementById("arquivoFoto").value="";document.getElementById("legendaFoto").value="";
+mostrarMensagem("mensagemFoto","Foto publicada com sucesso!");await carregarMural();
+}catch(erro){mostrarMensagem("mensagemFoto","Falha de conexão ao publicar foto: "+erro.message);}
 }
-}
-
 async function carregarComentarios(caminho,area){
 area.innerHTML="<p class='pequeno'>Carregando comentários...</p>";
-const {data:comentarios,error}=await supabaseClient.from("photo_comments")
-.select("id,user_id,body,created_at").eq("photo_path",caminho).order("created_at",{ascending:true});
+const {data:comentarios,error}=await supabaseClient.from("photo_comments").select("id,user_id,body,created_at").eq("photo_path",caminho).order("created_at",{ascending:true});
 if(error){area.textContent="Não foi possível carregar os comentários.";console.error(error);return;}
-area.innerHTML="";
-if(!comentarios||comentarios.length===0){
-area.innerHTML="<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";
-return;
-}
+area.innerHTML="";if(!comentarios||comentarios.length===0){area.innerHTML="<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";return;}
 const ids=[...new Set(comentarios.map(c=>c.user_id))];
 const {data:perfis}=await supabaseClient.from("profiles").select("id,display_name").in("id",ids);
-const nomes={};
-(perfis||[]).forEach(p=>{if(p.display_name)nomes[p.id]=p.display_name;});
+const nomes={};(perfis||[]).forEach(p=>{if(p.display_name)nomes[p.id]=p.display_name;});
 comentarios.forEach(comentario=>{
-const item=document.createElement("div");
-item.className="comentario";
-const autor=document.createElement("strong");
-let nomeAutor=nomes[comentario.user_id];
-if(!nomeAutor&&usuarioAtual&&comentario.user_id===usuarioAtual.id)nomeAutor=obterNome(usuarioAtual);
-autor.textContent=nomeAutor||"Tutor PETMUNDO";
-const texto=document.createElement("p");
-texto.textContent=comentario.body;
-texto.style.margin="5px 0";
-item.appendChild(autor);
-item.appendChild(texto);
-area.appendChild(item);
+const item=document.createElement("div");item.className="comentario";const autor=document.createElement("strong");
+let nomeAutor=nomes[comentario.user_id];if(!nomeAutor&&usuarioAtual&&comentario.user_id===usuarioAtual.id)nomeAutor=obterNome(usuarioAtual);
+autor.textContent=nomeAutor||"Tutor PETMUNDO";const texto=document.createElement("p");texto.textContent=comentario.body;texto.style.margin="5px 0";
+item.appendChild(autor);item.appendChild(texto);area.appendChild(item);
 });
 }
-
 async function publicarComentario(caminho,campo,area){
 if(!usuarioAtual){alert("Entre na sua conta para comentar.");return;}
-const texto=campo.value.trim();
-if(!texto){alert("Escreva seu comentário.");return;}
+const texto=campo.value.trim();if(!texto){alert("Escreva seu comentário.");return;}
 await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
 const {error}=await supabaseClient.from("photo_comments").insert({photo_path:caminho,user_id:usuarioAtual.id,body:texto});
 if(error){alert("Não foi possível publicar o comentário: "+error.message);return;}
-campo.value="";
-await carregarComentarios(caminho,area);
+campo.value="";await carregarComentarios(caminho,area);
 }
-
 async function alternarCurtida(caminho,botao,contador){
 if(!usuarioAtual){alert("Entre na sua conta para curtir fotos.");return;}
-const {data:existente,error:erroBusca}=await supabaseClient.from("photo_likes")
-.select("id").eq("photo_path",caminho).eq("user_id",usuarioAtual.id).maybeSingle();
+const {data:existente,error:erroBusca}=await supabaseClient.from("photo_likes").select("id").eq("photo_path",caminho).eq("user_id",usuarioAtual.id).maybeSingle();
 if(erroBusca){alert("Não foi possível verificar a curtida: "+erroBusca.message);return;}
-if(existente){
-const {error}=await supabaseClient.from("photo_likes").delete().eq("id",existente.id);
-if(error){alert("Erro ao retirar curtida: "+error.message);return;}
-}else{
-const {error}=await supabaseClient.from("photo_likes").insert({photo_path:caminho,user_id:usuarioAtual.id});
-if(error){alert("Erro ao curtir: "+error.message);return;}
-}
+if(existente){const {error}=await supabaseClient.from("photo_likes").delete().eq("id",existente.id);if(error){alert("Erro ao retirar curtida: "+error.message);return;}}
+else{const {error}=await supabaseClient.from("photo_likes").insert({photo_path:caminho,user_id:usuarioAtual.id});if(error){alert("Erro ao curtir: "+error.message);return;}}
 await atualizarCurtidas(caminho,botao,contador);
 }
-
 async function atualizarCurtidas(caminho,botao,contador){
-const {data:curtidas,error}=await supabaseClient.from("photo_likes")
-.select("id,user_id").eq("photo_path",caminho);
+const {data:curtidas,error}=await supabaseClient.from("photo_likes").select("id,user_id").eq("photo_path",caminho);
 if(error){console.error(error);return;}
-const total=curtidas?curtidas.length:0;
-contador.textContent=total+(total===1?" curtida":" curtidas");
+const total=curtidas?curtidas.length:0;contador.textContent=total+(total===1?" curtida":" curtidas");
 const curtiu=usuarioAtual&&curtidas.some(c=>c.user_id===usuarioAtual.id);
-botao.classList.toggle("ativo",!!curtiu);
-botao.textContent=curtiu?"♥ Curtido":"♡ Curtir";
+botao.classList.toggle("ativo",!!curtiu);botao.textContent=curtiu?"♥ Curtido":"♡ Curtir";
 }
-
 async function carregarMural(){
-const mural=document.getElementById("mural");
-mural.innerHTML="<p>Carregando fotos da comunidade...</p>";
+const mural=document.getElementById("mural");mural.innerHTML="<p>Carregando fotos da comunidade...</p>";
 const {data:pastas,error:erroPastas}=await supabaseClient.storage.from("petmundo-fotos").list("",{limit:1000});
-if(erroPastas){
-mural.textContent="Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";
-console.error(erroPastas);
-return;
-}
+if(erroPastas){mural.textContent="Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";console.error(erroPastas);return;}
 const fotosEncontradas=[];
 for(const pasta of(pastas||[])){
 if(!pasta.id||pasta.metadata)continue;
 const {data:arquivos,error}=await supabaseClient.storage.from("petmundo-fotos").list(pasta.name,{limit:100,sortBy:{column:"name",order:"desc"}});
 if(error){console.error("Erro ao listar pasta:",pasta.name,error);continue;}
-for(const arquivo of(arquivos||[])){
-if(!arquivo.name||!arquivo.metadata)continue;
-fotosEncontradas.push({caminho:pasta.name+"/"+arquivo.name,dono:pasta.name,nomeArquivo:arquivo.name});
+for(const arquivo of(arquivos||[])){if(!arquivo.name||!arquivo.metadata)continue;fotosEncontradas.push({caminho:pasta.name+"/"+arquivo.name,dono:pasta.name,nomeArquivo:arquivo.name});}
 }
-}
-fotosEncontradas.sort((a,b)=>b.nomeArquivo.localeCompare(a.nomeArquivo));
-mural.innerHTML="";
-if(fotosEncontradas.length===0){
-mural.innerHTML="<p>Ainda não há fotos publicadas na comunidade.</p>";
-return;
-}
+fotosEncontradas.sort((a,b)=>b.nomeArquivo.localeCompare(a.nomeArquivo));mural.innerHTML="";
+if(fotosEncontradas.length===0){mural.innerHTML="<p>Ainda não há fotos publicadas na comunidade.</p>";return;}
 for(const foto of fotosEncontradas){
-const caminho=foto.caminho;
-const {data:urlData}=supabaseClient.storage.from("petmundo-fotos").getPublicUrl(caminho);
+const caminho=foto.caminho;const {data:urlData}=supabaseClient.storage.from("petmundo-fotos").getPublicUrl(caminho);
 let nomeAutor="Comunidade PETMUNDO";
+if(usuarioAtual){const {data:perfil}=await supabaseClient.from("profiles").select("display_name").eq("id",foto.dono).maybeSingle();if(perfil?.display_name)nomeAutor=perfil.display_name;if(foto.dono===usuarioAtual.id&&!perfil?.display_name)nomeAutor=obterNome(usuarioAtual);}
+const card=document.createElement("div");card.className="foto-card";const autor=document.createElement("div");autor.className="foto-autor";autor.textContent=nomeAutor;
+const imagem=document.createElement("img");imagem.src=urlData.publicUrl;imagem.alt="Foto de animal publicada no PETMUNDO";imagem.loading="lazy";
+const legenda=document.createElement("p");legenda.textContent=localStorage.getItem("petmundo_legenda_"+caminho)||"";
+card.appendChild(autor);card.appendChild(imagem);if(legenda.textContent)card.appendChild(legenda);
 if(usuarioAtual){
-const {data:perfil}=await supabaseClient.from("profiles").select("display_name").eq("id",foto.dono).maybeSingle();
-if(perfil?.display_name)nomeAutor=perfil.display_name;
-if(foto.dono===usuarioAtual.id&&!perfil?.display_name)nomeAutor=obterNome(usuarioAtual);
-}
-const card=document.createElement("div");
-card.className="foto-card";
-const autor=document.createElement("div");
-autor.className="foto-autor";
-autor.textContent=nomeAutor;
-const imagem=document.createElement("img");
-imagem.src=urlData.publicUrl;
-imagem.alt="Foto de animal publicada no PETMUNDO";
-imagem.loading="lazy";
-const legenda=document.createElement("p");
-legenda.textContent=localStorage.getItem("petmundo_legenda_"+caminho)||"";
-card.appendChild(autor);
-card.appendChild(imagem);
-if(legenda.textContent)card.appendChild(legenda);
-if(usuarioAtual){
-const acoes=document.createElement("div");
-acoes.className="acoes-foto";
-const botaoCurtir=document.createElement("button");
-botaoCurtir.className="curtir";
-botaoCurtir.textContent="♡ Curtir";
-const contador=document.createElement("span");
-contador.className="pequeno";
-botaoCurtir.onclick=()=>alternarCurtida(caminho,botaoCurtir,contador);
-acoes.appendChild(botaoCurtir);
-acoes.appendChild(contador);
-card.appendChild(acoes);
-const tituloComentarios=document.createElement("h3");
-tituloComentarios.textContent="Comentários";
-const listaComentarios=document.createElement("div");
-const campoComentario=document.createElement("input");
-campoComentario.type="text";
-campoComentario.placeholder="Escreva um comentário...";
-const botaoComentar=document.createElement("button");
-botaoComentar.textContent="Comentar";
-botaoComentar.onclick=()=>publicarComentario(caminho,campoComentario,listaComentarios);
-campoComentario.addEventListener("keydown",event=>{
-if(event.key==="Enter")publicarComentario(caminho,campoComentario,listaComentarios);
-});
-card.appendChild(tituloComentarios);
-card.appendChild(listaComentarios);
-card.appendChild(campoComentario);
-card.appendChild(botaoComentar);
-await atualizarCurtidas(caminho,botaoCurtir,contador);
-await carregarComentarios(caminho,listaComentarios);
-}else{
-const aviso=document.createElement("p");
-aviso.className="pequeno";
-aviso.textContent="Entre na sua conta para curtir e comentar.";
-card.appendChild(aviso);
-}
+const acoes=document.createElement("div");acoes.className="acoes-foto";const botaoCurtir=document.createElement("button");botaoCurtir.className="curtir";botaoCurtir.textContent="♡ Curtir";
+const contador=document.createElement("span");contador.className="pequeno";botaoCurtir.onclick=()=>alternarCurtida(caminho,botaoCurtir,contador);
+acoes.appendChild(botaoCurtir);acoes.appendChild(contador);card.appendChild(acoes);
+const tituloComentarios=document.createElement("h3");tituloComentarios.textContent="Comentários";const listaComentarios=document.createElement("div");
+const campoComentario=document.createElement("input");campoComentario.type="text";campoComentario.placeholder="Escreva um comentário...";
+const botaoComentar=document.createElement("button");botaoComentar.textContent="Comentar";botaoComentar.onclick=()=>publicarComentario(caminho,campoComentario,listaComentarios);
+campoComentario.addEventListener("keydown",event=>{if(event.key==="Enter")publicarComentario(caminho,campoComentario,listaComentarios);});
+card.appendChild(tituloComentarios);card.appendChild(listaComentarios);card.appendChild(campoComentario);card.appendChild(botaoComentar);
+await atualizarCurtidas(caminho,botaoCurtir,contador);await carregarComentarios(caminho,listaComentarios);
+}else{const aviso=document.createElement("p");aviso.className="pequeno";aviso.textContent="Entre na sua conta para curtir e comentar.";card.appendChild(aviso);}
 mural.appendChild(card);
 }
 }
 
-/* NOVA FUNÇÃO: PUBLICAR CASO DE ADOÇÃO OU RESGATE */
-
+/* PUBLICAR CASO DE ADOÇÃO OU RESGATE */
 async function publicarResgate(){
-if(!usuarioAtual){
-mostrarMensagem("mensagemResgate","Entre na sua conta primeiro.");
-return;
-}
-
+if(!usuarioAtual){mostrarMensagem("mensagemResgate","Entre na sua conta primeiro.");return;}
 const botao=document.getElementById("botaoPublicarResgate");
 const tipo=document.getElementById("resgateTipo").value;
 const nome=document.getElementById("resgateNome").value.trim();
@@ -1152,227 +603,116 @@ const ajuda=document.getElementById("resgateAjuda").value.trim();
 const contatoDigitado=document.getElementById("resgateContato").value.trim();
 const autorizaContato=document.getElementById("resgateAutorizaContato").checked;
 const foto=document.getElementById("resgateFoto").files[0];
-
-if(!tipo||!especie||!descricao||!cidade){
-mostrarMensagem("mensagemResgate","Preencha o tipo de publicação, a espécie, a descrição e a cidade.");
-return;
-}
-
-if(contatoDigitado&&!autorizaContato){
-mostrarMensagem("mensagemResgate","Para divulgar o contato, marque a autorização. Se não quiser divulgá-lo, apague o campo de contato.");
-return;
-}
-
-botao.disabled=true;
-botao.textContent="Publicando...";
-
+if(!tipo||!especie||!descricao||!cidade){mostrarMensagem("mensagemResgate","Preencha o tipo de publicação, a espécie, a descrição e a cidade.");return;}
+if(contatoDigitado&&!autorizaContato){mostrarMensagem("mensagemResgate","Para divulgar o contato, marque a autorização. Se não quiser divulgá-lo, apague o campo de contato.");return;}
+botao.disabled=true;botao.textContent="Publicando...";
 try{
 let caminhoFoto=null;
-
-if(foto){
-if(!foto.type.startsWith("image/")){
-throw new Error("Escolha um arquivo de imagem válido.");
-}
-caminhoFoto=await enviarArquivoPet(foto,"foto");
-}
-
-const dados={
-owner_id:usuarioAtual.id,
-tipo:tipo,
-nome_animal:nome||null,
-especie:especie,
-descricao:descricao,
-cidade:cidade,
-bairro:bairro||null,
-contato:autorizaContato?contatoDigitado:null,
-ajuda_necessaria:ajuda||null,
-foto_path:caminhoFoto,
-status:"ativo"
-};
-
+if(foto){if(!foto.type.startsWith("image/"))throw new Error("Escolha um arquivo de imagem válido.");caminhoFoto=await enviarArquivoPet(foto,"foto");}
+const dados={owner_id:usuarioAtual.id,tipo:tipo,nome_animal:nome||null,especie:especie,descricao:descricao,cidade:cidade,bairro:bairro||null,contato:autorizaContato?contatoDigitado:null,ajuda_necessaria:ajuda||null,foto_path:caminhoFoto,status:"ativo"};
 const {error}=await supabaseClient.from("pet_resgates").insert(dados);
-
 if(error)throw new Error("Não foi possível publicar o caso: "+error.message);
-
-[
-"resgateTipo",
-"resgateNome",
-"resgateEspecie",
-"resgateDescricao",
-"resgateCidade",
-"resgateBairro",
-"resgateAjuda",
-"resgateContato",
-"resgateFoto"
-].forEach(id=>document.getElementById(id).value="");
-
+["resgateTipo","resgateNome","resgateEspecie","resgateDescricao","resgateCidade","resgateBairro","resgateAjuda","resgateContato","resgateFoto"].forEach(id=>document.getElementById(id).value="");
 document.getElementById("resgateAutorizaContato").checked=false;
+mostrarMensagem("mensagemResgate","Publicação realizada com sucesso! 🐾");await carregarResgates();
+}catch(erro){mostrarMensagem("mensagemResgate",erro.message||"Ocorreu um erro ao publicar.");}
+finally{botao.disabled=false;botao.textContent="🐾 Publicar caso";}
+}
 
-mostrarMensagem("mensagemResgate","Publicação realizada com sucesso! 🐾");
+/* MARCAR PUBLICAÇÃO COMO ATENDIDA */
+async function marcarResgateAtendido(id,botao){
+if(!usuarioAtual)return;
+if(!confirm("Este pedido já foi atendido? Deseja marcar a publicação como ATENDIDA?"))return;
+botao.disabled=true;botao.textContent="Atualizando...";
+const {data,error}=await supabaseClient.from("pet_resgates")
+.update({status:"atendido"}).eq("id",id).eq("owner_id",usuarioAtual.id).select("id").maybeSingle();
+if(error||!data){
+alert("Não foi possível atualizar: "+(error?.message||"Publicação não encontrada ou sem permissão."));
+botao.disabled=false;botao.textContent="✓ Marcar como atendido";return;
+}
 await carregarResgates();
-
-}catch(erro){
-mostrarMensagem("mensagemResgate",erro.message||"Ocorreu um erro ao publicar.");
-}finally{
-botao.disabled=false;
-botao.textContent="🐾 Publicar caso";
-}
 }
 
-/* NOVA FUNÇÃO: CARREGAR MURAL DE ADOÇÃO E RESGATE */
+/* EXCLUIR PUBLICAÇÃO E FOTO */
+async function excluirResgate(id,botao){
+if(!usuarioAtual){alert("Entre na sua conta primeiro.");return;}
+if(!confirm("Deseja realmente excluir esta publicação e sua foto? Esta ação não pode ser desfeita."))return;
+botao.disabled=true;botao.textContent="Excluindo...";
+const {data:caso,error:erroBusca}=await supabaseClient.from("pet_resgates")
+.select("id,foto_path").eq("id",id).eq("owner_id",usuarioAtual.id).maybeSingle();
+if(erroBusca||!caso){
+alert("Não foi possível localizar a publicação: "+(erroBusca?.message||"Publicação não encontrada."));
+botao.disabled=false;botao.textContent="🗑 Excluir publicação e foto";return;
+}
+const {data,error}=await supabaseClient.from("pet_resgates")
+.delete().eq("id",id).eq("owner_id",usuarioAtual.id).select("id").maybeSingle();
+if(error||!data){
+alert("Não foi possível excluir: "+(error?.message||"Publicação não encontrada ou sem permissão."));
+botao.disabled=false;botao.textContent="🗑 Excluir publicação e foto";return;
+}
+if(caso.foto_path){
+const {error:erroFoto}=await supabaseClient.storage.from("petmundo-pets").remove([caso.foto_path]);
+if(erroFoto)console.error("Publicação excluída, mas não foi possível apagar a foto:",erroFoto.message);
+}
+await carregarResgates();
+}
 
+/* CARREGAR MURAL DE ADOÇÃO E RESGATE */
 async function carregarResgates(){
-const mural=document.getElementById("muralResgates");
-mural.innerHTML="<p>Carregando publicações...</p>";
-
-const {data:casos,error}=await supabaseClient
-.from("pet_resgates")
+const mural=document.getElementById("muralResgates");mural.innerHTML="<p>Carregando publicações...</p>";
+const {data:casos,error}=await supabaseClient.from("pet_resgates")
 .select("id,owner_id,tipo,nome_animal,especie,descricao,cidade,bairro,contato,ajuda_necessaria,foto_path,status,created_at")
 .order("created_at",{ascending:false});
-
-if(error){
-console.error("Erro ao carregar resgates:",error);
-mural.innerHTML="<p>Não foi possível carregar as publicações: "+escapeHTML(error.message)+"</p>";
-return;
-}
-
+if(error){console.error("Erro ao carregar resgates:",error);mural.innerHTML="<p>Não foi possível carregar as publicações: "+escapeHTML(error.message)+"</p>";return;}
 mural.innerHTML="";
-
-if(!casos||casos.length===0){
-mural.innerHTML="<p>Ainda não há casos publicados. Seja o primeiro a ajudar um animal!</p>";
-return;
-}
-
+if(!casos||casos.length===0){mural.innerHTML="<p>Ainda não há casos publicados. Seja o primeiro a ajudar um animal!</p>";return;}
 casos.forEach(caso=>{
-const card=document.createElement("div");
-card.className="resgate-publicacao";
-
-const etiqueta=document.createElement("span");
-etiqueta.className="resgate-etiqueta";
-etiqueta.textContent=caso.tipo||"Adoção e resgate";
-card.appendChild(etiqueta);
-
-const titulo=document.createElement("h3");
-titulo.textContent="🐾 "+(caso.nome_animal||caso.especie||"Animal");
-card.appendChild(titulo);
-
+const card=document.createElement("div");card.className="resgate-publicacao";
+const etiqueta=document.createElement("span");etiqueta.className="resgate-etiqueta";etiqueta.textContent=caso.tipo||"Adoção e resgate";card.appendChild(etiqueta);
+if(caso.status==="atendido"){
+const selo=document.createElement("div");selo.className="resgate-atendido";selo.textContent="✓ PEDIDO ATENDIDO";card.appendChild(selo);
+}
+const titulo=document.createElement("h3");titulo.textContent="🐾 "+(caso.nome_animal||caso.especie||"Animal");card.appendChild(titulo);
 if(caso.foto_path){
 const {data:urlData}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(caso.foto_path);
-const img=document.createElement("img");
-img.src=urlData.publicUrl;
-img.alt="Foto do animal anunciado";
-img.loading="lazy";
-card.appendChild(img);
+const img=document.createElement("img");img.src=urlData.publicUrl;img.alt="Foto do animal anunciado";img.loading="lazy";card.appendChild(img);
 }
-
 function adicionarTexto(rotulo,valor){
-if(!valor)return;
-const p=document.createElement("p");
-const strong=document.createElement("strong");
-strong.textContent=rotulo+": ";
-p.appendChild(strong);
-p.appendChild(document.createTextNode(valor));
-card.appendChild(p);
+if(!valor)return;const p=document.createElement("p");const strong=document.createElement("strong");strong.textContent=rotulo+": ";p.appendChild(strong);p.appendChild(document.createTextNode(valor));card.appendChild(p);
 }
-
-adicionarTexto("Espécie",caso.especie);
-adicionarTexto("Descrição",caso.descricao);
-adicionarTexto("Cidade",caso.cidade);
-adicionarTexto("Bairro",caso.bairro);
-adicionarTexto("Ajuda necessária",caso.ajuda_necessaria);
-
-if(caso.contato){
-adicionarTexto("Contato autorizado pelo responsável",caso.contato);
-}
-
-if(caso.created_at){
-const data=document.createElement("p");
-data.className="pequeno";
-data.textContent="Publicado em "+new Date(caso.created_at).toLocaleDateString("pt-BR");
-card.appendChild(data);
-}
-
+adicionarTexto("Espécie",caso.especie);adicionarTexto("Descrição",caso.descricao);adicionarTexto("Cidade",caso.cidade);adicionarTexto("Bairro",caso.bairro);adicionarTexto("Ajuda necessária",caso.ajuda_necessaria);
+if(caso.contato)adicionarTexto("Contato autorizado pelo responsável",caso.contato);
+if(caso.created_at){const data=document.createElement("p");data.className="pequeno";data.textContent="Publicado em "+new Date(caso.created_at).toLocaleDateString("pt-BR");card.appendChild(data);}
 if(usuarioAtual&&caso.owner_id===usuarioAtual.id){
-const acoes=document.createElement("div");
-acoes.className="acoes-foto";
-
-const botaoExcluir=document.createElement("button");
-botaoExcluir.type="button";
-botaoExcluir.className="excluir";
-botaoExcluir.textContent="Excluir minha publicação";
-botaoExcluir.onclick=()=>excluirResgate(caso.id,botaoExcluir);
-
-acoes.appendChild(botaoExcluir);
-card.appendChild(acoes);
+const acoes=document.createElement("div");acoes.className="acoes-foto";
+if(caso.status!=="atendido"){
+const botaoAtendido=document.createElement("button");botaoAtendido.type="button";botaoAtendido.textContent="✓ Marcar como atendido";
+botaoAtendido.onclick=()=>marcarResgateAtendido(caso.id,botaoAtendido);acoes.appendChild(botaoAtendido);
 }
-
+const botaoExcluir=document.createElement("button");botaoExcluir.type="button";botaoExcluir.className="excluir";
+botaoExcluir.textContent="🗑 Excluir publicação e foto";botaoExcluir.onclick=()=>excluirResgate(caso.id,botaoExcluir);
+acoes.appendChild(botaoExcluir);card.appendChild(acoes);
+}
 mural.appendChild(card);
 });
 }
-
-/* EXCLUIR A PRÓPRIA PUBLICAÇÃO */
-
-async function excluirResgate(id,botao){
-if(!usuarioAtual){
-alert("Entre na sua conta primeiro.");
-return;
-}
-
-if(!confirm("Deseja realmente excluir esta publicação?"))return;
-
-botao.disabled=true;
-botao.textContent="Excluindo...";
-
-const {error}=await supabaseClient
-.from("pet_resgates")
-.delete()
-.eq("id",id)
-.eq("owner_id",usuarioAtual.id);
-
-if(error){
-alert("Não foi possível excluir: "+error.message);
-botao.disabled=false;
-botao.textContent="Excluir minha publicação";
-return;
-}
-
-await carregarResgates();
-}
-
 function escapeHTML(texto){
-return String(texto).replace(/[&<>"']/g,function(letra){
-return {
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-}[letra];
-});
+return String(texto).replace(/[&<>"']/g,function(letra){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[letra];});
 }
 
 /* INICIALIZAÇÃO */
-
 async function iniciarPetmundo(){
-const {data,error}=await supabaseClient.auth.getSession();
-if(error)console.error(error);
-usuarioAtual=data?.session?.user||null;
-if(usuarioAtual)await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
-await atualizarAreaUsuario();
-await carregarMural();
-await carregarResgates();
+const {data,error}=await supabaseClient.auth.getSession();if(error)console.error(error);
+usuarioAtual=data?.session?.user||null;if(usuarioAtual)await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
+await atualizarAreaUsuario();await carregarMural();await carregarResgates();
 }
-
 supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
 usuarioAtual=sessao?.user||null;
 setTimeout(async()=>{
 if(usuarioAtual)await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
-await atualizarAreaUsuario();
-await carregarMural();
-await carregarResgates();
+await atualizarAreaUsuario();await carregarMural();await carregarResgates();
 },0);
 });
-
 iniciarPetmundo();
 </script>
 </body>
