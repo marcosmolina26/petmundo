@@ -12,119 +12,31 @@
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#26332d}
 
-/* CAPA NO TOPO */
-.capa{
-position:relative;
-width:100%;
-height:320px;
-overflow:hidden;
-background:#15966b;
-display:flex;
-align-items:flex-end;
-justify-content:center;
-}
-.imagem-capa{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-object-position:center;
-}
-.capa-texto{
-position:relative;
-z-index:1;
-width:100%;
-padding:22px 12px;
-text-align:center;
-color:white;
-background:linear-gradient(transparent,rgba(0,0,0,.75));
-}
+.capa{position:relative;width:100%;height:320px;overflow:hidden;background:#15966b;display:flex;align-items:flex-end;justify-content:center}
+.imagem-capa{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.capa-texto{position:relative;z-index:1;width:100%;padding:22px 12px;text-align:center;color:white;background:linear-gradient(transparent,rgba(0,0,0,.75))}
 .capa-texto h2{color:white;font-size:29px;margin:0 0 8px}
 .capa-texto p{margin:0 0 12px}
-.botoes-capa{
-display:flex;
-justify-content:center;
-gap:8px;
-flex-wrap:wrap;
-}
-.botoes-capa a{
-display:inline-block;
-text-decoration:none;
-color:#087c56;
-background:white;
-padding:11px 16px;
-border-radius:8px;
-font-weight:bold;
-font-size:14px;
-}
-.botoes-capa a:hover{background:#e4f7ec}
+.botoes-capa{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.botoes-capa a{display:inline-block;text-decoration:none;color:#087c56;background:white;padding:11px 16px;border-radius:8px;font-weight:bold;font-size:14px}
 
-/* LOGO GRANDE ABAIXO DA CAPA */
-header{
-background:#15966b;
-color:white;
-padding:0;
-text-align:center;
-}
-.logo-petmundo{
-width:100%;
-height:260px;
-object-fit:cover;
-object-position:center;
-display:block;
-margin:0;
-}
+header{background:#15966b;color:white;padding:0;text-align:center}
+.logo-petmundo{width:100%;height:260px;object-fit:cover;object-position:center;display:block;margin:0}
 .header-texto{padding:15px}
 header h1{margin:0;font-size:30px}
 header p{margin:7px 0 0}
 
-/* MENU */
-nav{
-background:#087c56;
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-}
-nav a{
-color:white;
-text-decoration:none;
-padding:13px 12px;
-font-weight:bold;
-}
+nav{background:#087c56;display:flex;justify-content:center;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;padding:13px 12px;font-weight:bold}
 nav a:hover{background:#056344}
 
 .container{max-width:950px;margin:20px auto;padding:0 12px}
-.card{
-background:white;
-border-radius:12px;
-padding:18px;
-margin-bottom:18px;
-box-shadow:0 2px 8px #00000012;
-}
+.card{background:white;border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 2px 8px #00000012}
 h2{color:#087c56;margin-top:0}
 h3{color:#087c56}
-
-input,textarea{
-width:100%;
-padding:12px;
-margin:7px 0;
-border:1px solid #ccd8d1;
-border-radius:8px;
-font-size:15px;
-}
+input,textarea,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd8d1;border-radius:8px;font-size:15px;background:white;color:#26332d}
 textarea{resize:vertical;min-height:75px}
-button{
-background:#15966b;
-color:white;
-border:0;
-border-radius:8px;
-padding:11px 16px;
-font-size:15px;
-font-weight:bold;
-cursor:pointer;
-margin:5px 3px 5px 0;
-}
+button{background:#15966b;color:white;border:0;border-radius:8px;padding:11px 16px;font-size:15px;font-weight:bold;cursor:pointer;margin:5px 3px 5px 0}
 button:hover{background:#087c56}
 button.secundario{background:#687b71}
 button.curtir{background:#eaf7f0;color:#087c56;border:1px solid #b9dfca}
@@ -134,20 +46,8 @@ button.curtir.ativo{background:#15966b;color:white}
 .oculto{display:none!important}
 .duas-colunas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-.foto-card{
-background:white;
-border:1px solid #e0e9e3;
-border-radius:12px;
-padding:12px;
-margin:15px 0;
-}
-.foto-card img{
-width:100%;
-max-height:520px;
-object-fit:contain;
-border-radius:8px;
-background:#f3f7f5;
-}
+.foto-card{background:white;border:1px solid #e0e9e3;border-radius:12px;padding:12px;margin:15px 0}
+.foto-card img{width:100%;max-height:520px;object-fit:contain;border-radius:8px;background:#f3f7f5}
 .foto-autor{font-weight:bold;color:#087c56;margin-bottom:8px}
 .acoes-foto{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .comentario{border-top:1px solid #e5ece7;padding:9px 3px;font-size:14px}
@@ -156,6 +56,15 @@ background:#f3f7f5;
 .banner-conteudo{text-align:center;padding:10px 5px}
 .mascote{text-align:center;padding:20px}
 footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:30px}
+
+.pet-formulario{border:1px solid #dce9e0;padding:14px;border-radius:10px;margin-top:12px;background:#fbfdfb}
+.pet-card{border:1px solid #dce9e0;border-radius:12px;padding:14px;margin:14px 0;background:#fff}
+.pet-card img,.pet-card video{width:100%;max-height:320px;object-fit:contain;border-radius:9px;background:#f3f7f5;margin-top:8px}
+.pet-dados p{margin:7px 0}
+.campo-arquivo{background:#f3f7f5;padding:10px;border-radius:8px}
+.aviso-privacidade{background:#fff8e7;border-radius:8px;padding:10px;font-size:13px;color:#66552c;margin:10px 0}
+.campo-check{display:flex;align-items:flex-start;gap:8px;margin:12px 0}
+.campo-check input{width:auto;margin-top:3px}
 
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
@@ -171,14 +80,9 @@ header h1{font-size:25px}
 
 <body>
 
-<!-- CAPA PRINCIPAL -->
 <section id="inicio">
 <div class="capa">
-<img class="imagem-capa"
-src="%20petmundo-banner.png"
-alt="Capa PETMUNDO"
-onerror="this.style.display='none'">
-
+<img class="imagem-capa" src="%20petmundo-banner.png" alt="Capa PETMUNDO" onerror="this.style.display='none'">
 <div class="capa-texto">
 <h2>Bem-vindo ao PETMUNDO!</h2>
 <p>Um mundo de amor pelos animais.</p>
@@ -191,12 +95,8 @@ onerror="this.style.display='none'">
 </div>
 </section>
 
-<!-- LOGO ABAIXO DA CAPA -->
 <header>
-<img class="logo-petmundo"
-src="%20petmundo-logo.png"
-alt="Logo PETMUNDO">
-
+<img class="logo-petmundo" src="%20petmundo-logo.png" alt="Logo PETMUNDO">
 <div class="header-texto">
 <h1>🐾 PETMUNDO</h1>
 <p>Uma rede social para quem ama os animais</p>
@@ -225,7 +125,6 @@ alt="Logo PETMUNDO">
 <section id="acesso" class="card">
 <h2>Entrar no PETMUNDO</h2>
 <p>Faça login para publicar fotos, curtir e comentar.</p>
-
 <div class="duas-colunas">
 <div>
 <h3>Entrar na conta</h3>
@@ -249,14 +148,84 @@ alt="Logo PETMUNDO">
 <div id="perfilDesconectado">
 <p>Entre na sua conta para visualizar seu perfil.</p>
 </div>
+
 <div id="perfilConectado" class="oculto">
 <p><strong>Nome:</strong> <span id="perfilNome"></span></p>
 <p><strong>E-mail:</strong> <span id="perfilEmail"></span></p>
-<p><strong>Situação:</strong> <span id="perfilStatus">Conectado</span></p>
+<p><strong>Situação:</strong> Conectado</p>
+
 <h3>Alterar meu nome</h3>
 <input type="text" id="novoNome" placeholder="Digite seu nome">
 <button onclick="atualizarNome()">Salvar nome</button>
 <p id="mensagemPerfil" class="mensagem oculto"></p>
+
+<hr>
+
+<h2>🐾 Cadastro dos meus pets</h2>
+<p>Crie um perfil para cada animal da sua família.</p>
+
+<div class="pet-formulario">
+<h3>Adicionar um novo pet</h3>
+
+<label for="petNome">Nome do animal *</label>
+<input type="text" id="petNome" placeholder="Nome do pet">
+
+<label for="petEspecie">Espécie *</label>
+<select id="petEspecie">
+<option value="">Selecione</option>
+<option>Cachorro</option>
+<option>Gato</option>
+<option>Ave</option>
+<option>Coelho</option>
+<option>Roedor</option>
+<option>Réptil</option>
+<option>Outro</option>
+</select>
+
+<label for="petRaca">Raça</label>
+<input type="text" id="petRaca" placeholder="Raça do animal">
+
+<label for="petNascimento">Data de nascimento</label>
+<input type="date" id="petNascimento">
+
+<label for="petSexo">Sexo</label>
+<select id="petSexo">
+<option value="">Não informado</option>
+<option>Macho</option>
+<option>Fêmea</option>
+</select>
+
+<label for="petDescricao">Descrição do pet</label>
+<textarea id="petDescricao" placeholder="Conte um pouco sobre seu animal..."></textarea>
+
+<label for="petFoto">Foto do pet</label>
+<input class="campo-arquivo" type="file" id="petFoto" accept="image/jpeg,image/png,image/webp,image/gif">
+
+<label for="petVideo">Vídeo do pet (máximo 20 MB)</label>
+<input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime">
+
+<h3>Contato do tutor</h3>
+<input type="tel" id="petTelefone" placeholder="Telefone do responsável">
+<input type="text" id="petEndereco" placeholder="Endereço do responsável">
+
+<label class="campo-check">
+<input type="checkbox" id="petMostrarContato">
+<span>Autorizo exibir telefone e endereço no perfil público do pet.</span>
+</label>
+
+<div class="aviso-privacidade">
+<strong>Privacidade:</strong> os dados de contato ficam privados por padrão. Só serão exibidos publicamente quando o tutor marcar a opção acima. Nesta versão, os dados ainda aparecem somente na área privada do tutor.
+</div>
+
+<button id="botaoCadastrarPet" onclick="cadastrarPet()">🐾 Salvar cadastro do pet</button>
+<p id="mensagemPet" class="mensagem oculto"></p>
+</div>
+
+<h3>Meus animais cadastrados</h3>
+<div id="listaMeusPets">
+<p class="pequeno">Seus animais cadastrados aparecerão aqui.</p>
+</div>
+
 <button class="secundario" onclick="sair()">Sair da conta</button>
 </div>
 </section>
@@ -365,6 +334,7 @@ desconectado.classList.remove("oculto");
 conectado.classList.add("oculto");
 publicacao.classList.add("oculto");
 area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
+document.getElementById("listaMeusPets").innerHTML="";
 return;
 }
 
@@ -378,6 +348,7 @@ desconectado.classList.add("oculto");
 conectado.classList.remove("oculto");
 publicacao.classList.remove("oculto");
 area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";
+await carregarMeusPets();
 }
 
 async function atualizarNome(){
@@ -403,17 +374,239 @@ await carregarMural();
 mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
 }
 
+/* CADASTRO DOS PETS */
+
+async function enviarArquivoPet(arquivo,tipo){
+if(!arquivo)return null;
+
+const limite=20*1024*1024;
+if(arquivo.size>limite)throw new Error("O arquivo "+tipo+" ultrapassa 20 MB.");
+
+const permitidosFoto=["image/jpeg","image/png","image/webp","image/gif"];
+const permitidosVideo=["video/mp4","video/webm","video/quicktime"];
+
+if(tipo==="foto"&&!permitidosFoto.includes(arquivo.type)){
+throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
+}
+if(tipo==="vídeo"&&!permitidosVideo.includes(arquivo.type)){
+throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
+}
+
+const extensao=arquivo.name.split(".").pop().replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+const nomeArquivo=Date.now()+"-"+crypto.randomUUID()+"."+extensao;
+const caminho=usuarioAtual.id+"/"+nomeArquivo;
+
+const {error}=await supabaseClient.storage.from("petmundo-pets").upload(caminho,arquivo,{
+upsert:false,
+contentType:arquivo.type
+});
+
+if(error)throw new Error("Erro ao enviar "+tipo+": "+error.message);
+return caminho;
+}
+
+async function cadastrarPet(){
+if(!usuarioAtual){
+mostrarMensagem("mensagemPet","Entre na sua conta primeiro.");
+return;
+}
+
+const botao=document.getElementById("botaoCadastrarPet");
+const nome=document.getElementById("petNome").value.trim();
+const especie=document.getElementById("petEspecie").value;
+const raca=document.getElementById("petRaca").value.trim();
+const nascimento=document.getElementById("petNascimento").value||null;
+const sexo=document.getElementById("petSexo").value;
+const descricao=document.getElementById("petDescricao").value.trim();
+const telefone=document.getElementById("petTelefone").value.trim();
+const endereco=document.getElementById("petEndereco").value.trim();
+const mostrarContato=document.getElementById("petMostrarContato").checked;
+const foto=document.getElementById("petFoto").files[0];
+const video=document.getElementById("petVideo").files[0];
+
+if(!nome||!especie){
+mostrarMensagem("mensagemPet","Informe o nome e a espécie do animal.");
+return;
+}
+
+if(foto&&foto.size>20*1024*1024){
+mostrarMensagem("mensagemPet","A foto ultrapassa o limite de 20 MB.");
+return;
+}
+if(video&&video.size>20*1024*1024){
+mostrarMensagem("mensagemPet","O vídeo ultrapassa o limite de 20 MB.");
+return;
+}
+
+botao.disabled=true;
+botao.textContent="Salvando cadastro...";
+
+let caminhoFoto=null;
+let caminhoVideo=null;
+
+try{
+if(foto)caminhoFoto=await enviarArquivoPet(foto,"foto");
+if(video)caminhoVideo=await enviarArquivoPet(video,"vídeo");
+
+const {error}=await supabaseClient.from("pets").insert({
+owner_id:usuarioAtual.id,
+name:nome,
+species:especie,
+breed:raca||null,
+birth_date:nascimento,
+sex:sexo||null,
+description:descricao||null,
+photo_path:caminhoFoto,
+video_path:caminhoVideo,
+tutor_phone:telefone||null,
+tutor_address:endereco||null,
+show_contact:mostrarContato
+});
+
+if(error){
+console.error(error);
+throw new Error("Não foi possível salvar o cadastro: "+error.message);
+}
+
+document.getElementById("petNome").value="";
+document.getElementById("petEspecie").value="";
+document.getElementById("petRaca").value="";
+document.getElementById("petNascimento").value="";
+document.getElementById("petSexo").value="";
+document.getElementById("petDescricao").value="";
+document.getElementById("petTelefone").value="";
+document.getElementById("petEndereco").value="";
+document.getElementById("petMostrarContato").checked=false;
+document.getElementById("petFoto").value="";
+document.getElementById("petVideo").value="";
+
+mostrarMensagem("mensagemPet","Cadastro do pet realizado com sucesso! 🐾");
+await carregarMeusPets();
+
+}catch(erro){
+mostrarMensagem("mensagemPet",erro.message);
+}finally{
+botao.disabled=false;
+botao.textContent="🐾 Salvar cadastro do pet";
+}
+}
+
+function calcularIdade(data){
+if(!data)return "Não informada";
+const nascimento=new Date(data+"T12:00:00");
+if(Number.isNaN(nascimento.getTime()))return "Não informada";
+const hoje=new Date();
+let anos=hoje.getFullYear()-nascimento.getFullYear();
+let meses=hoje.getMonth()-nascimento.getMonth();
+if(hoje.getDate()<nascimento.getDate())meses--;
+if(meses<0){anos--;meses+=12;}
+if(anos<0)return "Não informada";
+if(anos===0)return meses+" mês(es)";
+return anos+" ano(s) e "+meses+" mês(es)";
+}
+
+async function carregarMeusPets(){
+const area=document.getElementById("listaMeusPets");
+if(!usuarioAtual){area.innerHTML="";return;}
+
+area.innerHTML="<p class='pequeno'>Carregando seus animais...</p>";
+
+const {data:pets,error}=await supabaseClient.from("pets")
+.select("id,name,species,breed,birth_date,sex,description,photo_path,video_path,tutor_phone,tutor_address,show_contact,created_at")
+.eq("owner_id",usuarioAtual.id)
+.order("created_at",{ascending:false});
+
+if(error){
+console.error(error);
+area.textContent="Não foi possível carregar seus pets: "+error.message;
+return;
+}
+
+area.innerHTML="";
+
+if(!pets||pets.length===0){
+area.innerHTML="<p class='pequeno'>Você ainda não cadastrou nenhum pet.</p>";
+return;
+}
+
+pets.forEach(pet=>{
+const card=document.createElement("div");
+card.className="pet-card";
+
+const titulo=document.createElement("h3");
+titulo.textContent="🐾 "+pet.name;
+card.appendChild(titulo);
+
+if(pet.photo_path){
+const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.photo_path);
+const img=document.createElement("img");
+img.src=data.publicUrl;
+img.alt="Foto de "+pet.name;
+img.loading="lazy";
+card.appendChild(img);
+}
+
+if(pet.video_path){
+const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.video_path);
+const video=document.createElement("video");
+video.src=data.publicUrl;
+video.controls=true;
+video.preload="none";
+video.playsInline=true;
+card.appendChild(video);
+}
+
+const dados=document.createElement("div");
+dados.className="pet-dados";
+
+function adicionarDado(rotulo,valor){
+if(!valor)return;
+const p=document.createElement("p");
+const strong=document.createElement("strong");
+strong.textContent=rotulo+": ";
+p.appendChild(strong);
+p.appendChild(document.createTextNode(valor));
+dados.appendChild(p);
+}
+
+adicionarDado("Espécie",pet.species);
+adicionarDado("Raça",pet.breed);
+adicionarDado("Nascimento",pet.birth_date?new Date(pet.birth_date+"T12:00:00").toLocaleDateString("pt-BR"):"");
+adicionarDado("Idade aproximada",calcularIdade(pet.birth_date));
+adicionarDado("Sexo",pet.sex);
+adicionarDado("Descrição",pet.description);
+
+if(pet.show_contact){
+adicionarDado("Telefone do tutor",pet.tutor_phone);
+adicionarDado("Endereço do tutor",pet.tutor_address);
+}else{
+const privado=document.createElement("p");
+privado.className="pequeno";
+privado.textContent="Contato do tutor protegido.";
+dados.appendChild(privado);
+}
+
+card.appendChild(dados);
+area.appendChild(card);
+});
+}
+
+/* PUBLICAÇÕES DA COMUNIDADE */
+
 async function enviarFoto(){
 if(!usuarioAtual){mostrarMensagem("mensagemFoto","Entre na sua conta primeiro.");return;}
 const arquivo=document.getElementById("arquivoFoto").files[0];
 const legenda=document.getElementById("legendaFoto").value.trim();
 if(!arquivo){mostrarMensagem("mensagemFoto","Escolha uma foto antes de publicar.");return;}
 if(!arquivo.type.startsWith("image/")){mostrarMensagem("mensagemFoto","Escolha um arquivo de imagem.");return;}
+
 const nomeArquivo=Date.now()+"-"+crypto.randomUUID()+"-"+arquivo.name.replace(/[^a-zA-Z0-9._-]/g,"_");
 const caminho=usuarioAtual.id+"/"+nomeArquivo;
 const {error}=await supabaseClient.storage.from("petmundo-fotos").upload(caminho,arquivo);
+
 if(error){mostrarMensagem("mensagemFoto","Erro ao enviar: "+error.message);return;}
 if(legenda)localStorage.setItem("petmundo_legenda_"+caminho,legenda);
+
 document.getElementById("arquivoFoto").value="";
 document.getElementById("legendaFoto").value="";
 mostrarMensagem("mensagemFoto","Foto publicada com sucesso!");
@@ -422,22 +615,34 @@ await carregarMural();
 
 async function carregarComentarios(caminho,area){
 area.innerHTML="<p class='pequeno'>Carregando comentários...</p>";
-const {data:comentarios,error}=await supabaseClient.from("photo_comments").select("id,user_id,body,created_at").eq("photo_path",caminho).order("created_at",{ascending:true});
+const {data:comentarios,error}=await supabaseClient.from("photo_comments")
+.select("id,user_id,body,created_at").eq("photo_path",caminho).order("created_at",{ascending:true});
+
 if(error){area.textContent="Não foi possível carregar os comentários.";console.error(error);return;}
 area.innerHTML="";
-if(!comentarios||comentarios.length===0){area.innerHTML="<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";return;}
+if(!comentarios||comentarios.length===0){
+area.innerHTML="<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";
+return;
+}
+
 const ids=[...new Set(comentarios.map(c=>c.user_id))];
 const {data:perfis}=await supabaseClient.from("profiles").select("id,display_name").in("id",ids);
 const nomes={};
 (perfis||[]).forEach(p=>{if(p.display_name)nomes[p.id]=p.display_name;});
+
 comentarios.forEach(comentario=>{
-const item=document.createElement("div");item.className="comentario";
+const item=document.createElement("div");
+item.className="comentario";
 const autor=document.createElement("strong");
 let nomeAutor=nomes[comentario.user_id];
 if(!nomeAutor&&usuarioAtual&&comentario.user_id===usuarioAtual.id)nomeAutor=obterNome(usuarioAtual);
 autor.textContent=nomeAutor||"Tutor PETMUNDO";
-const texto=document.createElement("p");texto.textContent=comentario.body;texto.style.margin="5px 0";
-item.appendChild(autor);item.appendChild(texto);area.appendChild(item);
+const texto=document.createElement("p");
+texto.textContent=comentario.body;
+texto.style.margin="5px 0";
+item.appendChild(autor);
+item.appendChild(texto);
+area.appendChild(item);
 });
 }
 
@@ -446,7 +651,9 @@ if(!usuarioAtual){alert("Entre na sua conta para comentar.");return;}
 const texto=campo.value.trim();
 if(!texto){alert("Escreva seu comentário.");return;}
 await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
-const {error}=await supabaseClient.from("photo_comments").insert({photo_path:caminho,user_id:usuarioAtual.id,body:texto});
+const {error}=await supabaseClient.from("photo_comments").insert({
+photo_path:caminho,user_id:usuarioAtual.id,body:texto
+});
 if(error){alert("Não foi possível publicar o comentário: "+error.message);return;}
 campo.value="";
 await carregarComentarios(caminho,area);
@@ -454,8 +661,11 @@ await carregarComentarios(caminho,area);
 
 async function alternarCurtida(caminho,botao,contador){
 if(!usuarioAtual){alert("Entre na sua conta para curtir fotos.");return;}
-const {data:existente,error:erroBusca}=await supabaseClient.from("photo_likes").select("id").eq("photo_path",caminho).eq("user_id",usuarioAtual.id).maybeSingle();
+const {data:existente,error:erroBusca}=await supabaseClient.from("photo_likes")
+.select("id").eq("photo_path",caminho).eq("user_id",usuarioAtual.id).maybeSingle();
+
 if(erroBusca){alert("Não foi possível verificar a curtida: "+erroBusca.message);return;}
+
 if(existente){
 const {error}=await supabaseClient.from("photo_likes").delete().eq("id",existente.id);
 if(error){alert("Erro ao retirar curtida: "+error.message);return;}
@@ -467,7 +677,8 @@ await atualizarCurtidas(caminho,botao,contador);
 }
 
 async function atualizarCurtidas(caminho,botao,contador){
-const {data:curtidas,error}=await supabaseClient.from("photo_likes").select("id,user_id").eq("photo_path",caminho);
+const {data:curtidas,error}=await supabaseClient.from("photo_likes")
+.select("id,user_id").eq("photo_path",caminho);
 if(error){console.error(error);return;}
 const total=curtidas?curtidas.length:0;
 contador.textContent=total+(total===1?" curtida":" curtidas");
@@ -479,8 +690,14 @@ botao.textContent=curtiu?"♥ Curtido":"♡ Curtir";
 async function carregarMural(){
 const mural=document.getElementById("mural");
 mural.innerHTML="<p>Carregando fotos da comunidade...</p>";
+
 const {data:pastas,error:erroPastas}=await supabaseClient.storage.from("petmundo-fotos").list("",{limit:1000});
-if(erroPastas){mural.textContent="Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";console.error(erroPastas);return;}
+if(erroPastas){
+mural.textContent="Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";
+console.error(erroPastas);
+return;
+}
+
 const fotosEncontradas=[];
 for(const pasta of(pastas||[])){
 if(!pasta.id||pasta.metadata)continue;
@@ -491,43 +708,80 @@ if(!arquivo.name||!arquivo.metadata)continue;
 fotosEncontradas.push({caminho:pasta.name+"/"+arquivo.name,dono:pasta.name,nomeArquivo:arquivo.name});
 }
 }
+
 fotosEncontradas.sort((a,b)=>b.nomeArquivo.localeCompare(a.nomeArquivo));
 mural.innerHTML="";
-if(fotosEncontradas.length===0){mural.innerHTML="<p>Ainda não há fotos publicadas na comunidade.</p>";return;}
+if(fotosEncontradas.length===0){
+mural.innerHTML="<p>Ainda não há fotos publicadas na comunidade.</p>";
+return;
+}
 
 for(const foto of fotosEncontradas){
 const caminho=foto.caminho;
 const {data:urlData}=supabaseClient.storage.from("petmundo-fotos").getPublicUrl(caminho);
 let nomeAutor="Comunidade PETMUNDO";
+
 if(usuarioAtual){
 const {data:perfil}=await supabaseClient.from("profiles").select("display_name").eq("id",foto.dono).maybeSingle();
 if(perfil?.display_name)nomeAutor=perfil.display_name;
 if(foto.dono===usuarioAtual.id&&!perfil?.display_name)nomeAutor=obterNome(usuarioAtual);
 }
-const card=document.createElement("div");card.className="foto-card";
-const autor=document.createElement("div");autor.className="foto-autor";autor.textContent=nomeAutor;
-const imagem=document.createElement("img");imagem.src=urlData.publicUrl;imagem.alt="Foto de animal publicada no PETMUNDO";imagem.loading="lazy";
-const legenda=document.createElement("p");legenda.textContent=localStorage.getItem("petmundo_legenda_"+caminho)||"";
-card.appendChild(autor);card.appendChild(imagem);if(legenda.textContent)card.appendChild(legenda);
+
+const card=document.createElement("div");
+card.className="foto-card";
+const autor=document.createElement("div");
+autor.className="foto-autor";
+autor.textContent=nomeAutor;
+
+const imagem=document.createElement("img");
+imagem.src=urlData.publicUrl;
+imagem.alt="Foto de animal publicada no PETMUNDO";
+imagem.loading="lazy";
+
+const legenda=document.createElement("p");
+legenda.textContent=localStorage.getItem("petmundo_legenda_"+caminho)||"";
+
+card.appendChild(autor);
+card.appendChild(imagem);
+if(legenda.textContent)card.appendChild(legenda);
 
 if(usuarioAtual){
-const acoes=document.createElement("div");acoes.className="acoes-foto";
-const botaoCurtir=document.createElement("button");botaoCurtir.className="curtir";botaoCurtir.textContent="♡ Curtir";
-const contador=document.createElement("span");contador.className="pequeno";
+const acoes=document.createElement("div");
+acoes.className="acoes-foto";
+const botaoCurtir=document.createElement("button");
+botaoCurtir.className="curtir";
+botaoCurtir.textContent="♡ Curtir";
+const contador=document.createElement("span");
+contador.className="pequeno";
 botaoCurtir.onclick=()=>alternarCurtida(caminho,botaoCurtir,contador);
-acoes.appendChild(botaoCurtir);acoes.appendChild(contador);card.appendChild(acoes);
+acoes.appendChild(botaoCurtir);
+acoes.appendChild(contador);
+card.appendChild(acoes);
 
-const tituloComentarios=document.createElement("h3");tituloComentarios.textContent="Comentários";
+const tituloComentarios=document.createElement("h3");
+tituloComentarios.textContent="Comentários";
 const listaComentarios=document.createElement("div");
-const campoComentario=document.createElement("input");campoComentario.type="text";campoComentario.placeholder="Escreva um comentário...";
-const botaoComentar=document.createElement("button");botaoComentar.textContent="Comentar";
+const campoComentario=document.createElement("input");
+campoComentario.type="text";
+campoComentario.placeholder="Escreva um comentário...";
+const botaoComentar=document.createElement("button");
+botaoComentar.textContent="Comentar";
 botaoComentar.onclick=()=>publicarComentario(caminho,campoComentario,listaComentarios);
-campoComentario.addEventListener("keydown",event=>{if(event.key==="Enter")publicarComentario(caminho,campoComentario,listaComentarios);});
-card.appendChild(tituloComentarios);card.appendChild(listaComentarios);card.appendChild(campoComentario);card.appendChild(botaoComentar);
+campoComentario.addEventListener("keydown",event=>{
+if(event.key==="Enter")publicarComentario(caminho,campoComentario,listaComentarios);
+});
+
+card.appendChild(tituloComentarios);
+card.appendChild(listaComentarios);
+card.appendChild(campoComentario);
+card.appendChild(botaoComentar);
 await atualizarCurtidas(caminho,botaoCurtir,contador);
 await carregarComentarios(caminho,listaComentarios);
 }else{
-const aviso=document.createElement("p");aviso.className="pequeno";aviso.textContent="Entre na sua conta para curtir e comentar.";card.appendChild(aviso);
+const aviso=document.createElement("p");
+aviso.className="pequeno";
+aviso.textContent="Entre na sua conta para curtir e comentar.";
+card.appendChild(aviso);
 }
 mural.appendChild(card);
 }
