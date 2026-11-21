@@ -117,9 +117,9 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 <button onclick="enviarFoto()">Publicar foto</button>
 <p id="mensagemFoto" class="mensagem oculto"></p>
 </div>
-<h3>Fotos publicadas</h3>
+<h3>Fotos da comunidade</h3>
 <div id="mural">
-<p>Entre na sua conta para visualizar suas fotos.</p>
+<p>Carregando fotos...</p>
 </div>
 </section>
 
@@ -312,8 +312,7 @@ async function sair() {
 
   usuarioAtual = null;
   await atualizarAreaUsuario();
-  document.getElementById("mural").innerHTML =
-    "<p>Entre na sua conta para visualizar suas fotos.</p>";
+  await carregarMural();
   mostrarMensagem("mensagemAcesso", "Você saiu da sua conta.");
 }
 
@@ -385,12 +384,10 @@ async function carregarComentarios(caminho, area) {
 
   const ids = [...new Set(comentarios.map(c => c.user_id))];
 
-  const { data: perfis, error: erroPerfis } = await supabaseClient
+  const { data: perfis } = await supabaseClient
     .from("profiles")
     .select("id,display_name")
     .in("id", ids);
-
-  if (erroPerfis) console.error("Erro ao buscar nomes:", erroPerfis.message);
 
   const nomes = {};
   (perfis || []).forEach(p => {
@@ -402,7 +399,6 @@ async function carregarComentarios(caminho, area) {
     item.className = "comentario";
 
     const autor = document.createElement("strong");
-
     let nomeAutor = nomes[comentario.user_id];
 
     if (!nomeAutor && usuarioAtual && comentario.user_id === usuarioAtual.id) {
@@ -434,9 +430,7 @@ async function publicarComentario(caminho, campo, area) {
     return;
   }
 
-  const nomeAtual = obterNome(usuarioAtual);
-
-  await salvarNomePerfil(usuarioAtual, nomeAtual);
+  await salvarNomePerfil(usuarioAtual, obterNome(usuarioAtual));
 
   const { error } = await supabaseClient
     .from("photo_comments")
@@ -521,50 +515,89 @@ async function atualizarCurtidas(caminho, botao, contador) {
   botao.textContent = curtiu ? "♥ Curtido" : "♡ Curtir";
 }
 
+/* NOVO MURAL: busca fotos de todas as pastas, mesmo sem login */
 async function carregarMural() {
   const mural = document.getElementById("mural");
+  mural.innerHTML = "<p>Carregando fotos da comunidade...</p>";
 
-  if (!usuarioAtual) {
-    mural.innerHTML = "<p>Entre na sua conta para visualizar suas fotos.</p>";
-    return;
-  }
-
-  mural.innerHTML = "<p>Carregando fotos...</p>";
-
-  const { data: arquivos, error } = await supabaseClient.storage
+  const { data: pastas, error: erroPastas } = await supabaseClient.storage
     .from("petmundo-fotos")
-    .list(usuarioAtual.id, {
-      limit: 100,
-      sortBy: { column: "name", order: "desc" }
-    });
+    .list("", { limit: 1000 });
 
-  if (error) {
-    mural.textContent = "Erro ao carregar fotos: " + error.message;
+  if (erroPastas) {
+    mural.textContent = "Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";
+    console.error(erroPastas);
     return;
   }
+
+  const fotosEncontradas = [];
+
+  for (const pasta of (pastas || [])) {
+    if (!pasta.id || pasta.metadata) continue;
+
+    const { data: arquivos, error } = await supabaseClient.storage
+      .from("petmundo-fotos")
+      .list(pasta.name, {
+        limit: 100,
+        sortBy: { column: "name", order: "desc" }
+      });
+
+    if (error) {
+      console.error("Erro ao listar pasta:", pasta.name, error);
+      continue;
+    }
+
+    for (const arquivo of (arquivos || [])) {
+      if (!arquivo.name || !arquivo.metadata) continue;
+
+      fotosEncontradas.push({
+        caminho: pasta.name + "/" + arquivo.name,
+        dono: pasta.name,
+        nomeArquivo: arquivo.name
+      });
+    }
+  }
+
+  fotosEncontradas.sort((a, b) =>
+    b.nomeArquivo.localeCompare(a.nomeArquivo)
+  );
 
   mural.innerHTML = "";
 
-  const fotos = (arquivos || []).filter(a => a.name && a.metadata);
-
-  if (fotos.length === 0) {
-    mural.innerHTML = "<p>Você ainda não publicou fotos. Que tal compartilhar a primeira?</p>";
+  if (fotosEncontradas.length === 0) {
+    mural.innerHTML = "<p>Ainda não há fotos publicadas na comunidade.</p>";
     return;
   }
 
-  for (const arquivo of fotos) {
-    const caminho = usuarioAtual.id + "/" + arquivo.name;
+  for (const foto of fotosEncontradas) {
+    const caminho = foto.caminho;
 
     const { data: urlData } = supabaseClient.storage
       .from("petmundo-fotos")
       .getPublicUrl(caminho);
+
+    let nomeAutor = "Comunidade PETMUNDO";
+
+    if (usuarioAtual) {
+      const { data: perfil } = await supabaseClient
+        .from("profiles")
+        .select("display_name")
+        .eq("id", foto.dono)
+        .maybeSingle();
+
+      if (perfil?.display_name) nomeAutor = perfil.display_name;
+
+      if (foto.dono === usuarioAtual.id && !perfil?.display_name) {
+        nomeAutor = obterNome(usuarioAtual);
+      }
+    }
 
     const card = document.createElement("div");
     card.className = "foto-card";
 
     const autor = document.createElement("div");
     autor.className = "foto-autor";
-    autor.textContent = obterNome(usuarioAtual);
+    autor.textContent = nomeAutor;
 
     const imagem = document.createElement("img");
     imagem.src = urlData.publicUrl;
@@ -572,59 +605,67 @@ async function carregarMural() {
     imagem.loading = "lazy";
 
     const legenda = document.createElement("p");
-    legenda.textContent = localStorage.getItem("petmundo_legenda_" + caminho) || "";
-
-    const acoes = document.createElement("div");
-    acoes.className = "acoes-foto";
-
-    const botaoCurtir = document.createElement("button");
-    botaoCurtir.className = "curtir";
-    botaoCurtir.textContent = "♡ Curtir";
-
-    const contador = document.createElement("span");
-    contador.className = "pequeno";
-
-    botaoCurtir.onclick = () =>
-      alternarCurtida(caminho, botaoCurtir, contador);
-
-    acoes.appendChild(botaoCurtir);
-    acoes.appendChild(contador);
-
-    const tituloComentarios = document.createElement("h3");
-    tituloComentarios.textContent = "Comentários";
-
-    const listaComentarios = document.createElement("div");
-
-    const campoComentario = document.createElement("input");
-    campoComentario.type = "text";
-    campoComentario.placeholder = "Escreva um comentário...";
-
-    const botaoComentar = document.createElement("button");
-    botaoComentar.textContent = "Comentar";
-    botaoComentar.onclick = () =>
-      publicarComentario(caminho, campoComentario, listaComentarios);
-
-    campoComentario.addEventListener("keydown", event => {
-      if (event.key === "Enter") {
-        publicarComentario(caminho, campoComentario, listaComentarios);
-      }
-    });
+    legenda.textContent =
+      localStorage.getItem("petmundo_legenda_" + caminho) || "";
 
     card.appendChild(autor);
     card.appendChild(imagem);
 
     if (legenda.textContent) card.appendChild(legenda);
 
-    card.appendChild(acoes);
-    card.appendChild(tituloComentarios);
-    card.appendChild(listaComentarios);
-    card.appendChild(campoComentario);
-    card.appendChild(botaoComentar);
+    if (usuarioAtual) {
+      const acoes = document.createElement("div");
+      acoes.className = "acoes-foto";
+
+      const botaoCurtir = document.createElement("button");
+      botaoCurtir.className = "curtir";
+      botaoCurtir.textContent = "♡ Curtir";
+
+      const contador = document.createElement("span");
+      contador.className = "pequeno";
+
+      botaoCurtir.onclick = () =>
+        alternarCurtida(caminho, botaoCurtir, contador);
+
+      acoes.appendChild(botaoCurtir);
+      acoes.appendChild(contador);
+      card.appendChild(acoes);
+
+      const tituloComentarios = document.createElement("h3");
+      tituloComentarios.textContent = "Comentários";
+
+      const listaComentarios = document.createElement("div");
+
+      const campoComentario = document.createElement("input");
+      campoComentario.type = "text";
+      campoComentario.placeholder = "Escreva um comentário...";
+
+      const botaoComentar = document.createElement("button");
+      botaoComentar.textContent = "Comentar";
+      botaoComentar.onclick = () =>
+        publicarComentario(caminho, campoComentario, listaComentarios);
+
+      campoComentario.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          publicarComentario(caminho, campoComentario, listaComentarios);
+        }
+      });
+
+      card.appendChild(tituloComentarios);
+      card.appendChild(listaComentarios);
+      card.appendChild(campoComentario);
+      card.appendChild(botaoComentar);
+
+      await atualizarCurtidas(caminho, botaoCurtir, contador);
+      await carregarComentarios(caminho, listaComentarios);
+    } else {
+      const aviso = document.createElement("p");
+      aviso.className = "pequeno";
+      aviso.textContent = "Entre na sua conta para curtir e comentar.";
+      card.appendChild(aviso);
+    }
 
     mural.appendChild(card);
-
-    await atualizarCurtidas(caminho, botaoCurtir, contador);
-    await carregarComentarios(caminho, listaComentarios);
   }
 }
 
@@ -640,8 +681,7 @@ async function iniciarPetmundo() {
   }
 
   await atualizarAreaUsuario();
-
-  if (usuarioAtual) await carregarMural();
+  await carregarMural();
 }
 
 supabaseClient.auth.onAuthStateChange((evento, sessao) => {
@@ -653,13 +693,7 @@ supabaseClient.auth.onAuthStateChange((evento, sessao) => {
     }
 
     await atualizarAreaUsuario();
-
-    if (usuarioAtual) {
-      await carregarMural();
-    } else {
-      document.getElementById("mural").innerHTML =
-        "<p>Entre na sua conta para visualizar suas fotos.</p>";
-    }
+    await carregarMural();
   }, 0);
 });
 
