@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PETMUNDO - Rede Social Pet</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#26332d}
@@ -35,12 +37,40 @@ button.curtir.ativo{background:#15966b;color:white}
 .acoes-foto{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .comentario{border-top:1px solid #e5ece7;padding:9px 3px;font-size:14px}
 .comentario strong{color:#087c56}
-.banner{background:linear-gradient(120deg,#dff5e9,#f4fbf6);padding:24px;border-radius:12px;text-align:center}
-.banner h2{font-size:25px}
+
+/* CAPA DO PETMUNDO - INDEPENDENTE DAS FOTOS DO MURAL */
+.capa{
+width:100%;
+height:300px;
+border-radius:12px;
+overflow:hidden;
+background:#dff5e9 url('petmundo-banner.png') center/cover no-repeat;
+display:flex;
+align-items:flex-end;
+justify-content:center;
+}
+.capa-texto{
+width:100%;
+padding:25px 15px;
+text-align:center;
+color:white;
+background:linear-gradient(transparent,rgba(0,0,0,.7));
+}
+.capa-texto h2{color:white;font-size:30px;margin:0 0 8px}
+.capa-texto p{margin:0}
+.banner{padding:0;overflow:hidden}
+.banner-conteudo{text-align:center;padding:20px}
+.mascote{text-align:center;padding:20px}
 footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:30px}
-@media(max-width:600px){.duas-colunas{grid-template-columns:1fr}nav a{padding:11px 8px;font-size:13px}header h1{font-size:25px}}
+@media(max-width:600px){
+.duas-colunas{grid-template-columns:1fr}
+nav a{padding:11px 8px;font-size:13px}
+header h1{font-size:25px}
+.capa{height:220px}
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -59,11 +89,19 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 
 <main class="container">
 
+<!-- CAPA PRINCIPAL: IMAGEM SEPARADA DO MURAL -->
 <section id="inicio" class="card banner">
+<div class="capa">
+<div class="capa-texto">
 <h2>Bem-vindo ao PETMUNDO!</h2>
+<p>Um mundo de amor pelos animais.</p>
+</div>
+</div>
+<div class="banner-conteudo">
 <p>Compartilhe momentos, publique fotos, conheça outros tutores e ajude animais que precisam.</p>
 <p><strong>Todos os animais são bem-vindos!</strong></p>
 <a href="#comunidade"><button>Conhecer a comunidade</button></a>
+</div>
 </section>
 
 <section id="acesso" class="card">
@@ -107,9 +145,11 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 <section id="comunidade" class="card">
 <h2>📸 Comunidade PETMUNDO</h2>
 <p>Compartilhe as fotos do seu animal com a comunidade.</p>
+
 <div id="areaPublicacao">
 <p>Entre na sua conta para publicar fotos.</p>
 </div>
+
 <div id="publicarFoto" class="oculto">
 <h3>Publicar uma foto</h3>
 <input type="file" id="arquivoFoto" accept="image/*">
@@ -117,6 +157,7 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 <button onclick="enviarFoto()">Publicar foto</button>
 <p id="mensagemFoto" class="mensagem oculto"></p>
 </div>
+
 <h3>Fotos da comunidade</h3>
 <div id="mural">
 <p>Carregando fotos...</p>
@@ -136,7 +177,7 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 <p><strong>Em breve, uma área própria para campanhas e contribuições.</strong></p>
 </section>
 
-<section class="card banner">
+<section class="card mascote">
 <h2>🦜 Conheça o Tucolino!</h2>
 <p>O mascote do PETMUNDO representa todos os animais que fazem parte da nossa comunidade.</p>
 <p><strong>Um mundo melhor para todos os pets!</strong></p>
@@ -154,550 +195,494 @@ const SUPABASE_URL = "https://gvltggsagpiikmecyfyq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_rejBmiKDT6eXZ53ilpVEBw_niDpV8-P";
 
 const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 let usuarioAtual = null;
 
-function mostrarMensagem(id, texto) {
-  const elemento = document.getElementById(id);
-  elemento.textContent = texto;
-  elemento.classList.remove("oculto");
+function mostrarMensagem(id,texto){
+const elemento=document.getElementById(id);
+elemento.textContent=texto;
+elemento.classList.remove("oculto");
 }
 
-function obterNome(usuario) {
-  return usuario?.user_metadata?.full_name ||
-    usuario?.email?.split("@")[0] ||
-    "Tutor PETMUNDO";
+function obterNome(usuario){
+return usuario?.user_metadata?.full_name ||
+usuario?.email?.split("@")[0] ||
+"Tutor PETMUNDO";
 }
 
-async function salvarNomePerfil(usuario, nome) {
-  const { error } = await supabaseClient
-    .from("profiles")
-    .upsert({
-      id: usuario.id,
-      display_name: nome
-    }, { onConflict: "id" });
-
-  if (error) console.error("Erro ao salvar perfil:", error.message);
+async function salvarNomePerfil(usuario,nome){
+const {error}=await supabaseClient.from("profiles").upsert({
+id:usuario.id,
+display_name:nome
+},{onConflict:"id"});
+if(error)console.error("Erro ao salvar perfil:",error.message);
 }
 
-async function cadastrar() {
-  const nome = document.getElementById("nomeCadastro").value.trim();
-  const email = document.getElementById("emailCadastro").value.trim();
-  const senha = document.getElementById("senhaCadastro").value;
+async function cadastrar(){
+const nome=document.getElementById("nomeCadastro").value.trim();
+const email=document.getElementById("emailCadastro").value.trim();
+const senha=document.getElementById("senhaCadastro").value;
 
-  if (!nome || !email || !senha) {
-    mostrarMensagem("mensagemAcesso", "Preencha todos os campos.");
-    return;
-  }
-
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password: senha,
-    options: { data: { full_name: nome } }
-  });
-
-  if (error) {
-    mostrarMensagem("mensagemAcesso", error.message);
-    return;
-  }
-
-  if (data.user) await salvarNomePerfil(data.user, nome);
-
-  mostrarMensagem(
-    "mensagemAcesso",
-    "Cadastro realizado! Verifique seu e-mail para confirmar a conta, caso seja solicitado."
-  );
+if(!nome||!email||!senha){
+mostrarMensagem("mensagemAcesso","Preencha todos os campos.");
+return;
 }
 
-async function entrar() {
-  const email = document.getElementById("emailLogin").value.trim();
-  const senha = document.getElementById("senhaLogin").value;
+const {data,error}=await supabaseClient.auth.signUp({
+email,password:senha,
+options:{data:{full_name:nome}}
+});
 
-  if (!email || !senha) {
-    mostrarMensagem("mensagemAcesso", "Informe seu e-mail e sua senha.");
-    return;
-  }
-
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password: senha
-  });
-
-  if (error) {
-    mostrarMensagem("mensagemAcesso", "Não foi possível entrar: " + error.message);
-    return;
-  }
-
-  usuarioAtual = data.user;
-  await salvarNomePerfil(usuarioAtual, obterNome(usuarioAtual));
-  await atualizarAreaUsuario();
-  await carregarMural();
-  mostrarMensagem("mensagemAcesso", "Login realizado com sucesso!");
+if(error){
+mostrarMensagem("mensagemAcesso",error.message);
+return;
 }
 
-async function atualizarAreaUsuario() {
-  const topo = document.getElementById("identificacaoTopo");
-  const desconectado = document.getElementById("perfilDesconectado");
-  const conectado = document.getElementById("perfilConectado");
-  const publicacao = document.getElementById("publicarFoto");
-  const area = document.getElementById("areaPublicacao");
+if(data.user)await salvarNomePerfil(data.user,nome);
 
-  if (!usuarioAtual) {
-    topo.textContent = "Entre ou crie sua conta";
-    desconectado.classList.remove("oculto");
-    conectado.classList.add("oculto");
-    publicacao.classList.add("oculto");
-    area.innerHTML = "<p>Entre na sua conta para publicar fotos.</p>";
-    return;
-  }
-
-  const { data: perfil } = await supabaseClient
-    .from("profiles")
-    .select("display_name")
-    .eq("id", usuarioAtual.id)
-    .maybeSingle();
-
-  const nome = perfil?.display_name || obterNome(usuarioAtual);
-
-  topo.textContent = "Conectado: " + nome;
-  document.getElementById("perfilNome").textContent = nome;
-  document.getElementById("perfilEmail").textContent = usuarioAtual.email;
-  document.getElementById("novoNome").value = nome;
-
-  desconectado.classList.add("oculto");
-  conectado.classList.remove("oculto");
-  publicacao.classList.remove("oculto");
-  area.innerHTML = "<p>Você está conectado. Publique sua foto abaixo!</p>";
+mostrarMensagem("mensagemAcesso",
+"Cadastro realizado! Verifique seu e-mail para confirmar a conta, caso seja solicitado.");
 }
 
-async function atualizarNome() {
-  if (!usuarioAtual) return;
+async function entrar(){
+const email=document.getElementById("emailLogin").value.trim();
+const senha=document.getElementById("senhaLogin").value;
 
-  const nome = document.getElementById("novoNome").value.trim();
-
-  if (!nome) {
-    mostrarMensagem("mensagemPerfil", "Digite um nome.");
-    return;
-  }
-
-  const { error } = await supabaseClient.auth.updateUser({
-    data: { full_name: nome }
-  });
-
-  if (error) {
-    mostrarMensagem("mensagemPerfil", error.message);
-    return;
-  }
-
-  await salvarNomePerfil(usuarioAtual, nome);
-
-  const { data } = await supabaseClient.auth.getUser();
-  usuarioAtual = data.user;
-
-  await atualizarAreaUsuario();
-  mostrarMensagem("mensagemPerfil", "Nome atualizado com sucesso!");
-  await carregarMural();
+if(!email||!senha){
+mostrarMensagem("mensagemAcesso","Informe seu e-mail e sua senha.");
+return;
 }
 
-async function sair() {
-  const { error } = await supabaseClient.auth.signOut();
+const {data,error}=await supabaseClient.auth.signInWithPassword({
+email,password:senha
+});
 
-  if (error) {
-    mostrarMensagem("mensagemPerfil", error.message);
-    return;
-  }
-
-  usuarioAtual = null;
-  await atualizarAreaUsuario();
-  await carregarMural();
-  mostrarMensagem("mensagemAcesso", "Você saiu da sua conta.");
+if(error){
+mostrarMensagem("mensagemAcesso","Não foi possível entrar: "+error.message);
+return;
 }
 
-async function enviarFoto() {
-  if (!usuarioAtual) {
-    mostrarMensagem("mensagemFoto", "Entre na sua conta primeiro.");
-    return;
-  }
-
-  const arquivo = document.getElementById("arquivoFoto").files[0];
-  const legenda = document.getElementById("legendaFoto").value.trim();
-
-  if (!arquivo) {
-    mostrarMensagem("mensagemFoto", "Escolha uma foto antes de publicar.");
-    return;
-  }
-
-  if (!arquivo.type.startsWith("image/")) {
-    mostrarMensagem("mensagemFoto", "Escolha um arquivo de imagem.");
-    return;
-  }
-
-  const nomeArquivo = Date.now() + "-" + crypto.randomUUID() + "-" +
-    arquivo.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-
-  const caminho = usuarioAtual.id + "/" + nomeArquivo;
-
-  const { error } = await supabaseClient.storage
-    .from("petmundo-fotos")
-    .upload(caminho, arquivo);
-
-  if (error) {
-    mostrarMensagem("mensagemFoto", "Erro ao enviar: " + error.message);
-    return;
-  }
-
-  if (legenda) {
-    localStorage.setItem("petmundo_legenda_" + caminho, legenda);
-  }
-
-  document.getElementById("arquivoFoto").value = "";
-  document.getElementById("legendaFoto").value = "";
-
-  mostrarMensagem("mensagemFoto", "Foto publicada com sucesso!");
-  await carregarMural();
+usuarioAtual=data.user;
+await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
+await atualizarAreaUsuario();
+await carregarMural();
+mostrarMensagem("mensagemAcesso","Login realizado com sucesso!");
 }
 
-async function carregarComentarios(caminho, area) {
-  area.innerHTML = "<p class='pequeno'>Carregando comentários...</p>";
+async function atualizarAreaUsuario(){
+const topo=document.getElementById("identificacaoTopo");
+const desconectado=document.getElementById("perfilDesconectado");
+const conectado=document.getElementById("perfilConectado");
+const publicacao=document.getElementById("publicarFoto");
+const area=document.getElementById("areaPublicacao");
 
-  const { data: comentarios, error } = await supabaseClient
-    .from("photo_comments")
-    .select("id,user_id,body,created_at")
-    .eq("photo_path", caminho)
-    .order("created_at", { ascending: true });
-
-  if (error) {
-    area.textContent = "Não foi possível carregar os comentários.";
-    console.error(error);
-    return;
-  }
-
-  area.innerHTML = "";
-
-  if (!comentarios || comentarios.length === 0) {
-    area.innerHTML = "<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";
-    return;
-  }
-
-  const ids = [...new Set(comentarios.map(c => c.user_id))];
-
-  const { data: perfis } = await supabaseClient
-    .from("profiles")
-    .select("id,display_name")
-    .in("id", ids);
-
-  const nomes = {};
-  (perfis || []).forEach(p => {
-    if (p.display_name) nomes[p.id] = p.display_name;
-  });
-
-  comentarios.forEach(comentario => {
-    const item = document.createElement("div");
-    item.className = "comentario";
-
-    const autor = document.createElement("strong");
-    let nomeAutor = nomes[comentario.user_id];
-
-    if (!nomeAutor && usuarioAtual && comentario.user_id === usuarioAtual.id) {
-      nomeAutor = obterNome(usuarioAtual);
-    }
-
-    autor.textContent = nomeAutor || "Tutor PETMUNDO";
-
-    const texto = document.createElement("p");
-    texto.textContent = comentario.body;
-    texto.style.margin = "5px 0";
-
-    item.appendChild(autor);
-    item.appendChild(texto);
-    area.appendChild(item);
-  });
+if(!usuarioAtual){
+topo.textContent="Entre ou crie sua conta";
+desconectado.classList.remove("oculto");
+conectado.classList.add("oculto");
+publicacao.classList.add("oculto");
+area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
+return;
 }
 
-async function publicarComentario(caminho, campo, area) {
-  if (!usuarioAtual) {
-    alert("Entre na sua conta para comentar.");
-    return;
-  }
+const {data:perfil}=await supabaseClient.from("profiles")
+.select("display_name").eq("id",usuarioAtual.id).maybeSingle();
 
-  const texto = campo.value.trim();
+const nome=perfil?.display_name||obterNome(usuarioAtual);
 
-  if (!texto) {
-    alert("Escreva seu comentário.");
-    return;
-  }
+topo.textContent="Conectado: "+nome;
+document.getElementById("perfilNome").textContent=nome;
+document.getElementById("perfilEmail").textContent=usuarioAtual.email;
+document.getElementById("novoNome").value=nome;
 
-  await salvarNomePerfil(usuarioAtual, obterNome(usuarioAtual));
-
-  const { error } = await supabaseClient
-    .from("photo_comments")
-    .insert({
-      photo_path: caminho,
-      user_id: usuarioAtual.id,
-      body: texto
-    });
-
-  if (error) {
-    alert("Não foi possível publicar o comentário: " + error.message);
-    return;
-  }
-
-  campo.value = "";
-  await carregarComentarios(caminho, area);
+desconectado.classList.add("oculto");
+conectado.classList.remove("oculto");
+publicacao.classList.remove("oculto");
+area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";
 }
 
-async function alternarCurtida(caminho, botao, contador) {
-  if (!usuarioAtual) {
-    alert("Entre na sua conta para curtir fotos.");
-    return;
-  }
+async function atualizarNome(){
+if(!usuarioAtual)return;
+const nome=document.getElementById("novoNome").value.trim();
 
-  const { data: existente, error: erroBusca } = await supabaseClient
-    .from("photo_likes")
-    .select("id")
-    .eq("photo_path", caminho)
-    .eq("user_id", usuarioAtual.id)
-    .maybeSingle();
-
-  if (erroBusca) {
-    alert("Não foi possível verificar a curtida: " + erroBusca.message);
-    return;
-  }
-
-  if (existente) {
-    const { error } = await supabaseClient
-      .from("photo_likes")
-      .delete()
-      .eq("id", existente.id);
-
-    if (error) {
-      alert("Erro ao retirar curtida: " + error.message);
-      return;
-    }
-  } else {
-    const { error } = await supabaseClient
-      .from("photo_likes")
-      .insert({
-        photo_path: caminho,
-        user_id: usuarioAtual.id
-      });
-
-    if (error) {
-      alert("Erro ao curtir: " + error.message);
-      return;
-    }
-  }
-
-  await atualizarCurtidas(caminho, botao, contador);
+if(!nome){
+mostrarMensagem("mensagemPerfil","Digite um nome.");
+return;
 }
 
-async function atualizarCurtidas(caminho, botao, contador) {
-  const { data: curtidas, error } = await supabaseClient
-    .from("photo_likes")
-    .select("id,user_id")
-    .eq("photo_path", caminho);
+const {error}=await supabaseClient.auth.updateUser({
+data:{full_name:nome}
+});
 
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  const total = curtidas ? curtidas.length : 0;
-  contador.textContent = total + (total === 1 ? " curtida" : " curtidas");
-
-  const curtiu = usuarioAtual &&
-    curtidas.some(c => c.user_id === usuarioAtual.id);
-
-  botao.classList.toggle("ativo", !!curtiu);
-  botao.textContent = curtiu ? "♥ Curtido" : "♡ Curtir";
+if(error){
+mostrarMensagem("mensagemPerfil",error.message);
+return;
 }
 
-/* NOVO MURAL: busca fotos de todas as pastas, mesmo sem login */
-async function carregarMural() {
-  const mural = document.getElementById("mural");
-  mural.innerHTML = "<p>Carregando fotos da comunidade...</p>";
-
-  const { data: pastas, error: erroPastas } = await supabaseClient.storage
-    .from("petmundo-fotos")
-    .list("", { limit: 1000 });
-
-  if (erroPastas) {
-    mural.textContent = "Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";
-    console.error(erroPastas);
-    return;
-  }
-
-  const fotosEncontradas = [];
-
-  for (const pasta of (pastas || [])) {
-    if (!pasta.id || pasta.metadata) continue;
-
-    const { data: arquivos, error } = await supabaseClient.storage
-      .from("petmundo-fotos")
-      .list(pasta.name, {
-        limit: 100,
-        sortBy: { column: "name", order: "desc" }
-      });
-
-    if (error) {
-      console.error("Erro ao listar pasta:", pasta.name, error);
-      continue;
-    }
-
-    for (const arquivo of (arquivos || [])) {
-      if (!arquivo.name || !arquivo.metadata) continue;
-
-      fotosEncontradas.push({
-        caminho: pasta.name + "/" + arquivo.name,
-        dono: pasta.name,
-        nomeArquivo: arquivo.name
-      });
-    }
-  }
-
-  fotosEncontradas.sort((a, b) =>
-    b.nomeArquivo.localeCompare(a.nomeArquivo)
-  );
-
-  mural.innerHTML = "";
-
-  if (fotosEncontradas.length === 0) {
-    mural.innerHTML = "<p>Ainda não há fotos publicadas na comunidade.</p>";
-    return;
-  }
-
-  for (const foto of fotosEncontradas) {
-    const caminho = foto.caminho;
-
-    const { data: urlData } = supabaseClient.storage
-      .from("petmundo-fotos")
-      .getPublicUrl(caminho);
-
-    let nomeAutor = "Comunidade PETMUNDO";
-
-    if (usuarioAtual) {
-      const { data: perfil } = await supabaseClient
-        .from("profiles")
-        .select("display_name")
-        .eq("id", foto.dono)
-        .maybeSingle();
-
-      if (perfil?.display_name) nomeAutor = perfil.display_name;
-
-      if (foto.dono === usuarioAtual.id && !perfil?.display_name) {
-        nomeAutor = obterNome(usuarioAtual);
-      }
-    }
-
-    const card = document.createElement("div");
-    card.className = "foto-card";
-
-    const autor = document.createElement("div");
-    autor.className = "foto-autor";
-    autor.textContent = nomeAutor;
-
-    const imagem = document.createElement("img");
-    imagem.src = urlData.publicUrl;
-    imagem.alt = "Foto publicada no PETMUNDO";
-    imagem.loading = "lazy";
-
-    const legenda = document.createElement("p");
-    legenda.textContent =
-      localStorage.getItem("petmundo_legenda_" + caminho) || "";
-
-    card.appendChild(autor);
-    card.appendChild(imagem);
-
-    if (legenda.textContent) card.appendChild(legenda);
-
-    if (usuarioAtual) {
-      const acoes = document.createElement("div");
-      acoes.className = "acoes-foto";
-
-      const botaoCurtir = document.createElement("button");
-      botaoCurtir.className = "curtir";
-      botaoCurtir.textContent = "♡ Curtir";
-
-      const contador = document.createElement("span");
-      contador.className = "pequeno";
-
-      botaoCurtir.onclick = () =>
-        alternarCurtida(caminho, botaoCurtir, contador);
-
-      acoes.appendChild(botaoCurtir);
-      acoes.appendChild(contador);
-      card.appendChild(acoes);
-
-      const tituloComentarios = document.createElement("h3");
-      tituloComentarios.textContent = "Comentários";
-
-      const listaComentarios = document.createElement("div");
-
-      const campoComentario = document.createElement("input");
-      campoComentario.type = "text";
-      campoComentario.placeholder = "Escreva um comentário...";
-
-      const botaoComentar = document.createElement("button");
-      botaoComentar.textContent = "Comentar";
-      botaoComentar.onclick = () =>
-        publicarComentario(caminho, campoComentario, listaComentarios);
-
-      campoComentario.addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-          publicarComentario(caminho, campoComentario, listaComentarios);
-        }
-      });
-
-      card.appendChild(tituloComentarios);
-      card.appendChild(listaComentarios);
-      card.appendChild(campoComentario);
-      card.appendChild(botaoComentar);
-
-      await atualizarCurtidas(caminho, botaoCurtir, contador);
-      await carregarComentarios(caminho, listaComentarios);
-    } else {
-      const aviso = document.createElement("p");
-      aviso.className = "pequeno";
-      aviso.textContent = "Entre na sua conta para curtir e comentar.";
-      card.appendChild(aviso);
-    }
-
-    mural.appendChild(card);
-  }
+await salvarNomePerfil(usuarioAtual,nome);
+const {data}=await supabaseClient.auth.getUser();
+usuarioAtual=data.user;
+await atualizarAreaUsuario();
+mostrarMensagem("mensagemPerfil","Nome atualizado com sucesso!");
+await carregarMural();
 }
 
-async function iniciarPetmundo() {
-  const { data, error } = await supabaseClient.auth.getSession();
-
-  if (error) console.error(error);
-
-  usuarioAtual = data?.session?.user || null;
-
-  if (usuarioAtual) {
-    await salvarNomePerfil(usuarioAtual, obterNome(usuarioAtual));
-  }
-
-  await atualizarAreaUsuario();
-  await carregarMural();
+async function sair(){
+const {error}=await supabaseClient.auth.signOut();
+if(error){
+mostrarMensagem("mensagemPerfil",error.message);
+return;
+}
+usuarioAtual=null;
+await atualizarAreaUsuario();
+await carregarMural();
+mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
 }
 
-supabaseClient.auth.onAuthStateChange((evento, sessao) => {
-  usuarioAtual = sessao?.user || null;
+async function enviarFoto(){
+if(!usuarioAtual){
+mostrarMensagem("mensagemFoto","Entre na sua conta primeiro.");
+return;
+}
 
-  setTimeout(async () => {
-    if (usuarioAtual) {
-      await salvarNomePerfil(usuarioAtual, obterNome(usuarioAtual));
-    }
+const arquivo=document.getElementById("arquivoFoto").files[0];
+const legenda=document.getElementById("legendaFoto").value.trim();
 
-    await atualizarAreaUsuario();
-    await carregarMural();
-  }, 0);
+if(!arquivo){
+mostrarMensagem("mensagemFoto","Escolha uma foto antes de publicar.");
+return;
+}
+
+if(!arquivo.type.startsWith("image/")){
+mostrarMensagem("mensagemFoto","Escolha um arquivo de imagem.");
+return;
+}
+
+const nomeArquivo=Date.now()+"-"+crypto.randomUUID()+"-"+
+arquivo.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+
+const caminho=usuarioAtual.id+"/"+nomeArquivo;
+
+const {error}=await supabaseClient.storage.from("petmundo-fotos")
+.upload(caminho,arquivo);
+
+if(error){
+mostrarMensagem("mensagemFoto","Erro ao enviar: "+error.message);
+return;
+}
+
+if(legenda){
+localStorage.setItem("petmundo_legenda_"+caminho,legenda);
+}
+
+document.getElementById("arquivoFoto").value="";
+document.getElementById("legendaFoto").value="";
+mostrarMensagem("mensagemFoto","Foto publicada com sucesso!");
+await carregarMural();
+}
+
+async function carregarComentarios(caminho,area){
+area.innerHTML="<p class='pequeno'>Carregando comentários...</p>";
+
+const {data:comentarios,error}=await supabaseClient
+.from("photo_comments")
+.select("id,user_id,body,created_at")
+.eq("photo_path",caminho)
+.order("created_at",{ascending:true});
+
+if(error){
+area.textContent="Não foi possível carregar os comentários.";
+console.error(error);
+return;
+}
+
+area.innerHTML="";
+
+if(!comentarios||comentarios.length===0){
+area.innerHTML="<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";
+return;
+}
+
+const ids=[...new Set(comentarios.map(c=>c.user_id))];
+
+const {data:perfis}=await supabaseClient.from("profiles")
+.select("id,display_name").in("id",ids);
+
+const nomes={};
+(perfis||[]).forEach(p=>{
+if(p.display_name)nomes[p.id]=p.display_name;
+});
+
+comentarios.forEach(comentario=>{
+const item=document.createElement("div");
+item.className="comentario";
+const autor=document.createElement("strong");
+let nomeAutor=nomes[comentario.user_id];
+
+if(!nomeAutor&&usuarioAtual&&comentario.user_id===usuarioAtual.id){
+nomeAutor=obterNome(usuarioAtual);
+}
+
+autor.textContent=nomeAutor||"Tutor PETMUNDO";
+const texto=document.createElement("p");
+texto.textContent=comentario.body;
+texto.style.margin="5px 0";
+item.appendChild(autor);
+item.appendChild(texto);
+area.appendChild(item);
+});
+}
+
+async function publicarComentario(caminho,campo,area){
+if(!usuarioAtual){
+alert("Entre na sua conta para comentar.");
+return;
+}
+
+const texto=campo.value.trim();
+if(!texto){
+alert("Escreva seu comentário.");
+return;
+}
+
+await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
+
+const {error}=await supabaseClient.from("photo_comments").insert({
+photo_path:caminho,
+user_id:usuarioAtual.id,
+body:texto
+});
+
+if(error){
+alert("Não foi possível publicar o comentário: "+error.message);
+return;
+}
+
+campo.value="";
+await carregarComentarios(caminho,area);
+}
+
+async function alternarCurtida(caminho,botao,contador){
+if(!usuarioAtual){
+alert("Entre na sua conta para curtir fotos.");
+return;
+}
+
+const {data:existente,error:erroBusca}=await supabaseClient
+.from("photo_likes").select("id")
+.eq("photo_path",caminho)
+.eq("user_id",usuarioAtual.id).maybeSingle();
+
+if(erroBusca){
+alert("Não foi possível verificar a curtida: "+erroBusca.message);
+return;
+}
+
+if(existente){
+const {error}=await supabaseClient.from("photo_likes")
+.delete().eq("id",existente.id);
+if(error){
+alert("Erro ao retirar curtida: "+error.message);
+return;
+}
+}else{
+const {error}=await supabaseClient.from("photo_likes").insert({
+photo_path:caminho,
+user_id:usuarioAtual.id
+});
+if(error){
+alert("Erro ao curtir: "+error.message);
+return;
+}
+}
+
+await atualizarCurtidas(caminho,botao,contador);
+}
+
+async function atualizarCurtidas(caminho,botao,contador){
+const {data:curtidas,error}=await supabaseClient
+.from("photo_likes").select("id,user_id").eq("photo_path",caminho);
+
+if(error){
+console.error(error);
+return;
+}
+
+const total=curtidas?curtidas.length:0;
+contador.textContent=total+(total===1?" curtida":" curtidas");
+
+const curtiu=usuarioAtual&&curtidas.some(c=>c.user_id===usuarioAtual.id);
+botao.classList.toggle("ativo",!!curtiu);
+botao.textContent=curtiu?"♥ Curtido":"♡ Curtir";
+}
+
+/* MURAL: SOMENTE AS FOTOS PUBLICADAS PELOS USUÁRIOS */
+async function carregarMural(){
+const mural=document.getElementById("mural");
+mural.innerHTML="<p>Carregando fotos da comunidade...</p>";
+
+const {data:pastas,error:erroPastas}=await supabaseClient
+.storage.from("petmundo-fotos").list("",{limit:1000});
+
+if(erroPastas){
+mural.textContent="Não foi possível carregar as fotos. Verifique a permissão de leitura pública no Supabase.";
+console.error(erroPastas);
+return;
+}
+
+const fotosEncontradas=[];
+
+for(const pasta of(pastas||[])){
+if(!pasta.id||pasta.metadata)continue;
+
+const {data:arquivos,error}=await supabaseClient
+.storage.from("petmundo-fotos").list(pasta.name,{
+limit:100,
+sortBy:{column:"name",order:"desc"}
+});
+
+if(error){
+console.error("Erro ao listar pasta:",pasta.name,error);
+continue;
+}
+
+for(const arquivo of(arquivos||[])){
+if(!arquivo.name||!arquivo.metadata)continue;
+fotosEncontradas.push({
+caminho:pasta.name+"/"+arquivo.name,
+dono:pasta.name,
+nomeArquivo:arquivo.name
+});
+}
+}
+
+fotosEncontradas.sort((a,b)=>b.nomeArquivo.localeCompare(a.nomeArquivo));
+mural.innerHTML="";
+
+if(fotosEncontradas.length===0){
+mural.innerHTML="<p>Ainda não há fotos publicadas na comunidade.</p>";
+return;
+}
+
+for(const foto of fotosEncontradas){
+const caminho=foto.caminho;
+
+const {data:urlData}=supabaseClient.storage
+.from("petmundo-fotos").getPublicUrl(caminho);
+
+let nomeAutor="Comunidade PETMUNDO";
+
+if(usuarioAtual){
+const {data:perfil}=await supabaseClient.from("profiles")
+.select("display_name").eq("id",foto.dono).maybeSingle();
+
+if(perfil?.display_name)nomeAutor=perfil.display_name;
+if(foto.dono===usuarioAtual.id&&!perfil?.display_name){
+nomeAutor=obterNome(usuarioAtual);
+}
+}
+
+const card=document.createElement("div");
+card.className="foto-card";
+
+const autor=document.createElement("div");
+autor.className="foto-autor";
+autor.textContent=nomeAutor;
+
+const imagem=document.createElement("img");
+imagem.src=urlData.publicUrl;
+imagem.alt="Foto de animal publicada no PETMUNDO";
+imagem.loading="lazy";
+
+const legenda=document.createElement("p");
+legenda.textContent=localStorage.getItem("petmundo_legenda_"+caminho)||"";
+
+card.appendChild(autor);
+card.appendChild(imagem);
+if(legenda.textContent)card.appendChild(legenda);
+
+if(usuarioAtual){
+const acoes=document.createElement("div");
+acoes.className="acoes-foto";
+
+const botaoCurtir=document.createElement("button");
+botaoCurtir.className="curtir";
+botaoCurtir.textContent="♡ Curtir";
+
+const contador=document.createElement("span");
+contador.className="pequeno";
+
+botaoCurtir.onclick=()=>alternarCurtida(caminho,botaoCurtir,contador);
+acoes.appendChild(botaoCurtir);
+acoes.appendChild(contador);
+card.appendChild(acoes);
+
+const tituloComentarios=document.createElement("h3");
+tituloComentarios.textContent="Comentários";
+
+const listaComentarios=document.createElement("div");
+const campoComentario=document.createElement("input");
+campoComentario.type="text";
+campoComentario.placeholder="Escreva um comentário...";
+
+const botaoComentar=document.createElement("button");
+botaoComentar.textContent="Comentar";
+botaoComentar.onclick=()=>publicarComentario(caminho,campoComentario,listaComentarios);
+
+campoComentario.addEventListener("keydown",event=>{
+if(event.key==="Enter"){
+publicarComentario(caminho,campoComentario,listaComentarios);
+}
+});
+
+card.appendChild(tituloComentarios);
+card.appendChild(listaComentarios);
+card.appendChild(campoComentario);
+card.appendChild(botaoComentar);
+
+await atualizarCurtidas(caminho,botaoCurtir,contador);
+await carregarComentarios(caminho,listaComentarios);
+}else{
+const aviso=document.createElement("p");
+aviso.className="pequeno";
+aviso.textContent="Entre na sua conta para curtir e comentar.";
+card.appendChild(aviso);
+}
+
+mural.appendChild(card);
+}
+}
+
+async function iniciarPetmundo(){
+const {data,error}=await supabaseClient.auth.getSession();
+if(error)console.error(error);
+
+usuarioAtual=data?.session?.user||null;
+
+if(usuarioAtual){
+await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
+}
+
+await atualizarAreaUsuario();
+await carregarMural();
+}
+
+supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
+usuarioAtual=sessao?.user||null;
+setTimeout(async()=>{
+if(usuarioAtual){
+await salvarNomePerfil(usuarioAtual,obterNome(usuarioAtual));
+}
+await atualizarAreaUsuario();
+await carregarMural();
+},0);
 });
 
 iniciarPetmundo();
 </script>
+
 </body>
 </html>
