@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -390,7 +389,6 @@ await new Promise(resolve=>setTimeout(resolve,1200));
 
 throw new Error("Não foi possível enviar o arquivo após duas tentativas. "+(ultimoErro?.message||"Verifique sua conexão e tente novamente."));
 }
-
 /* CADASTRAR NOVO PET */
 async function cadastrarPet(){
 if(!usuarioAtual){mostrarMensagem("mensagemPet","Entre na sua conta primeiro.");return;}
@@ -636,11 +634,13 @@ const autorizaContato=document.getElementById("resgateAutorizaContato").checked;
 const foto=document.getElementById("resgateFoto").files[0];
 if(!tipo||!especie||!descricao||!cidade){mostrarMensagem("mensagemResgate","Preencha o tipo de publicação, a espécie, a descrição e a cidade.");return;}
 if(contatoDigitado&&!autorizaContato){mostrarMensagem("mensagemResgate","Para divulgar o contato, marque a autorização. Se não quiser divulgá-lo, apague o campo de contato.");return;}
+// A tabela pet_resgates aceita somente: adocao, resgate e ajuda.
+const tipoBanco=tipo==="Adoção"?"adocao":tipo==="Ferido ou em risco"?"ajuda":"resgate";
 botao.disabled=true;botao.textContent="Publicando...";
 try{
 let caminhoFoto=null;
 if(foto){if(!foto.type.startsWith("image/"))throw new Error("Escolha um arquivo de imagem válido.");caminhoFoto=await enviarArquivoPet(foto,"foto");}
-const dados={owner_id:usuarioAtual.id,tipo:tipo,nome_animal:nome||null,especie:especie,descricao:descricao,cidade:cidade,bairro:bairro||null,contato:autorizaContato?contatoDigitado:null,ajuda_necessaria:ajuda||null,foto_path:caminhoFoto,status:"aguardando"};
+const dados={owner_id:usuarioAtual.id,tipo:tipoBanco,nome_animal:nome||null,especie:especie,descricao:descricao,cidade:cidade,bairro:bairro||null,contato:autorizaContato?contatoDigitado:null,ajuda_necessaria:ajuda||null,foto_path:caminhoFoto,status:"aguardando"};
 const {error}=await supabaseClient.from("pet_resgates").insert(dados);
 if(error)throw new Error("Não foi possível publicar o caso: "+error.message);
 ["resgateTipo","resgateNome","resgateEspecie","resgateDescricao","resgateCidade","resgateBairro","resgateAjuda","resgateContato","resgateFoto"].forEach(id=>document.getElementById(id).value="");
@@ -704,7 +704,9 @@ mural.innerHTML="";
 if(!casos||casos.length===0){mural.innerHTML="<p>Ainda não há casos publicados. Seja o primeiro a ajudar um animal!</p>";return;}
 casos.forEach(caso=>{
 const card=document.createElement("div");card.className="resgate-publicacao";
-const etiqueta=document.createElement("span");etiqueta.className="resgate-etiqueta";etiqueta.textContent=caso.tipo||"Adoção e resgate";card.appendChild(etiqueta);
+const etiqueta=document.createElement("span");etiqueta.className="resgate-etiqueta";
+const rotulosTipo={adocao:"Animal para adoção",resgate:"Animal abandonado ou perdido",ajuda:"Animal ferido ou em risco"};
+etiqueta.textContent=rotulosTipo[caso.tipo]||caso.tipo||"Adoção e resgate";card.appendChild(etiqueta);
 if(caso.status==="resolvido"){
 const selo=document.createElement("div");selo.className="resgate-atendido";selo.textContent="✓ PEDIDO ATENDIDO";card.appendChild(selo);
 }
