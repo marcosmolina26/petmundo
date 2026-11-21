@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,21 +9,73 @@
 
 <style>
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#26332d}
-header{background:#15966b;color:white;padding:18px 15px;text-align:center}
-.logo-petmundo{width:160px;height:160px;object-fit:contain;display:block;margin:0 auto 8px}
+
+.capa{
+position:relative;width:100%;height:300px;overflow:hidden;
+background:linear-gradient(135deg,#15966b,#b5e8c9);
+display:flex;align-items:flex-end;justify-content:center
+}
+.imagem-capa{
+position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover
+}
+.capa-texto{
+position:relative;z-index:1;width:100%;padding:22px 12px;
+text-align:center;color:white;
+background:linear-gradient(transparent,rgba(0,0,0,.75))
+}
+.capa-texto h2{color:white;font-size:29px;margin:0 0 8px}
+.capa-texto p{margin:0 0 12px}
+.botoes-capa{
+display:flex;justify-content:center;gap:8px;flex-wrap:wrap
+}
+.botoes-capa a{
+display:inline-block;text-decoration:none;color:#087c56;
+background:white;padding:11px 16px;border-radius:8px;
+font-weight:bold;font-size:14px
+}
+.botoes-capa a:hover{background:#e4f7ec}
+
+header{
+background:#15966b;color:white;padding:15px;text-align:center
+}
+.logo-petmundo{
+width:140px;height:140px;object-fit:contain;
+display:block;margin:0 auto 8px
+}
 header h1{margin:0;font-size:30px}
 header p{margin:7px 0 0}
-nav{background:#087c56;display:flex;justify-content:center;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;padding:13px 12px;font-weight:bold}
+
+nav{
+background:#087c56;display:flex;
+justify-content:center;flex-wrap:wrap
+}
+nav a{
+color:white;text-decoration:none;padding:13px 12px;
+font-weight:bold
+}
 nav a:hover{background:#056344}
+
 .container{max-width:950px;margin:20px auto;padding:0 12px}
-.card{background:white;border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 2px 8px #00000012}
+.card{
+background:white;border-radius:12px;padding:18px;
+margin-bottom:18px;box-shadow:0 2px 8px #00000012
+}
 h2{color:#087c56;margin-top:0}
 h3{color:#087c56}
-input,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd8d1;border-radius:8px;font-size:15px}
+
+input,textarea{
+width:100%;padding:12px;margin:7px 0;
+border:1px solid #ccd8d1;border-radius:8px;font-size:15px
+}
 textarea{resize:vertical;min-height:75px}
-button{background:#15966b;color:white;border:0;border-radius:8px;padding:11px 16px;font-size:15px;font-weight:bold;cursor:pointer;margin:5px 3px 5px 0}
+button{
+background:#15966b;color:white;border:0;border-radius:8px;
+padding:11px 16px;font-size:15px;font-weight:bold;
+cursor:pointer;margin:5px 3px 5px 0
+}
 button:hover{background:#087c56}
 button.secundario{background:#687b71}
 button.curtir{background:#eaf7f0;color:#087c56;border:1px solid #b9dfca}
@@ -31,45 +84,21 @@ button.curtir.ativo{background:#15966b;color:white}
 .mensagem{padding:10px;margin:8px 0;border-radius:7px;background:#edf8f1}
 .oculto{display:none!important}
 .duas-colunas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.foto-card{background:white;border:1px solid #e0e9e3;border-radius:12px;padding:12px;margin:15px 0}
-.foto-card img{width:100%;max-height:520px;object-fit:contain;border-radius:8px;background:#f3f7f5}
+
+.foto-card{
+background:white;border:1px solid #e0e9e3;
+border-radius:12px;padding:12px;margin:15px 0
+}
+.foto-card img{
+width:100%;max-height:520px;object-fit:contain;
+border-radius:8px;background:#f3f7f5
+}
 .foto-autor{font-weight:bold;color:#087c56;margin-bottom:8px}
 .acoes-foto{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .comentario{border-top:1px solid #e5ece7;padding:9px 3px;font-size:14px}
 .comentario strong{color:#087c56}
 
-/* CAPA PRINCIPAL */
-.capa{
-position:relative;
-width:100%;
-height:300px;
-border-radius:12px;
-overflow:hidden;
-background:#dff5e9;
-display:flex;
-align-items:flex-end;
-justify-content:center;
-}
-.imagem-capa{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-}
-.capa-texto{
-position:relative;
-z-index:1;
-width:100%;
-padding:25px 15px;
-text-align:center;
-color:white;
-background:linear-gradient(transparent,rgba(0,0,0,.7));
-}
-.capa-texto h2{color:white;font-size:30px;margin:0 0 8px}
-.capa-texto p{margin:0}
-.banner{padding:0;overflow:hidden}
-.banner-conteudo{text-align:center;padding:20px}
+.banner-conteudo{text-align:center;padding:10px 5px}
 .mascote{text-align:center;padding:20px}
 footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:30px}
 
@@ -77,22 +106,48 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .duas-colunas{grid-template-columns:1fr}
 nav a{padding:11px 8px;font-size:13px}
 header h1{font-size:25px}
-.logo-petmundo{width:140px;height:140px}
-.capa{height:220px}
-.capa-texto h2{font-size:25px}
+.logo-petmundo{width:120px;height:120px}
+.capa{height:240px}
+.capa-texto h2{font-size:24px}
+.botoes-capa a{padding:10px 12px;font-size:13px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- CAPA PRINCIPAL NO TOPO -->
+<section id="inicio">
+<div class="capa">
+<img class="imagem-capa"
+src="%20petmundo-banner.png"
+alt="Capa PETMUNDO"
+onerror="this.style.display='none'">
+
+<div class="capa-texto">
+<h2>Bem-vindo ao PETMUNDO!</h2>
+<p>Um mundo de amor pelos animais.</p>
+
+<div class="botoes-capa">
+<a href="#adocao">🐶 Adote</a>
+<a href="#comunidade">📸 Comunidade</a>
+<a href="#donativos">❤️ Doações</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- LOGO ABAIXO DA CAPA -->
 <header>
-<img class="logo-petmundo" src="%20petmundo-logo.png" alt="Logo PETMUNDO">
+<img class="logo-petmundo"
+src="%20petmundo-logo.png"
+alt="Logo PETMUNDO">
 <h1>🐾 PETMUNDO</h1>
 <p>Uma rede social para quem ama os animais</p>
 <p id="identificacaoTopo">Entre ou crie sua conta</p>
 </header>
 
+<!-- MENU -->
 <nav>
 <a href="#inicio">Início</a>
 <a href="#comunidade">Comunidade</a>
@@ -103,14 +158,7 @@ header h1{font-size:25px}
 
 <main class="container">
 
-<section id="inicio" class="card banner">
-<div class="capa">
-<img class="imagem-capa" src="%20petmundo-banner.png" alt="Capa PETMUNDO">
-<div class="capa-texto">
-<h2>Bem-vindo ao PETMUNDO!</h2>
-<p>Um mundo de amor pelos animais.</p>
-</div>
-</div>
+<section class="card banner">
 <div class="banner-conteudo">
 <p>Compartilhe momentos, publique fotos, conheça outros tutores e ajude animais que precisam.</p>
 <p><strong>Todos os animais são bem-vindos!</strong></p>
@@ -121,6 +169,7 @@ header h1{font-size:25px}
 <section id="acesso" class="card">
 <h2>Entrar no PETMUNDO</h2>
 <p>Faça login para publicar fotos, curtir e comentar.</p>
+
 <div class="duas-colunas">
 <div>
 <h3>Entrar na conta</h3>
@@ -128,6 +177,7 @@ header h1{font-size:25px}
 <input type="password" id="senhaLogin" placeholder="Sua senha">
 <button onclick="entrar()">Entrar</button>
 </div>
+
 <div>
 <h3>Criar uma conta</h3>
 <input type="text" id="nomeCadastro" placeholder="Seu nome">
@@ -141,13 +191,16 @@ header h1{font-size:25px}
 
 <section id="meu-petmundo" class="card">
 <h2>👤 Meu PETMUNDO</h2>
+
 <div id="perfilDesconectado">
 <p>Entre na sua conta para visualizar seu perfil.</p>
 </div>
+
 <div id="perfilConectado" class="oculto">
 <p><strong>Nome:</strong> <span id="perfilNome"></span></p>
 <p><strong>E-mail:</strong> <span id="perfilEmail"></span></p>
 <p><strong>Situação:</strong> <span id="perfilStatus">Conectado</span></p>
+
 <h3>Alterar meu nome</h3>
 <input type="text" id="novoNome" placeholder="Digite seu nome">
 <button onclick="atualizarNome()">Salvar nome</button>
@@ -159,9 +212,11 @@ header h1{font-size:25px}
 <section id="comunidade" class="card">
 <h2>📸 Comunidade PETMUNDO</h2>
 <p>Compartilhe as fotos do seu animal com a comunidade.</p>
+
 <div id="areaPublicacao">
 <p>Entre na sua conta para publicar fotos.</p>
 </div>
+
 <div id="publicarFoto" class="oculto">
 <h3>Publicar uma foto</h3>
 <input type="file" id="arquivoFoto" accept="image/*">
@@ -169,6 +224,7 @@ header h1{font-size:25px}
 <button onclick="enviarFoto()">Publicar foto</button>
 <p id="mensagemFoto" class="mensagem oculto"></p>
 </div>
+
 <h3>Fotos da comunidade</h3>
 <div id="mural"><p>Carregando fotos...</p></div>
 </section>
@@ -253,6 +309,7 @@ const desconectado=document.getElementById("perfilDesconectado");
 const conectado=document.getElementById("perfilConectado");
 const publicacao=document.getElementById("publicarFoto");
 const area=document.getElementById("areaPublicacao");
+
 if(!usuarioAtual){
 topo.textContent="Entre ou crie sua conta";
 desconectado.classList.remove("oculto");
@@ -261,6 +318,7 @@ publicacao.classList.add("oculto");
 area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
 return;
 }
+
 const {data:perfil}=await supabaseClient.from("profiles").select("display_name").eq("id",usuarioAtual.id).maybeSingle();
 const nome=perfil?.display_name||obterNome(usuarioAtual);
 topo.textContent="Conectado: "+nome;
@@ -387,6 +445,7 @@ fotosEncontradas.push({caminho:pasta.name+"/"+arquivo.name,dono:pasta.name,nomeA
 fotosEncontradas.sort((a,b)=>b.nomeArquivo.localeCompare(a.nomeArquivo));
 mural.innerHTML="";
 if(fotosEncontradas.length===0){mural.innerHTML="<p>Ainda não há fotos publicadas na comunidade.</p>";return;}
+
 for(const foto of fotosEncontradas){
 const caminho=foto.caminho;
 const {data:urlData}=supabaseClient.storage.from("petmundo-fotos").getPublicUrl(caminho);
@@ -401,12 +460,14 @@ const autor=document.createElement("div");autor.className="foto-autor";autor.tex
 const imagem=document.createElement("img");imagem.src=urlData.publicUrl;imagem.alt="Foto de animal publicada no PETMUNDO";imagem.loading="lazy";
 const legenda=document.createElement("p");legenda.textContent=localStorage.getItem("petmundo_legenda_"+caminho)||"";
 card.appendChild(autor);card.appendChild(imagem);if(legenda.textContent)card.appendChild(legenda);
+
 if(usuarioAtual){
 const acoes=document.createElement("div");acoes.className="acoes-foto";
 const botaoCurtir=document.createElement("button");botaoCurtir.className="curtir";botaoCurtir.textContent="♡ Curtir";
 const contador=document.createElement("span");contador.className="pequeno";
 botaoCurtir.onclick=()=>alternarCurtida(caminho,botaoCurtir,contador);
 acoes.appendChild(botaoCurtir);acoes.appendChild(contador);card.appendChild(acoes);
+
 const tituloComentarios=document.createElement("h3");tituloComentarios.textContent="Comentários";
 const listaComentarios=document.createElement("div");
 const campoComentario=document.createElement("input");campoComentario.type="text";campoComentario.placeholder="Escreva um comentário...";
