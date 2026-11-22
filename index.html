@@ -787,7 +787,6 @@ return;
 }
 await carregarRegistrosPassaporte(petId,lista,formulario);
 }
-
 /* GERAR PASSAPORTE PARA IMPRESSÃO */
 function escaparPassaporte(valor){
 return String(valor??"").replace(/[&<>"']/g,function(letra){
@@ -801,9 +800,24 @@ return Number.isNaN(data.getTime())?"Não informada":data.toLocaleDateString("pt
 }
 async function gerarPassaporteImpressao(pet,botao){
 if(!usuarioAtual){alert("Entre na sua conta primeiro.");return;}
+
+/* Abre a janela imediatamente, antes de qualquer consulta ao Supabase.
+   Isso evita que o Chrome bloqueie a impressão por considerar o pop-up automático. */
+const janela=window.open("","_blank");
+
+if(!janela){
+alert("O navegador bloqueou a abertura do passaporte. Permita pop-ups para o PETMUNDO e tente novamente.");
+return;
+}
+
+janela.document.open();
+janela.document.write("<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Preparando passaporte</title></head><body style='font-family:Arial;text-align:center;padding:30px'><h2>🐾 PETMUNDO</h2><p>Preparando o passaporte do seu animal...</p></body></html>");
+janela.document.close();
+
 const textoOriginal=botao.textContent;
 botao.disabled=true;
 botao.textContent="Preparando passaporte...";
+
 try{
 const {data:perfil,error:erroPerfil}=await supabaseClient
 .from("profiles").select("display_name").eq("id",usuarioAtual.id).maybeSingle();
@@ -838,12 +852,6 @@ ${registro.descricao?`<p><strong>Observações:</strong> ${escaparPassaporte(reg
 </div>`).join("");
 }else{
 historico="<p>Nenhum registro de saúde foi cadastrado até o momento.</p>";
-}
-
-const janela=window.open("","_blank");
-if(!janela){
-alert("O navegador bloqueou a abertura do passaporte. Permita pop-ups para o PETMUNDO e tente novamente.");
-return;
 }
 
 const documento=`
@@ -934,7 +942,13 @@ Passaporte gerado em ${new Date().toLocaleDateString("pt-BR")}
 janela.document.open();
 janela.document.write(documento);
 janela.document.close();
+
 }catch(erro){
+if(janela&&!janela.closed){
+janela.document.open();
+janela.document.write("<!DOCTYPE html><html><body style='font-family:Arial;padding:20px'><h2>Não foi possível gerar o passaporte</h2><p>"+escaparPassaporte(erro.message||"Erro inesperado.")+"</p><p>Feche esta janela e tente novamente.</p></body></html>");
+janela.document.close();
+}
 alert(erro.message||"Não foi possível gerar o passaporte.");
 }finally{
 botao.disabled=false;
