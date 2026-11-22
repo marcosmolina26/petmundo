@@ -79,6 +79,17 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .resgate-etiqueta{display:inline-block;background:#eaf7f0;color:#087c56;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin:3px 0}
 .resgate-atendido{display:inline-block;background:#e5f1ff;color:#205b91;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold;margin:5px 0}
 .resgate-publicacao p{line-height:1.5}
+
+/* PASSAPORTE DIGITAL PETMUNDO */
+.botao-passaporte{background:#087c56}
+.area-passaporte{background:#f4faf6;border:1px solid #b9dfca;border-radius:12px;padding:14px;margin-top:14px}
+.area-passaporte h3{margin-top:5px}
+.passaporte-formulario{background:white;border:1px solid #dce9e0;border-radius:10px;padding:12px;margin:12px 0}
+.passaporte-registro{background:white;border:1px solid #dce9e0;border-radius:9px;padding:12px;margin:10px 0}
+.passaporte-registro p{margin:6px 0;line-height:1.5}
+.passaporte-tipo{display:inline-block;background:#eaf7f0;color:#087c56;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin-bottom:8px}
+.passaporte-acoes{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.passaporte-acoes button{font-size:13px;padding:8px 11px}
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
 .resgate-grid{grid-template-columns:1fr}
@@ -338,57 +349,45 @@ return (arquivo.name.split(".").pop()||"").replace(/[^a-zA-Z0-9]/g,"").toLowerCa
 
 async function enviarArquivoPet(arquivo,tipo){
 if(!arquivo)return null;
-
 if(arquivo.size>20*1024*1024){
 throw new Error("O arquivo ultrapassa o limite de 20 MB.");
 }
-
 const extensao=extensaoArquivo(arquivo);
 const tiposFoto=["image/jpeg","image/png","image/webp","image/gif"];
 const tiposVideo=["video/mp4","video/webm","video/quicktime"];
 const extensoesVideo=["mp4","webm","mov"];
-
 if(tipo==="foto"&&!tiposFoto.includes(arquivo.type)){
 throw new Error("Formato de foto não permitido. Use JPG, PNG, WEBP ou GIF.");
 }
-
 if(tipo==="vídeo"&&!tiposVideo.includes(arquivo.type)&&!extensoesVideo.includes(extensao)){
 throw new Error("Formato de vídeo não permitido. Use MP4, WEBM ou MOV.");
 }
-
 let contentType=arquivo.type;
-
 if(tipo==="vídeo"&&!contentType.startsWith("video/")){
 contentType=extensao==="mp4"?"video/mp4":extensao==="mov"?"video/quicktime":"video/webm";
 }
-
 let ultimoErro=null;
-
 for(let tentativa=1;tentativa<=2;tentativa++){
 const nomeArquivo=Date.now()+"-"+Math.random().toString(36).slice(2)+"."+extensao;
 const caminho=usuarioAtual.id+"/"+nomeArquivo;
-
 try{
 const resultado=await supabaseClient.storage.from("petmundo-pets").upload(caminho,arquivo,{
 upsert:false,
 contentType:contentType||"application/octet-stream",
 cacheControl:"3600"
 });
-
 if(!resultado.error)return caminho;
 ultimoErro=resultado.error;
-
 }catch(erro){
 ultimoErro=erro;
 }
-
 if(tentativa<2){
 await new Promise(resolve=>setTimeout(resolve,1200));
 }
 }
-
 throw new Error("Não foi possível enviar o arquivo após duas tentativas. "+(ultimoErro?.message||"Verifique sua conexão e tente novamente."));
 }
+
 /* CADASTRAR NOVO PET */
 async function cadastrarPet(){
 if(!usuarioAtual){mostrarMensagem("mensagemPet","Entre na sua conta primeiro.");return;}
@@ -438,7 +437,6 @@ mensagem.textContent="Vídeo adicionado ao pet com sucesso! 🐾";input.value=""
 }catch(erro){mensagem.textContent=erro.message||"Não foi possível adicionar o vídeo.";}
 finally{botao.disabled=false;botao.textContent="🎬 Adicionar vídeo";}
 }
-
 /* EDIÇÃO DO CADASTRO DO PET */
 function criarCampoEditor(form,rotulo,tipo,nome,valor){
 const grupo=document.createElement("div");const label=document.createElement("label");label.textContent=rotulo;
@@ -524,8 +522,259 @@ if(pet.show_contact){adicionarDado("Telefone do tutor",pet.tutor_phone);adiciona
 else{const privado=document.createElement("p");privado.className="pequeno";privado.textContent="Contato do tutor protegido.";dados.appendChild(privado);}
 card.appendChild(dados);
 const botaoEditar=document.createElement("button");botaoEditar.type="button";botaoEditar.className="editar";botaoEditar.textContent="✏️ Editar pet";botaoEditar.addEventListener("click",()=>abrirEdicaoPet(pet,card));card.appendChild(botaoEditar);
+
+/* BOTÃO DO PASSAPORTE DIGITAL */
+const botaoPassaporte=document.createElement("button");
+botaoPassaporte.type="button";
+botaoPassaporte.className="botao-passaporte";
+botaoPassaporte.textContent="📘 Abrir Passaporte Digital";
+botaoPassaporte.addEventListener("click",()=>abrirPassaporte(pet,card));
+card.appendChild(botaoPassaporte);
+
 area.appendChild(card);
 });
+}
+
+/* PASSAPORTE DIGITAL PETMUNDO */
+function abrirPassaporte(pet,card){
+const existente=card.querySelector(".area-passaporte");
+if(existente){existente.remove();return;}
+
+const area=document.createElement("div");
+area.className="area-passaporte";
+const titulo=document.createElement("h3");
+titulo.textContent="📘 Passaporte Digital de "+pet.name;
+area.appendChild(titulo);
+
+const explicacao=document.createElement("p");
+explicacao.className="pequeno";
+explicacao.textContent="Registre e acompanhe vacinas, consultas, exames, medicamentos e outros cuidados deste animal.";
+area.appendChild(explicacao);
+
+const formulario=document.createElement("form");
+formulario.className="passaporte-formulario";
+formulario.innerHTML=`
+<h3 id="tituloFormularioPassaporte">➕ Novo registro</h3>
+<input type="hidden" name="registro_id">
+<label>Tipo de registro *</label>
+<select name="tipo" required>
+<option value="">Selecione</option>
+<option value="vacina">Vacina</option>
+<option value="consulta">Consulta veterinária</option>
+<option value="exame">Exame</option>
+<option value="medicamento">Medicamento</option>
+<option value="outro">Outro cuidado</option>
+</select>
+<label>Nome ou título do registro *</label>
+<input type="text" name="titulo" maxlength="150" placeholder="Ex.: Vacina antirrábica" required>
+<label>Descrição e observações</label>
+<textarea name="descricao" placeholder="Informações importantes sobre o atendimento ou cuidado..."></textarea>
+<label>Data do registro</label>
+<input type="date" name="data_registro">
+<label>Próxima data ou reforço</label>
+<input type="date" name="proxima_data">
+<label>Profissional ou clínica (opcional)</label>
+<input type="text" name="profissional" maxlength="150" placeholder="Nome do veterinário ou clínica">
+<div class="passaporte-acoes">
+<button type="submit" id="botaoSalvarPassaporte">💾 Salvar registro</button>
+<button type="button" class="cancelar" id="botaoCancelarEdicaoPassaporte">Cancelar edição</button>
+</div>
+<p class="mensagem oculto" id="mensagemPassaporte"></p>
+`;
+area.appendChild(formulario);
+
+const lista=document.createElement("div");
+lista.innerHTML="<h3>📋 Histórico de cuidados</h3><p class='pequeno'>Carregando registros...</p>";
+area.appendChild(lista);
+card.appendChild(area);
+
+const campoId=formulario.elements.registro_id;
+const campoTipo=formulario.elements.tipo;
+const campoTitulo=formulario.elements.titulo;
+const campoDescricao=formulario.elements.descricao;
+const campoData=formulario.elements.data_registro;
+const campoProxima=formulario.elements.proxima_data;
+const campoProfissional=formulario.elements.profissional;
+const mensagem=formulario.querySelector("#mensagemPassaporte");
+const botaoSalvar=formulario.querySelector("#botaoSalvarPassaporte");
+
+function limparFormularioPassaporte(){
+formulario.reset();
+campoId.value="";
+formulario.querySelector("#tituloFormularioPassaporte").textContent="➕ Novo registro";
+botaoSalvar.textContent="💾 Salvar registro";
+mensagem.textContent="";
+mensagem.classList.add("oculto");
+}
+
+formulario.querySelector("#botaoCancelarEdicaoPassaporte").addEventListener("click",limparFormularioPassaporte);
+
+formulario.addEventListener("submit",async event=>{
+event.preventDefault();
+if(!usuarioAtual){mensagem.textContent="Entre na sua conta primeiro.";mensagem.classList.remove("oculto");return;}
+const tipo=campoTipo.value;
+const tituloRegistro=campoTitulo.value.trim();
+if(!tipo||!tituloRegistro){mensagem.textContent="Informe o tipo e o título do registro.";mensagem.classList.remove("oculto");return;}
+
+const dados={
+pet_id:pet.id,
+owner_id:usuarioAtual.id,
+tipo:tipo,
+titulo:tituloRegistro,
+descricao:campoDescricao.value.trim()||null,
+data_registro:campoData.value||null,
+proxima_data:campoProxima.value||null,
+profissional:campoProfissional.value.trim()||null
+};
+
+botaoSalvar.disabled=true;
+botaoSalvar.textContent="Salvando...";
+try{
+let resultado;
+if(campoId.value){
+resultado=await supabaseClient.from("pet_passaporte_registros")
+.update(dados)
+.eq("id",campoId.value)
+.eq("pet_id",pet.id)
+.eq("owner_id",usuarioAtual.id)
+.select("id")
+.maybeSingle();
+}else{
+resultado=await supabaseClient.from("pet_passaporte_registros")
+.insert(dados)
+.select("id")
+.maybeSingle();
+}
+if(resultado.error)throw new Error(resultado.error.message);
+if(!resultado.data)throw new Error("O registro não foi salvo. Verifique se você é o tutor deste pet.");
+limparFormularioPassaporte();
+mensagem.textContent="Registro salvo com sucesso!";
+mensagem.classList.remove("oculto");
+await carregarRegistrosPassaporte(pet.id,lista,formulario);
+}catch(erro){
+mensagem.textContent="Não foi possível salvar: "+erro.message;
+mensagem.classList.remove("oculto");
+}finally{
+botaoSalvar.disabled=false;
+botaoSalvar.textContent=campoId.value?"💾 Salvar alterações":"💾 Salvar registro";
+}
+});
+
+carregarRegistrosPassaporte(pet.id,lista,formulario);
+area.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+async function carregarRegistrosPassaporte(petId,lista,formulario){
+lista.innerHTML="<h3>📋 Histórico de cuidados</h3><p class='pequeno'>Carregando registros...</p>";
+if(!usuarioAtual){lista.textContent="Entre na sua conta para consultar o passaporte.";return;}
+
+const {data:registros,error}=await supabaseClient
+.from("pet_passaporte_registros")
+.select("id,pet_id,owner_id,tipo,titulo,descricao,data_registro,proxima_data,profissional,created_at")
+.eq("pet_id",petId)
+.eq("owner_id",usuarioAtual.id)
+.order("data_registro",{ascending:false});
+
+if(error){
+lista.textContent="Não foi possível carregar o passaporte: "+error.message;
+return;
+}
+
+lista.innerHTML="<h3>📋 Histórico de cuidados</h3>";
+if(!registros||registros.length===0){
+const vazio=document.createElement("p");
+vazio.className="pequeno";
+vazio.textContent="Ainda não existem registros para este pet. Use o formulário acima para adicionar o primeiro.";
+lista.appendChild(vazio);
+return;
+}
+
+const nomesTipos={vacina:"Vacina",consulta:"Consulta",exame:"Exame",medicamento:"Medicamento",outro:"Outro cuidado"};
+
+registros.forEach(registro=>{
+const item=document.createElement("div");
+item.className="passaporte-registro";
+
+const etiqueta=document.createElement("span");
+etiqueta.className="passaporte-tipo";
+etiqueta.textContent=nomesTipos[registro.tipo]||registro.tipo;
+item.appendChild(etiqueta);
+
+const titulo=document.createElement("h3");
+titulo.textContent=registro.titulo;
+item.appendChild(titulo);
+
+function adicionarInformacao(rotulo,valor,data=false){
+if(!valor)return;
+const p=document.createElement("p");
+const strong=document.createElement("strong");
+strong.textContent=rotulo+": ";
+p.appendChild(strong);
+const texto=data?new Date(valor+"T12:00:00").toLocaleDateString("pt-BR"):valor;
+p.appendChild(document.createTextNode(texto));
+item.appendChild(p);
+}
+
+adicionarInformacao("Data",registro.data_registro,true);
+adicionarInformacao("Próxima data",registro.proxima_data,true);
+adicionarInformacao("Profissional ou clínica",registro.profissional);
+adicionarInformacao("Observações",registro.descricao);
+
+const acoes=document.createElement("div");
+acoes.className="passaporte-acoes";
+
+const editar=document.createElement("button");
+editar.type="button";
+editar.className="editar";
+editar.textContent="✏️ Editar";
+editar.addEventListener("click",()=>{
+formulario.elements.registro_id.value=registro.id;
+formulario.elements.tipo.value=registro.tipo;
+formulario.elements.titulo.value=registro.titulo;
+formulario.elements.descricao.value=registro.descricao||"";
+formulario.elements.data_registro.value=registro.data_registro||"";
+formulario.elements.proxima_data.value=registro.proxima_data||"";
+formulario.elements.profissional.value=registro.profissional||"";
+formulario.querySelector("#tituloFormularioPassaporte").textContent="✏️ Editar registro";
+formulario.querySelector("#botaoSalvarPassaporte").textContent="💾 Salvar alterações";
+formulario.scrollIntoView({behavior:"smooth",block:"center"});
+});
+
+const excluir=document.createElement("button");
+excluir.type="button";
+excluir.className="excluir";
+excluir.textContent="🗑 Excluir";
+excluir.addEventListener("click",()=>excluirRegistroPassaporte(registro.id,petId,lista,formulario));
+
+acoes.appendChild(editar);
+acoes.appendChild(excluir);
+item.appendChild(acoes);
+lista.appendChild(item);
+});
+}
+
+async function excluirRegistroPassaporte(registroId,petId,lista,formulario){
+if(!usuarioAtual)return;
+if(!confirm("Deseja realmente excluir este registro do Passaporte Digital?"))return;
+
+const {data,error}=await supabaseClient
+.from("pet_passaporte_registros")
+.delete()
+.eq("id",registroId)
+.eq("pet_id",petId)
+.eq("owner_id",usuarioAtual.id)
+.select("id")
+.maybeSingle();
+
+if(error){
+alert("Não foi possível excluir o registro: "+error.message);
+return;
+}
+if(!data){
+alert("O registro não foi encontrado ou você não tem permissão para excluí-lo.");
+return;
+}
+await carregarRegistrosPassaporte(petId,lista,formulario);
 }
 
 /* PUBLICAÇÕES DA COMUNIDADE */
@@ -634,7 +883,6 @@ const autorizaContato=document.getElementById("resgateAutorizaContato").checked;
 const foto=document.getElementById("resgateFoto").files[0];
 if(!tipo||!especie||!descricao||!cidade){mostrarMensagem("mensagemResgate","Preencha o tipo de publicação, a espécie, a descrição e a cidade.");return;}
 if(contatoDigitado&&!autorizaContato){mostrarMensagem("mensagemResgate","Para divulgar o contato, marque a autorização. Se não quiser divulgá-lo, apague o campo de contato.");return;}
-// A tabela pet_resgates aceita somente: adocao, resgate e ajuda.
 const tipoBanco=tipo==="Adoção"?"adocao":tipo==="Ferido ou em risco"?"ajuda":"resgate";
 botao.disabled=true;botao.textContent="Publicando...";
 try{
@@ -754,4 +1002,4 @@ await atualizarAreaUsuario();await carregarMural();await carregarResgates();
 iniciarPetmundo();
 </script>
 </body>
-</html> 
+</html>
