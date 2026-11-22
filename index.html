@@ -110,7 +110,7 @@ header h1{font-size:25px}
 <body>
 <section id="inicio">
 <div class="capa">
-<img class="imagem-capa" src="%20petmundo-banner.png" alt="Capa PETMUNDO" onerror="this.style.display='none'">
+<img class="imagem-capa" src="petmundo-banner.png" alt="Capa PETMUNDO" onerror="this.style.display='none'">
 <div class="capa-texto">
 <h2>Bem-vindo ao PETMUNDO!</h2>
 <p>Um mundo de amor pelos animais.</p>
@@ -123,7 +123,7 @@ header h1{font-size:25px}
 </div>
 </section>
 <header>
-<img class="logo-petmundo" src="%20petmundo-logo.png" alt="Logo PETMUNDO">
+<img class="logo-petmundo" src="petmundo-logo.png" alt="Logo PETMUNDO">
 <div class="header-texto">
 <h1>🐾 PETMUNDO</h1>
 <p>Uma rede social para quem ama os animais</p>
@@ -694,6 +694,7 @@ card.appendChild(botaoPassaporte);
 area.appendChild(card);
 });
 }
+
 /* PASSAPORTE DIGITAL PETMUNDO */
 function abrirPassaporte(pet,card){
 const existente=card.querySelector(".area-passaporte");
@@ -942,7 +943,6 @@ return;
 }
 await carregarRegistrosPassaporte(petId,lista,formulario);
 }
-
 /* GERAR PASSAPORTE PARA IMPRESSÃO */
 function escaparPassaporte(valor){
 return String(valor??"").replace(/[&<>"']/g,function(letra){
@@ -1092,15 +1092,6 @@ Passaporte gerado em ${new Date().toLocaleDateString("pt-BR")}
 </div>
 </div>
 <div class="acoes"><button onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button></div>
-<script>
-/* Aguarda a foto carregar antes de imprimir, quando houver foto. */
-window.addEventListener("load",function(){
-const foto=document.querySelector(".foto img");
-if(foto){
-foto.addEventListener("error",function(){this.style.display="none";});
-}
-});
-</script>
 </body>
 </html>`;
 
@@ -1270,6 +1261,7 @@ card.appendChild(aviso);
 mural.appendChild(card);
 }
 }
+
 /* PUBLICAR CASO DE ADOÇÃO OU RESGATE */
 async function publicarResgate(){
 if(!usuarioAtual){mostrarMensagem("mensagemResgate","Entre na sua conta primeiro.");return;}
