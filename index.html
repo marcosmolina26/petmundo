@@ -1736,7 +1736,7 @@ usuarioAtual=data?.session?.user||null;
 await atualizarAreaUsuario();
 await carregarMural();
 await carregarResgates();
-   }
+   
 }
 supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
 usuarioAtual=sessao?.user||null;
