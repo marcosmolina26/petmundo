@@ -1645,15 +1645,98 @@ return String(texto).replace(/[&<>"']/g,function(letra){
 return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[letra];
 });
 }
+/* CONSULTAR IDENTIFICACAO PUBLICA PELO QR CODE */
+async function exibirPetmundoPublico(codigo) {
+document.body.innerHTML = "";
 
+const pagina = document.createElement("main");
+pagina.style.cssText = "max-width:600px;margin:30px auto;padding:20px;font-family:Arial,sans-serif;background:#f3f7f5;";
+
+const titulo = document.createElement("h1");
+titulo.textContent = "🐾 PETMUNDO - Identificação Animal";
+pagina.appendChild(titulo);
+
+const aviso = document.createElement("p");
+aviso.textContent = "Consultando identificação...";
+pagina.appendChild(aviso);
+document.body.appendChild(pagina);
+
+const { data, error } = await supabaseClient.rpc(
+"consultar_pet_identificacao",
+{ p_codigo: codigo }
+);
+
+if (error || !data) {
+aviso.textContent = error
+? "Erro ao consultar identificação: " + error.message
+: "Identificação não encontrada. Confira o QR Code.";
+return;
+}
+
+aviso.textContent = "";
+
+const nome = document.createElement("h2");
+nome.textContent = data.nome || "Animal identificado";
+pagina.appendChild(nome);
+
+if (data.foto_url) {
+const foto = document.createElement("img");
+foto.src = data.foto_url;
+foto.alt = "Foto do animal";
+foto.style.cssText = "width:100%;max-width:350px;border-radius:15px;display:block;margin:15px auto;";
+pagina.appendChild(foto);
+}
+
+function adicionarCampo(rotulo, valor) {
+if (!valor) return;
+const p = document.createElement("p");
+const strong = document.createElement("strong");
+strong.textContent = rotulo + ": ";
+p.appendChild(strong);
+p.appendChild(document.createTextNode(valor));
+pagina.appendChild(p);
+}
+
+adicionarCampo("Espécie", data.especie);
+adicionarCampo("Raça", data.raca);
+
+if (data.animal_perdido) {
+const perdido = document.createElement("h2");
+perdido.textContent = "⚠️ ANIMAL PERDIDO";
+perdido.style.color = "#c62828";
+pagina.appendChild(perdido);
+}
+
+adicionarCampo("Mensagem", data.mensagem);
+
+if (data.telefone) {
+const whatsapp = document.createElement("a");
+const numero = data.telefone.replace(/\D/g, "");
+whatsapp.href = "https://wa.me/55" + numero;
+whatsapp.target = "_blank";
+whatsapp.rel = "noopener";
+whatsapp.textContent = "📱 Entrar em contato pelo WhatsApp";
+whatsapp.style.cssText = "display:inline-block;padding:12px;background:#15966b;color:white;text-decoration:none;border-radius:8px;margin-top:15px;";
+pagina.appendChild(whatsapp);
+}
+   }
 /* INICIALIZAÇÃO */
 async function iniciarPetmundo(){
+const parametros = new URLSearchParams(window.location.search);
+const codigoPet = parametros.get("petid");
+
+if (codigoPet) {
+await exibirPetmundoPublico(codigoPet);
+return;
+}
+
 const {data,error}=await supabaseClient.auth.getSession();
 if(error)console.error(error);
 usuarioAtual=data?.session?.user||null;
 await atualizarAreaUsuario();
 await carregarMural();
 await carregarResgates();
+   }
 }
 supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
 usuarioAtual=sessao?.user||null;
