@@ -90,6 +90,11 @@ footer{text-align:center;padding:25px;background:#087c56;color:white;margin-top:
 .passaporte-tipo{display:inline-block;background:#eaf7f0;color:#087c56;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;margin-bottom:8px}
 .passaporte-acoes{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .passaporte-acoes button{font-size:13px;padding:8px 11px}
+.botao-imprimir-passaporte{background:#176b9b}
+@media print{
+body{background:white}
+.nao-imprimir{display:none!important}
+}
 @media(max-width:600px){
 .duas-colunas{grid-template-columns:1fr}
 .resgate-grid{grid-template-columns:1fr}
@@ -523,7 +528,6 @@ else{const privado=document.createElement("p");privado.className="pequeno";priva
 card.appendChild(dados);
 const botaoEditar=document.createElement("button");botaoEditar.type="button";botaoEditar.className="editar";botaoEditar.textContent="✏️ Editar pet";botaoEditar.addEventListener("click",()=>abrirEdicaoPet(pet,card));card.appendChild(botaoEditar);
 
-/* BOTÃO DO PASSAPORTE DIGITAL */
 const botaoPassaporte=document.createElement("button");
 botaoPassaporte.type="button";
 botaoPassaporte.className="botao-passaporte";
@@ -550,6 +554,13 @@ const explicacao=document.createElement("p");
 explicacao.className="pequeno";
 explicacao.textContent="Registre e acompanhe vacinas, consultas, exames, medicamentos e outros cuidados deste animal.";
 area.appendChild(explicacao);
+
+const botaoImprimir=document.createElement("button");
+botaoImprimir.type="button";
+botaoImprimir.className="botao-imprimir-passaporte";
+botaoImprimir.textContent="🖨️ Gerar passaporte para imprimir / PDF";
+botaoImprimir.addEventListener("click",()=>gerarPassaporteImpressao(pet,botaoImprimir));
+area.appendChild(botaoImprimir);
 
 const formulario=document.createElement("form");
 formulario.className="passaporte-formulario";
@@ -775,6 +786,160 @@ alert("O registro não foi encontrado ou você não tem permissão para excluí-
 return;
 }
 await carregarRegistrosPassaporte(petId,lista,formulario);
+}
+
+/* GERAR PASSAPORTE PARA IMPRESSÃO */
+function escaparPassaporte(valor){
+return String(valor??"").replace(/[&<>"']/g,function(letra){
+return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[letra];
+});
+}
+function dataPassaporte(valor){
+if(!valor)return "Não informada";
+const data=new Date(valor+"T12:00:00");
+return Number.isNaN(data.getTime())?"Não informada":data.toLocaleDateString("pt-BR");
+}
+async function gerarPassaporteImpressao(pet,botao){
+if(!usuarioAtual){alert("Entre na sua conta primeiro.");return;}
+const textoOriginal=botao.textContent;
+botao.disabled=true;
+botao.textContent="Preparando passaporte...";
+try{
+const {data:perfil,error:erroPerfil}=await supabaseClient
+.from("profiles").select("display_name").eq("id",usuarioAtual.id).maybeSingle();
+if(erroPerfil)throw new Error("Não foi possível consultar o nome do tutor: "+erroPerfil.message);
+
+const {data:registros,error:erroRegistros}=await supabaseClient
+.from("pet_passaporte_registros")
+.select("id,tipo,titulo,descricao,data_registro,proxima_data,profissional")
+.eq("pet_id",pet.id)
+.eq("owner_id",usuarioAtual.id)
+.order("data_registro",{ascending:false});
+if(erroRegistros)throw new Error("Não foi possível carregar o histórico: "+erroRegistros.message);
+
+let fotoUrl="";
+if(pet.photo_path){
+const {data}=supabaseClient.storage.from("petmundo-pets").getPublicUrl(pet.photo_path);
+fotoUrl=data?.publicUrl||"";
+}
+const nomeTutor=perfil?.display_name||obterNome(usuarioAtual);
+const tipos={vacina:"Vacina",consulta:"Consulta veterinária",exame:"Exame",medicamento:"Medicamento",outro:"Outro cuidado"};
+
+let historico="";
+if(registros&&registros.length){
+historico=registros.map(registro=>`
+<div class="registro">
+<div class="tipo">${escaparPassaporte(tipos[registro.tipo]||registro.tipo)}</div>
+<h3>${escaparPassaporte(registro.titulo)}</h3>
+<p><strong>Data:</strong> ${escaparPassaporte(dataPassaporte(registro.data_registro))}</p>
+<p><strong>Próxima data:</strong> ${escaparPassaporte(dataPassaporte(registro.proxima_data))}</p>
+${registro.profissional?`<p><strong>Profissional ou clínica:</strong> ${escaparPassaporte(registro.profissional)}</p>`:""}
+${registro.descricao?`<p><strong>Observações:</strong> ${escaparPassaporte(registro.descricao)}</p>`:""}
+</div>`).join("");
+}else{
+historico="<p>Nenhum registro de saúde foi cadastrado até o momento.</p>";
+}
+
+const janela=window.open("","_blank");
+if(!janela){
+alert("O navegador bloqueou a abertura do passaporte. Permita pop-ups para o PETMUNDO e tente novamente.");
+return;
+}
+
+const documento=`
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Passaporte PET - ${escaparPassaporte(pet.name)}</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;color:#26332d;margin:0;padding:25px;background:#fff}
+.folha{max-width:800px;margin:auto;border:3px solid #087c56;border-radius:16px;padding:25px}
+.cabecalho{text-align:center;background:#087c56;color:white;padding:18px;border-radius:10px}
+.cabecalho h1{margin:0;font-size:28px}
+.cabecalho p{margin:7px 0 0}
+.titulo{text-align:center;color:#087c56;font-size:25px;margin:22px 0}
+.identificacao{display:flex;gap:22px;align-items:center;border:1px solid #dce9e0;border-radius:12px;padding:16px}
+.foto{width:190px;height:190px;object-fit:cover;border-radius:10px;background:#edf5ef}
+.dados{flex:1}
+.dados p{margin:9px 0;line-height:1.4}
+.secao{margin-top:24px}
+.secao h2{font-size:18px;color:#087c56;border-bottom:2px solid #b9dfca;padding-bottom:8px}
+.registro{border:1px solid #dce9e0;border-radius:9px;padding:12px;margin:12px 0;break-inside:avoid}
+.registro h3{margin:8px 0;color:#087c56}
+.registro p{margin:6px 0;font-size:14px;line-height:1.4}
+.tipo{display:inline-block;background:#eaf7f0;color:#087c56;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.rodape{text-align:center;margin-top:28px;padding-top:15px;border-top:1px solid #dce9e0;color:#68756e;font-size:12px}
+.acoes{text-align:center;margin:18px auto}
+button{background:#087c56;color:white;border:0;border-radius:8px;padding:12px 20px;font-size:16px;font-weight:bold;cursor:pointer}
+.aviso{font-size:11px;color:#68756e;line-height:1.5;margin-top:15px}
+@media(max-width:600px){
+body{padding:8px}
+.folha{padding:12px}
+.identificacao{display:block;text-align:center}
+.foto{width:160px;height:160px}
+.dados{text-align:left;margin-top:12px}
+}
+@media print{
+@page{size:A4;margin:12mm}
+body{padding:0}
+.folha{border:2px solid #087c56;max-width:none;padding:18px}
+.acoes{display:none}
+}
+</style>
+</head>
+<body>
+<div class="acoes"><button onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button></div>
+<div class="folha">
+<div class="cabecalho">
+<h1>🐾 PETMUNDO</h1>
+<p>Um mundo de amor pelos animais</p>
+</div>
+<h2 class="titulo">PASSAPORTE DIGITAL PET</h2>
+<div class="identificacao">
+${fotoUrl?`<img class="foto" src="${escaparPassaporte(fotoUrl)}" alt="Foto de ${escaparPassaporte(pet.name)}">`:`<div class="foto" style="display:flex;align-items:center;justify-content:center">🐾</div>`}
+<div class="dados">
+<p><strong>Nome:</strong> ${escaparPassaporte(pet.name)}</p>
+<p><strong>Espécie:</strong> ${escaparPassaporte(pet.species||"Não informada")}</p>
+<p><strong>Raça:</strong> ${escaparPassaporte(pet.breed||"Não informada")}</p>
+<p><strong>Sexo:</strong> ${escaparPassaporte(pet.sex||"Não informado")}</p>
+<p><strong>Nascimento:</strong> ${escaparPassaporte(dataPassaporte(pet.birth_date))}</p>
+<p><strong>Idade aproximada:</strong> ${escaparPassaporte(calcularIdade(pet.birth_date))}</p>
+</div>
+</div>
+<div class="secao">
+<h2>IDENTIFICAÇÃO DO TUTOR</h2>
+<p><strong>Responsável:</strong> ${escaparPassaporte(nomeTutor)}</p>
+<p><strong>E-mail:</strong> ${escaparPassaporte(usuarioAtual.email||"Não informado")}</p>
+</div>
+<div class="secao">
+<h2>HISTÓRICO DE SAÚDE E CUIDADOS</h2>
+${historico}
+</div>
+<div class="aviso">
+Este documento reúne informações cadastradas pelo tutor no PETMUNDO. Os registros não são certificados pela plataforma e não substituem carteira de vacinação, atestados, receitas ou documentos emitidos por médico-veterinário.
+</div>
+<div class="rodape">
+<strong>PETMUNDO - Rede Social Pet</strong><br>
+Cuidar é amar!<br>
+Passaporte gerado em ${new Date().toLocaleDateString("pt-BR")}
+</div>
+</div>
+<div class="acoes"><button onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button></div>
+</body>
+</html>`;
+
+janela.document.open();
+janela.document.write(documento);
+janela.document.close();
+}catch(erro){
+alert(erro.message||"Não foi possível gerar o passaporte.");
+}finally{
+botao.disabled=false;
+botao.textContent=textoOriginal;
+}
 }
 
 /* PUBLICAÇÕES DA COMUNIDADE */
