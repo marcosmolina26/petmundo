@@ -1554,40 +1554,29 @@ whatsapp.style.cssText = "display:inline-block;padding:12px;background:#15966b;c
 pagina.appendChild(whatsapp);
 }
    }
+
+
 /* INICIALIZAÇÃO */
 async function iniciarPetmundo(){
-const parametros = new URLSearchParams(window.location.search);
-const codigoPet = parametros.get("petid");
+    const parametros = new URLSearchParams(window.location.search);
+    const codigoPet = parametros.get("petid");
 
-if (codigoPet) {
-await exibirPetmundoPublico(codigoPet);
-return;
+    if(codigoPet){
+        await exibirPetmundoPublico(codigoPet);
+        return;
+    }
+
+    const {data,error}=await supabaseClient.auth.getSession();
+    if(error)console.error(error);
+
+    usuarioAtual=data?.session?.user||null;
+
+    await atualizarAreaUsuario();
+    await carregarMural();
+    await carregarResgates();
 }
-
-const {data,error}=await supabaseClient.auth.getSession();
-if(error)console.error(error);
-usuarioAtual=data?.session?.user||null;
-await atualizarAreaUsuario();
-await carregarMural();
-await carregarResgates();
-   
-}
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-
-    supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
-        usuarioAtual=sessao?.user||null;
-        setTimeout(async()=>{
-            await atualizarAreaUsuario();
-            await carregarMural();
-            await carregarResgates();
-        },0);
-    });
-
-  
-
-});
 </script>
+
 <script src="js/supabase.js"></script>
 <script src="js/autenticacao.js"></script>
 <script src="js/animais.js"></script>
@@ -1595,10 +1584,12 @@ document.addEventListener("DOMContentLoaded", function(){
 <script src="js/passaporte.js"></script>
 <script src="js/adocao.js"></script>
 <script src="js/comunidade.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function(){
     iniciarPetmundo();
 });
 </script>
+
 </body>
 </html>
