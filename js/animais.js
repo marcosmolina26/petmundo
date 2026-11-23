@@ -8,7 +8,7 @@ function extensaoArquivo(arquivo) {
     return arquivo.name.split(".").pop().toLowerCase();
 }
 
-async function enviarArquivoPet(arquivo) {
+async function enviarArquivoPet(arquivo, tipo) {
     if (!arquivo || !usuarioAtual) return null;
 
     const extensao = extensaoArquivo(arquivo);
@@ -23,18 +23,18 @@ async function enviarArquivoPet(arquivo) {
         return null;
     }
 
-    const { data: urlData } = supabaseClient.storage
-        .from("petmundo-pets")
-        .getPublicUrl(data.path);
-
-    return urlData.publicUrl;
+    return data.path;
 }
 
 function calcularIdade(dataNascimento) {
-    if (!dataNascimento) return "";
+    if (!dataNascimento) return "Não informada";
 
     const nascimento = new Date(dataNascimento + "T00:00:00");
     const hoje = new Date();
+
+    if (isNaN(nascimento.getTime()) || nascimento > hoje) {
+        return "Não informada";
+    }
 
     let anos = hoje.getFullYear() - nascimento.getFullYear();
     let meses = hoje.getMonth() - nascimento.getMonth();
@@ -46,10 +46,9 @@ function calcularIdade(dataNascimento) {
         meses += 12;
     }
 
-    if (anos > 0) {
-        return `${anos} ano(s) e ${meses} mês(es)`;
+    if (anos === 0) {
+        return `${meses} mês(es)`;
     }
 
-    return `${meses} mês(es)`;
+    return `${anos} ano(s) e ${meses} mês(es)`;
 }
-
