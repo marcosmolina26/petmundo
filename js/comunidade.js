@@ -125,3 +125,36 @@ card.appendChild(aviso);
 mural.appendChild(card);
 }
 }
+/* CURTIDAS DAS FOTOS DA COMUNIDADE */
+
+async function alternarCurtida(caminho,botao,contador){
+if(!usuarioAtual){alert("Entre na sua conta para curtir fotos.");return;}
+
+const {data:existente,error:erroBusca}=await supabaseClient.from("photo_likes").select("id").eq("photo_path",caminho).eq("user_id",usuarioAtual.id).maybeSingle();
+
+if(erroBusca){alert("Não foi possível verificar a curtida: "+erroBusca.message);return;}
+
+if(existente){
+const {error}=await supabaseClient.from("photo_likes").delete().eq("id",existente.id);
+if(error){alert("Erro ao retirar curtida: "+error.message);return;}
+}else{
+const {error}=await supabaseClient.from("photo_likes").insert({photo_path:caminho,user_id:usuarioAtual.id});
+if(error){alert("Erro ao curtir: "+error.message);return;}
+}
+
+await atualizarCurtidas(caminho,botao,contador);
+}
+
+async function atualizarCurtidas(caminho,botao,contador){
+const {data:curtidas,error}=await supabaseClient.from("photo_likes").select("id,user_id").eq("photo_path",caminho);
+
+if(error){console.error(error);return;}
+
+const total=curtidas?curtidas.length:0;
+contador.textContent=total+(total===1?" curtida":" curtidas");
+
+const curtiu=usuarioAtual&&curtidas.some(c=>c.user_id===usuarioAtual.id);
+
+botao.classList.toggle("ativo",!!curtiu);
+botao.textContent=curtiu?"♥ Curtido":"♡ Curtir";
+}
