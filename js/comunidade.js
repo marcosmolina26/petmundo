@@ -181,3 +181,41 @@ return;
 campo.value="";
 await carregarComentarios(caminho,area);
 }
+/* CARREGAR COMENTÁRIOS DA COMUNIDADE */
+
+async function carregarComentarios(caminho,area){
+area.innerHTML="<p class='pequeno'>Carregando comentários...</p>";
+
+const {data:comentarios,error}=await supabaseClient.from("photo_comments").select("id,user_id,body,created_at").eq("photo_path",caminho).order("created_at",{ascending:true});
+
+if(error){
+area.textContent="Não foi possível carregar os comentários.";
+console.error(error);
+return;
+}
+
+area.innerHTML="";
+
+if(!comentarios||comentarios.length===0){
+area.innerHTML="<p class='pequeno'>Ainda não há comentários. Seja o primeiro!</p>";
+return;
+}
+
+comentarios.forEach(comentario=>{
+const item=document.createElement("div");
+item.className="comentario";
+
+const autor=document.createElement("strong");
+const nomeAutor=usuarioAtual&&comentario.user_id===usuarioAtual.id?obterNome(usuarioAtual):"Tutor PETMUNDO";
+
+autor.textContent=nomeAutor;
+
+const texto=document.createElement("p");
+texto.textContent=comentario.body;
+texto.style.margin="5px 0";
+
+item.appendChild(autor);
+item.appendChild(texto);
+area.appendChild(item);
+});
+}
