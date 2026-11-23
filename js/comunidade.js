@@ -158,3 +158,26 @@ const curtiu=usuarioAtual&&curtidas.some(c=>c.user_id===usuarioAtual.id);
 botao.classList.toggle("ativo",!!curtiu);
 botao.textContent=curtiu?"♥ Curtido":"♡ Curtir";
 }
+/* PUBLICAR COMENTÁRIO NA COMUNIDADE */
+
+async function publicarComentario(caminho,campo,area){
+if(!usuarioAtual){alert("Entre na sua conta para comentar.");return;}
+
+const texto=campo.value.trim();
+
+if(!texto){alert("Escreva seu comentário.");return;}
+
+const {error}=await supabaseClient.from("photo_comments").insert({
+photo_path:caminho,
+user_id:usuarioAtual.id,
+body:texto
+});
+
+if(error){
+alert("Não foi possível publicar o comentário: "+error.message);
+return;
+}
+
+campo.value="";
+await carregarComentarios(caminho,area);
+}
