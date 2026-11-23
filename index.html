@@ -1637,14 +1637,22 @@ await carregarMural();
 await carregarResgates();
    
 }
-supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
-usuarioAtual=sessao?.user||null;
-setTimeout(async()=>{
-await atualizarAreaUsuario();
-await carregarMural();
-await carregarResgates();
-},0);
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    supabaseClient.auth.onAuthStateChange((evento,sessao)=>{
+        usuarioAtual=sessao?.user||null;
+        setTimeout(async()=>{
+            await atualizarAreaUsuario();
+            await carregarMural();
+            await carregarResgates();
+        },0);
+    });
+
+    iniciarPetmundo();
+
 });
+</script>
 iniciarPetmundo();
 </script>
 <script src="js/supabase.js"></script>
