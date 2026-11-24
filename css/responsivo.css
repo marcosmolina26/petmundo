@@ -171,18 +171,27 @@
   }
 }
 /* LOGO PETMUNDO - RETANGULAR E EM TODA A LARGURA */
-.logo-petmundo {
+
+.capa {
     width: 100%;
-    height: 320px;
-    object-fit: contain;
-    object-position: center;
+    height: auto;
+    min-height: 0;
     display: block;
-    margin: 0;
+    overflow: hidden;
     background: #15966b;
 }
 
-@media (max-width: 600px) {
-    .logo-petmundo {
-        height: 280px;
-    }
+.imagem-capa {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    object-fit: contain;
+    object-position: center;
+}
+
+.capa-texto {
+    position: relative;
+    width: 100%;
 }
