@@ -18,29 +18,30 @@ async function cadastrar(){
         return;
     }
 
-    const {data,error}=await supabaseClient.auth.signUp({
-        email,
-        password:senha,
-        options:{data:{full_name:nome}}
-    });
+    try{
+        const {data,error}=await supabaseClient.auth.signUp({
+            email,
+            password:senha,
+            options:{data:{full_name:nome}}
+        });
 
-    if(error){
-        mostrarMensagem("mensagemAcesso",error.message);
-        return;
-    }
+        if(error) throw error;
 
-    mostrarMensagem(
-        "mensagemAcesso",
-        data.session
-            ?"Cadastro realizado com sucesso!"
-            :"Cadastro realizado! Verifique seu e-mail para confirmar a conta, caso seja solicitado."
-    );
+        mostrarMensagem(
+            "mensagemAcesso",
+            data.session
+                ?"Cadastro realizado com sucesso!"
+                :"Cadastro realizado! Verifique seu e-mail para confirmar a conta."
+        );
 
-    if(data.session){
-        usuarioAtual=data.user;
-        await atualizarAreaUsuario();
-        await carregarMural();
-        await carregarResgates();
+        if(data.session){
+            usuarioAtual=data.user;
+            await atualizarAreaUsuario();
+            await carregarMural();
+            await carregarResgates();
+        }
+    }catch(erro){
+        mostrarMensagem("mensagemAcesso","Erro no cadastro: "+erro.message);
     }
 }
 
@@ -53,22 +54,32 @@ async function entrar(){
         return;
     }
 
-    const {data,error}=await supabaseClient.auth.signInWithPassword({
-        email,
-        password:senha
-    });
+    try{
+        if(typeof supabaseClient==="undefined"){
+            throw new Error("Serviço de login não carregado. Atualize a página.");
+        }
 
-    if(error){
-        mostrarMensagem("mensagemAcesso","Não foi possível entrar: "+error.message);
-        return;
+        const {data,error}=await supabaseClient.auth.signInWithPassword({
+            email,
+            password:senha
+        });
+
+        if(error) throw error;
+
+        usuarioAtual=data.user;
+
+        await atualizarAreaUsuario();
+        await carregarMural();
+        await carregarResgates();
+
+        mostrarMensagem("mensagemAcesso","Login realizado com sucesso!");
+    }catch(erro){
+        console.error("Erro no login PETMUNDO:",erro);
+        mostrarMensagem(
+            "mensagemAcesso",
+            "Não foi possível entrar: "+(erro.message||"Erro inesperado.")
+        );
     }
-
-    usuarioAtual=data.user;
-    await atualizarAreaUsuario();
-    await carregarMural();
-    await carregarResgates();
-
-    mostrarMensagem("mensagemAcesso","Login realizado com sucesso!");
 }
 
 async function atualizarAreaUsuario(){
@@ -81,7 +92,8 @@ async function atualizarAreaUsuario(){
     const avisoLoginResgate=document.getElementById("avisoLoginResgate");
 
     if(!usuarioAtual){
-        topo.textContent="Entre ou crie sua conta";
+        if(topo) topo.textContent="Entre ou crie sua conta";
+
         desconectado.classList.remove("oculto");
         conectado.classList.add("oculto");
         publicacao.classList.add("oculto");
@@ -94,7 +106,8 @@ async function atualizarAreaUsuario(){
 
     const nome=obterNome(usuarioAtual);
 
-    topo.textContent="Conectado: "+nome;
+    if(topo) topo.textContent="Conectado: "+nome;
+
     document.getElementById("perfilNome").textContent=nome;
     document.getElementById("perfilEmail").textContent=usuarioAtual.email||"";
     document.getElementById("novoNome").value=nome;
@@ -110,7 +123,7 @@ async function atualizarAreaUsuario(){
 }
 
 async function atualizarNome(){
-    if(!usuarioAtual)return;
+    if(!usuarioAtual) return;
 
     const nome=document.getElementById("novoNome").value.trim();
 
@@ -119,37 +132,39 @@ async function atualizarNome(){
         return;
     }
 
-    const {error}=await supabaseClient.auth.updateUser({
-        data:{full_name:nome}
-    });
+    try{
+        const {error}=await supabaseClient.auth.updateUser({
+            data:{full_name:nome}
+        });
 
-    if(error){
-        mostrarMensagem("mensagemPerfil",error.message);
-        return;
+        if(error) throw error;
+
+        const {data}=await supabaseClient.auth.getUser();
+        usuarioAtual=data.user;
+
+        await atualizarAreaUsuario();
+
+        mostrarMensagem("mensagemPerfil","Nome atualizado com sucesso!");
+        await carregarMural();
+    }catch(erro){
+        mostrarMensagem("mensagemPerfil","Erro ao atualizar nome: "+erro.message);
     }
-
-    const {data}=await supabaseClient.auth.getUser();
-    usuarioAtual=data.user;
-
-    await atualizarAreaUsuario();
-
-    mostrarMensagem("mensagemPerfil","Nome atualizado com sucesso!");
-    await carregarMural();
 }
 
 async function sair(){
-    const {error}=await supabaseClient.auth.signOut();
+    try{
+        const {error}=await supabaseClient.auth.signOut();
 
-    if(error){
-        mostrarMensagem("mensagemPerfil",error.message);
-        return;
+        if(error) throw error;
+
+        usuarioAtual=null;
+
+        await atualizarAreaUsuario();
+        await carregarMural();
+        await carregarResgates();
+
+        mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
+    }catch(erro){
+        mostrarMensagem("mensagemPerfil","Erro ao sair: "+erro.message);
     }
-
-    usuarioAtual=null;
-
-    await atualizarAreaUsuario();
-    await carregarMural();
-    await carregarResgates();
-
-    mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
 }
