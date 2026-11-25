@@ -223,3 +223,66 @@
         padding: 16px 9px;
     }
 }
+/* BOTÕES DE ACESSO DO CABEÇALHO */
+header.topo-petmundo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 12px 16px;
+  background: #15966b;
+}
+
+header.topo-petmundo .logo-petmundo {
+  width: 100%;
+  max-width: 100%;
+}
+
+.botoes-acesso {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.botoes-acesso a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 128px;
+  padding: 12px 22px;
+  border: 2px solid white;
+  border-radius: 9px;
+  background: white;
+  color: #087c56;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 5px #00000020;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.botoes-acesso a:last-child {
+  background: #f4c542;
+  border-color: #f4c542;
+  color: #26332d;
+}
+
+.botoes-acesso a:hover {
+  transform: translateY(-1px);
+  filter: brightness(.96);
+}
+
+@media (max-width: 380px) {
+  .botoes-acesso {
+    gap: 8px;
+  }
+
+  .botoes-acesso a {
+    min-width: 116px;
+    padding: 11px 15px;
+    font-size: 14px;
+  }
+}
