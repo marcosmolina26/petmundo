@@ -11,6 +11,65 @@
 
 <link rel="stylesheet" href="css/estilo.css">
 <link rel="stylesheet" href="css/responsivo.css">
+
+<style>
+/* JANELA DE LOGIN E CADASTRO */
+#modalAcesso {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.65);
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+#modalAcesso .modal-conteudo {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 22px;
+    border-radius: 14px;
+    position: relative;
+}
+
+#modalAcesso .fechar-modal {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    border: none;
+    background: none;
+    color: #333;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+#modalAcesso h2 {
+    margin-top: 25px;
+}
+
+#modalAcesso input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+#modalAcesso .modal-formulario {
+    display: none;
+}
+
+#modalAcesso .modal-formulario.ativo {
+    display: block;
+}
+
+.botoes-acesso button {
+    cursor: pointer;
+}
+</style>
 </head>
 
 <body>
@@ -40,10 +99,11 @@
          alt="Logo PETMUNDO">
 
     <div class="botoes-acesso">
-        <a href="#acesso">Entrar</a>
-        <a href="#acesso">Criar conta</a>
+        <button type="button" onclick="abrirModalAcesso('login')">Entrar</button>
+        <button type="button" onclick="abrirModalAcesso('cadastro')">Criar conta</button>
     </div>
 </header>
+
 <nav>
 <a href="#inicio">Início</a>
 <a href="#comunidade">Comunidade</a>
@@ -51,7 +111,95 @@
 <a href="#donativos">DONATIVOS</a>
 <a href="#meu-petmundo">Meu PETMUNDO</a>
 </nav>
+
+<!-- JANELA DE LOGIN E CADASTRO -->
+<div id="modalAcesso">
+    <div class="modal-conteudo">
+
+        <button type="button" class="fechar-modal"
+                onclick="fecharModalAcesso()">×</button>
+
+        <section id="acesso" class="card">
+
+            <h2>Bem-vindo ao PETMUNDO!</h2>
+            <p>Entre ou crie sua conta para participar.</p>
+
+            <div id="formularioLogin" class="modal-formulario">
+                <h3>Entrar na conta</h3>
+
+                <input type="email" id="emailLogin"
+                       placeholder="Seu e-mail">
+
+                <input type="password" id="senhaLogin"
+                       placeholder="Sua senha">
+
+                <button type="button" onclick="entrar()">Entrar</button>
+
+                <p>Não tem conta?
+                    <a href="#" onclick="abrirModalAcesso('cadastro'); return false;">
+                        Criar conta
+                    </a>
+                </p>
+            </div>
+
+            <div id="formularioCadastro" class="modal-formulario">
+                <h3>Criar uma conta</h3>
+
+                <input type="text" id="nomeCadastro"
+                       placeholder="Seu nome">
+
+                <input type="email" id="emailCadastro"
+                       placeholder="Seu e-mail">
+
+                <input type="password" id="senhaCadastro"
+                       placeholder="Crie uma senha">
+
+                <button type="button" onclick="cadastrar()">Criar conta</button>
+
+                <p>Já tem conta?
+                    <a href="#" onclick="abrirModalAcesso('login'); return false;">
+                        Entrar
+                    </a>
+                </p>
+            </div>
+
+            <p id="mensagemAcesso" class="mensagem oculto"></p>
+
+        </section>
+    </div>
+</div>
+
+<script>
+function abrirModalAcesso(tipo) {
+    const modal = document.getElementById("modalAcesso");
+    const login = document.getElementById("formularioLogin");
+    const cadastro = document.getElementById("formularioCadastro");
+
+    modal.style.display = "flex";
+
+    login.classList.remove("ativo");
+    cadastro.classList.remove("ativo");
+
+    if (tipo === "cadastro") {
+        cadastro.classList.add("ativo");
+    } else {
+        login.classList.add("ativo");
+    }
+}
+
+function fecharModalAcesso() {
+    document.getElementById("modalAcesso").style.display = "none";
+}
+
+document.getElementById("modalAcesso").addEventListener("click", function(event) {
+    if (event.target === this) {
+        fecharModalAcesso();
+    }
+});
+</script>
+
 <main class="container">
+
 <section class="card banner">
 <div class="banner-conteudo">
 <p>Compartilhe momentos, publique fotos, conheça outros tutores e ajude animais que precisam.</p>
@@ -59,62 +207,91 @@
 <a href="#comunidade"><button>Conhecer a comunidade</button></a>
 </div>
 </section>
-<section id="acesso" class="card">
-<h2>Entrar no PETMUNDO</h2>
-<p>Faça login para publicar fotos, curtir e comentar.</p>
-<div class="duas-colunas">
-<div>
-<h3>Entrar na conta</h3>
-<input type="email" id="emailLogin" placeholder="Seu e-mail">
-<input type="password" id="senhaLogin" placeholder="Sua senha">
-<button onclick="entrar()">Entrar</button>
-</div>
-<div id="formularioLogin">
-<h3>Criar uma conta</h3>
-<input type="text" id="nomeCadastro" placeholder="Seu nome">
-<input type="email" id="emailCadastro" placeholder="Seu e-mail">
-<input type="password" id="senhaCadastro" placeholder="Crie uma senha">
-<button onclick="cadastrar()">Criar conta</button>
-</div>
-</div>
-<p id="mensagemAcesso" class="mensagem oculto"></p>
-</section>
+
 <section id="meu-petmundo" class="card">
 <h2>👤 Meu PETMUNDO</h2>
-<div id="perfilDesconectado"><p>Entre na sua conta para visualizar seu perfil.</p></div>
+
+<div id="perfilDesconectado">
+<p>Entre na sua conta para visualizar seu perfil.</p>
+</div>
+
 <div id="perfilConectado" class="oculto">
 <p><strong>Nome:</strong> <span id="perfilNome"></span></p>
 <p><strong>E-mail:</strong> <span id="perfilEmail"></span></p>
 <p><strong>Situação:</strong> Conectado</p>
+
 <h3>Alterar meu nome</h3>
 <input type="text" id="novoNome" placeholder="Digite seu nome">
 <button onclick="atualizarNome()">Salvar nome</button>
 <p id="mensagemPerfil" class="mensagem oculto"></p>
+
 <hr>
+
 <h2>🐾 Cadastro dos meus pets</h2>
 <p>Crie um perfil para cada animal da sua família.</p>
+
 <div class="pet-formulario">
 <h3>Adicionar um novo pet</h3>
+
 <label for="petNome">Nome do animal *</label>
 <input type="text" id="petNome" placeholder="Nome do pet">
+
 <label for="petEspecie">Espécie *</label>
-<select id="petEspecie"><option value="">Selecione</option><option>Cachorro</option><option>Gato</option><option>Ave</option><option>Coelho</option><option>Roedor</option><option>Réptil</option><option>Outro</option></select>
-<label for="petRaca">Raça</label><input type="text" id="petRaca" placeholder="Raça do animal">
-<label for="petNascimento">Data de nascimento</label><input type="date" id="petNascimento">
-<label for="petSexo">Sexo</label><select id="petSexo"><option value="">Não informado</option><option>Macho</option><option>Fêmea</option></select>
-<label for="petDescricao">Descrição do pet</label><textarea id="petDescricao" placeholder="Conte um pouco sobre seu animal..."></textarea>
-<label for="petFoto">Foto do pet</label><input class="campo-arquivo" type="file" id="petFoto" accept="image/jpeg,image/png,image/webp,image/gif">
-<label for="petVideo">Vídeo do pet (máximo 20 MB)</label><input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm">
+<select id="petEspecie">
+<option value="">Selecione</option>
+<option>Cachorro</option>
+<option>Gato</option>
+<option>Ave</option>
+<option>Coelho</option>
+<option>Roedor</option>
+<option>Réptil</option>
+<option>Outro</option>
+</select>
+
+<label for="petRaca">Raça</label>
+<input type="text" id="petRaca" placeholder="Raça do animal">
+
+<label for="petNascimento">Data de nascimento</label>
+<input type="date" id="petNascimento">
+
+<label for="petSexo">Sexo</label>
+<select id="petSexo">
+<option value="">Não informado</option>
+<option>Macho</option>
+<option>Fêmea</option>
+</select>
+
+<label for="petDescricao">Descrição do pet</label>
+<textarea id="petDescricao" placeholder="Conte um pouco sobre seu animal..."></textarea>
+
+<label for="petFoto">Foto do pet</label>
+<input class="campo-arquivo" type="file" id="petFoto" accept="image/jpeg,image/png,image/webp,image/gif">
+
+<label for="petVideo">Vídeo do pet (máximo 20 MB)</label>
+<input class="campo-arquivo" type="file" id="petVideo" accept="video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm">
+
 <h3>Contato do tutor</h3>
 <input type="tel" id="petTelefone" placeholder="Telefone do responsável">
 <input type="text" id="petEndereco" placeholder="Endereço do responsável">
-<label class="campo-check"><input type="checkbox" id="petMostrarContato"><span>Autorizo exibir telefone e endereço no perfil público do pet.</span></label>
-<div class="aviso-privacidade"><strong>Privacidade:</strong> os dados de contato ficam privados por padrão. Só serão exibidos publicamente quando o tutor marcar a opção acima. Nesta versão, os dados ainda aparecem somente na área privada do tutor.</div>
+
+<label class="campo-check">
+<input type="checkbox" id="petMostrarContato">
+<span>Autorizo exibir telefone e endereço no perfil público do pet.</span>
+</label>
+
+<div class="aviso-privacidade">
+<strong>Privacidade:</strong> os dados de contato ficam privados por padrão. Só serão exibidos publicamente quando o tutor marcar a opção acima. Nesta versão, os dados ainda aparecem somente na área privada do tutor.
+</div>
+
 <button id="botaoCadastrarPet" onclick="cadastrarPet()">🐾 Salvar cadastro do pet</button>
 <p id="mensagemPet" class="mensagem oculto"></p>
 </div>
+
 <h3>Meus animais cadastrados</h3>
-<div id="listaMeusPets"><p class="pequeno">Seus animais cadastrados aparecerão aqui.</p></div>
+<div id="listaMeusPets">
+<p class="pequeno">Seus animais cadastrados aparecerão aqui.</p>
+</div>
+
 <button class="secundario" onclick="sair()">Sair da conta</button>
 </div>
 </section>
