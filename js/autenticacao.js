@@ -75,6 +75,7 @@ async function entrar(){
         mostrarMensagem("mensagemAcesso","Login realizado com sucesso!");
     }catch(erro){
         console.error("Erro no login PETMUNDO:",erro);
+
         mostrarMensagem(
             "mensagemAcesso",
             "Não foi possível entrar: "+(erro.message||"Erro inesperado.")
@@ -90,34 +91,97 @@ async function atualizarAreaUsuario(){
     const area=document.getElementById("areaPublicacao");
     const formularioResgate=document.getElementById("formularioResgate");
     const avisoLoginResgate=document.getElementById("avisoLoginResgate");
+    const areaPrivada=document.getElementById("meu-petmundo");
+    const linkMeuPetmundo=document.querySelector('nav a[href="#meu-petmundo"]');
 
     if(!usuarioAtual){
-        if(topo) topo.textContent="Entre ou crie sua conta";
 
-        desconectado.classList.remove("oculto");
-        conectado.classList.add("oculto");
-        publicacao.classList.add("oculto");
-        area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
-        formularioResgate.classList.add("oculto");
-        avisoLoginResgate.classList.remove("oculto");
-        document.getElementById("listaMeusPets").innerHTML="";
+        if(topo){
+            topo.textContent="Entre ou crie sua conta";
+        }
+
+        if(areaPrivada){
+            areaPrivada.classList.add("oculto");
+        }
+
+        if(linkMeuPetmundo){
+            linkMeuPetmundo.classList.add("oculto");
+        }
+
+        if(desconectado){
+            desconectado.classList.remove("oculto");
+        }
+
+        if(conectado){
+            conectado.classList.add("oculto");
+        }
+
+        if(publicacao){
+            publicacao.classList.add("oculto");
+        }
+
+        if(area){
+            area.innerHTML="<p>Entre na sua conta para publicar fotos.</p>";
+        }
+
+        if(formularioResgate){
+            formularioResgate.classList.add("oculto");
+        }
+
+        if(avisoLoginResgate){
+            avisoLoginResgate.classList.remove("oculto");
+        }
+
+        const listaPets=document.getElementById("listaMeusPets");
+
+        if(listaPets){
+            listaPets.innerHTML="";
+        }
+
         return;
     }
 
     const nome=obterNome(usuarioAtual);
 
-    if(topo) topo.textContent="Conectado: "+nome;
+    if(topo){
+        topo.textContent="Conectado: "+nome;
+    }
+
+    if(areaPrivada){
+        areaPrivada.classList.remove("oculto");
+    }
+
+    if(linkMeuPetmundo){
+        linkMeuPetmundo.classList.remove("oculto");
+    }
 
     document.getElementById("perfilNome").textContent=nome;
     document.getElementById("perfilEmail").textContent=usuarioAtual.email||"";
     document.getElementById("novoNome").value=nome;
 
-    desconectado.classList.add("oculto");
-    conectado.classList.remove("oculto");
-    publicacao.classList.remove("oculto");
-    area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";
-    formularioResgate.classList.remove("oculto");
-    avisoLoginResgate.classList.add("oculto");
+    if(desconectado){
+        desconectado.classList.add("oculto");
+    }
+
+    if(conectado){
+        conectado.classList.remove("oculto");
+    }
+
+    if(publicacao){
+        publicacao.classList.remove("oculto");
+    }
+
+    if(area){
+        area.innerHTML="<p>Você está conectado. Publique sua foto abaixo!</p>";
+    }
+
+    if(formularioResgate){
+        formularioResgate.classList.remove("oculto");
+    }
+
+    if(avisoLoginResgate){
+        avisoLoginResgate.classList.add("oculto");
+    }
 
     await carregarMeusPets();
 }
@@ -146,6 +210,7 @@ async function atualizarNome(){
 
         mostrarMensagem("mensagemPerfil","Nome atualizado com sucesso!");
         await carregarMural();
+
     }catch(erro){
         mostrarMensagem("mensagemPerfil","Erro ao atualizar nome: "+erro.message);
     }
@@ -164,6 +229,7 @@ async function sair(){
         await carregarResgates();
 
         mostrarMensagem("mensagemAcesso","Você saiu da sua conta.");
+
     }catch(erro){
         mostrarMensagem("mensagemPerfil","Erro ao sair: "+erro.message);
     }
